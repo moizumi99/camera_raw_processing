@@ -3,6 +3,8 @@ RAW画像処理ライブラリ。
 """
 
 import numpy as np
+from scipy import signal
+
 
 def white_balance(raw_array, wb_gain, raw_colors):
     """
@@ -109,3 +111,57 @@ def gamma_correction(input_img, gamma):
     # numpyのpower関数を使って、ガンマ関数を適用。
     gamma_img = np.power(gamma_img, 1/gamma)
     return gamma_img
+
+
+def demosaic(raw_array, raw_colors):
+    """
+    線形補間でデモザイクを行う
+
+    Parameters
+    ----------
+    raw_array: numpy array
+        入力BayerRAW画像データ。
+    raw_colors: numpy array
+        RAW画像のカラーチャンネルマトリクス。
+        通常Rawpyのraw_colorsを用いて与える。
+
+    Returns
+    -------
+    dms_img: numpy array
+        出力RAW画像。
+    """
+    h, w = raw_array.shape
+    dms_img = np.zeros((h, w, 3))
+
+    # 緑画素の処理
+    # 元のRAW画像から緑画素だけ抜き出す
+    green = raw_array.copy()
+    green[(raw_colors == 0) | (raw_colors == 2)] = 0
+    # 緑画素の線形補間フィルター
+    # [[0, 1, 0]]
+    #  [1, 4, 1]
+    #  [0, 1, 0]] / 4.0
+    g_flt = np.array([[0, 1, 0], [1, 4, 1], [0, 1, 0]]) / 4.0
+    # フィルターの適用
+    # boundary='symm': 画像のヘリで折り返す。
+    # mode='same': 出力画像サイズは入力画像と同じ。
+    dms_img[:, :, 1] = signal.convolve2d(green, g_flt, boundary='symm', mode='same')
+
+    # 元のRAW画像から赤画素だけ抜き出す
+    red = raw_array.copy()
+    red[raw_colors != 0] = 0
+    # 赤画素の線形補間フィルター
+    # [[1, 2, 1]]
+    #  [2, 4, 2]
+    #  [1, 2, 1]] / 4.0
+    rb_flt = np.array([[1 / 4, 1 / 2, 1 / 4], [1 / 2, 1, 1 / 2], [1 / 4, 1 / 2, 1 / 4]])
+    # フィルターの適用
+    dms_img[:, :, 0] = signal.convolve2d(red, rb_flt, boundary='symm', mode='same')
+
+    # 元のRAW画像から青画素だけ抜き出す
+    blue = raw_array.copy()
+    blue[raw_colors != 2] = 0
+    # 青画素の線形補間フィルターは赤と共通
+    # フィルターの適用
+    dms_img[:, :, 2] = signal.convolve2d(blue, rb_flt, boundary='symm', mode='same')
+    return dms_img
