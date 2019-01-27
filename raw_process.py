@@ -83,3 +83,29 @@ def black_level_correction(raw_array, blc, bayer_pattern):
     blc_raw[1::2, 0::2] -= blc[bayer_pattern[1, 0]]
     blc_raw[1::2, 1::2] -= blc[bayer_pattern[1, 1]]
     return blc_raw
+
+
+def gamma_correction(input_img, gamma):
+    """
+    ガンマ補正処理を行う。
+
+    Parameters
+    ----------
+    input_img: numpy array [h, w, 3]
+        入力RGB画像データ。
+    gamma: float
+        ガンマ補正値。通常は2.2。
+
+    Returns
+    -------
+    gamma_img: numpy array [h, 2, 3]
+        出力RGB画像。
+    """
+    # デモザイク後の画像をfloatタイプとしてコピー。
+    gamma_img = input_img.astype(float)
+    # ガンマ関数は0-1の範囲で定義されているので、その範囲に正規化する。
+    gamma_img[gamma_img < 0] = 0
+    gamma_img = gamma_img/gamma_img.max()
+    # numpyのpower関数を使って、ガンマ関数を適用。
+    gamma_img = np.power(gamma_img, 1/gamma)
+    return gamma_img
