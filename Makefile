@@ -1,4 +1,4 @@
-SRCS=camera_raw_toc.ipynb camera_raw_chapter_1.ipynb camera_raw_chapter_2.ipynb camera_raw_chapter_3_1.ipynb camera_raw_chapter_3_2.ipynb camera_raw_chapter_3_3.ipynb camera_raw_chapter_3_4.ipynb camera_raw_chapter_3_5.ipynb camera_raw_chapter_4.ipynb camera_raw_chapter_4_2.ipynb  
+SRCS=camera_raw_toc.ipynb camera_raw_chapter_1.ipynb camera_raw_chapter_2.ipynb camera_raw_chapter_3_1.ipynb camera_raw_chapter_3_2.ipynb camera_raw_chapter_3_3.ipynb camera_raw_chapter_3_4.ipynb camera_raw_chapter_3_5.ipynb camera_raw_chapter_4.ipynb camera_raw_chapter_4_2.ipynb camera_raw_chapter_4_3.ipynb
 MDS=$(SRCS:.ipynb=.md)
 
 camera_raw.pdf: camera_raw.md

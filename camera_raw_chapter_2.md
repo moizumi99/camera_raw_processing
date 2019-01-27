@@ -113,8 +113,3 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 ## 次の章
 
 次は[RAW画像の準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1pynb)を行います。
-
-
-```python
-
-```

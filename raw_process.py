@@ -3,6 +3,7 @@ RAW画像処理ライブラリ。
 """
 
 import numpy as np
+import scipy
 from scipy import signal
 
 
@@ -165,3 +166,49 @@ def demosaic(raw_array, raw_colors):
     # フィルターの適用
     dms_img[:, :, 2] = signal.convolve2d(blue, rb_flt, boundary='symm', mode='same')
     return dms_img
+
+
+def defect_correction(raw_array, threshold):
+    """
+    線形補間でデモザイクを行う
+
+    Parameters
+    ----------
+    raw_array: numpy array
+        入力BayerRAW画像データ。
+    threshold: int
+        欠陥画素判定の閾値。
+        10bitRAW入力に対して典型的には16程度。
+
+    Returns
+    -------
+    dpc_raw: numpy array
+        出力RAW画像。
+    """
+    dpc_raw = raw_array.copy()
+    # footprintとして5x5のマスクを作成
+    # [[1 1 1 1 1]
+    #  [1 1 1 1 1]
+    #  [1 1 0 1 1]
+    #  [1 1 1 1 1]
+    #  [1 1 1 1 1]]
+    footprint = np.ones((5, 5))
+    footprint[2, 2] = 0
+    # 各カラーごとの処理。左上(0, 0)、左下(1, 0), 右上(0, 1), 右下(1, 1)
+    for (yo, xo) in ((0, 0), (1, 0), (0, 1), (1, 1)):
+        single_channel = dpc_raw[yo::2, xo::2]
+        # 上下左右の平均をとるフィルター
+        flt = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]]) / 4
+        # 上下左右の平均値をとった画像の作成
+        average = scipy.signal.convolve2d(single_channel, flt, mode='same')
+        # 周辺画像の最大値を求める。footprintにより、対象となる画素は含めない。
+        local_max = scipy.ndimage.filters.maximum_filter(single_channel, footprint=footprint, mode='mirror')
+        # 周辺画像の最小値を求める。footprintにより、対象となる画素は含めない。
+        local_min = scipy.ndimage.filters.minimum_filter(single_channel, footprint=footprint, mode='mirror')
+        # 中心画素が最大値よりthreshold分以上大きい、または最小値よりthreshold分以上小さければ欠陥とみなす。
+        # 欠陥の位置をTrueとして保存。
+        mask = (single_channel < local_min - threshold) + (single_channel > local_max + threshold)
+        # 欠陥画素を平均値で置換。
+        single_channel[mask] = average[mask]
+        # single_channelはdpc_rawへの参照なので書き戻す必用がない
+    return dpc_raw

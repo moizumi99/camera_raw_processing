@@ -393,37 +393,6 @@ $$ gout_{x, y}= \sum_{i=-1}^{+1}\sum_{j=-1}^{+1} gin_{x+i, y+i} g_{i, j}$$
 
 という処理を行います。これで入力画素が緑画素の場合、上下左右には緑画素がないので入力画素がそのまま出力されます。そうでない場合は、上下左右の緑がその平均値が出力されます。
 
-結果として先程行った１画素毎に処理するプログラムと同じ結果がえられます。試してみましょう。
-
-
-```python
-dms2_img = demosaic(wb_raw, raw.raw_colors)
-print(dms2_img.shape)
-```
-
-    (2464, 3280, 3)
-
-
-処理が終了して画像サイズが元のRAWデータと同じであることがわかります。
-
-ガンマ補正を行って表示してみましょう。
-
-
-```python
-gmm2_full_img = gamma_correction(dms2_img, 2.2)
-# サイズ設定
-plt.figure(figsize=(16, 8))
-imshow(gmm2_full_img)
-plt.axis('off')
-plt.show()
-```
-
-
-![png](camera_raw_chapter_4_2_files/camera_raw_chapter_4_2_39_0.png)
-
-
-同様の画像が出力されたようです。
-
 この`demosaic()`関数は`raw_process.py`モジュールの一部として[githubにアップロード](https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py)されています。
 使用する場合は、
 
@@ -438,6 +407,18 @@ plt.show()
 ## まとめ
 
 この節では線形補間によるデモザイク処理を行いました。次は[欠陥画素補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb)を行います。
+
+
+```python
+plt.figure(figsize=(16, 8))
+imshow(gmm2_full_img[2110:2160, 1150:1210, :])
+plt.axis('off')
+plt.show()
+```
+
+
+![png](camera_raw_chapter_4_2_files/camera_raw_chapter_4_2_39_0.png)
+
 
 
 ```python

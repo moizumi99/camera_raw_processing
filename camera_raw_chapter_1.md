@@ -7,11 +7,13 @@
 
 そのために、解説する処理は最重要なものにしぼり、使用するアルゴリズムは一部の例外（デモザイク）を除き、もっとも簡単なものを選びました<sup name="footnote1">[1]</sup>。
 
-またすべての処理はGoogle Colab上で行うことができ、読者の皆さんはパワフルなPCや特殊なソフトウェアをよういせずとも、ブラウザ上で全ての処理を試してみることができます。
-  
 記事の最後ではラズベリーパイのカメラで撮影したRAW画像からこんなRGB画像が作れるようになります。
 
 (TODO: 画像を入れる)
+
+またすべての処理はGoogle Colab上で行うことができ、読者の皆さんはパワフルなPCや特殊なソフトウェアをよういせずとも、ブラウザ上で全ての処理を試してみることができます。
+  
+全てのコードへのリンクはこちらの[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)からたどることができます。
 
 ## 対象読者
 
@@ -82,3 +84,7 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 - PC上で実行できるPerl環境（ExifToolの実行に必用)
 
 - [exiftool](https://www.sno.phy.queensu.ca/~phil/exiftool/)
+
+## 次の章
+
+次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1pynb)簡単に解説します。
