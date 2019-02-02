@@ -212,3 +212,33 @@ def defect_correction(raw_array, threshold):
         single_channel[mask] = average[mask]
         # single_channelはdpc_rawへの参照なので書き戻す必用がない
     return dpc_raw
+
+def color_correction_matrix(rgb_array, color_matrix):
+    """
+    カラーマトリクス補正を行う。
+
+    Parameters
+    ----------
+    rgb_array: numpy array
+        入力RGB画像
+    color_matrix: 2D (3x3) array like
+        3x3 Color Correction Matrix
+        Need to be normalized to 1.0
+
+    Returns
+    -------
+    ccm_img: numpy array
+        出力RGB画像
+    """
+
+    # 出力先を作成
+    ccm_img = np.zeros_like(rgb_array)
+    # CCMが3x3フォーマットでない場合、3x3に変換
+    ccm = np.array(color_matrix).reshape((3, 3))
+    # 各色毎に処理。この方が各画素ごとに処理するよりも高速なようだ。
+    for color in (0, 1, 2):
+        # 行列と入力画像の各色を掛け合わせる。
+        ccm_img[:, :, color] = ccm[color, 0] * rgb_array[:, :, 0] + \
+                               ccm[color, 1] * rgb_array[:, :, 1] + \
+                               ccm[color, 2] * rgb_array[:, :, 2]
+    return ccm_img
