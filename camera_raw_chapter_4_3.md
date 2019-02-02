@@ -3,7 +3,7 @@
 
 ## この節について
 
-この節では、画像サイズを変えないデモザイク処理を解説します。
+この節では、欠陥画素補正を解説します。
 
 この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
 
@@ -24,12 +24,17 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロード
 !if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/camera_raw_process.py; fi
 
 from raw_process import simple_demosaic, white_balance, black_level_correction, gamma_correction, demosaic
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f chart.jpg ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/chart.jpg; fi
@@ -50,6 +55,8 @@ raw_array = raw_array.reshape((h, w));
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 ## 欠陥画素
@@ -69,8 +76,9 @@ gmm_img = gamma_correction(dms_img, 2.2)
 
 # 画像の一部分を拡大表示。
 plt.figure(figsize=(16, 8))
-imshow(gmm_img[2110:2160, 1150:1210, :])
+plt.imshow(gmm_img[2110:2160, 1150:1210, :])
 plt.axis('off')
+plt.title(u"欠陥画素")
 plt.show()
 ```
 
@@ -219,8 +227,9 @@ gmm_img = gamma_correction(dms_img, 2.2)
 
 # 画像の一部分を拡大表示。
 plt.figure(figsize=(16, 8))
-imshow(gmm_img)
+plt.imshow(gmm_img)
 plt.axis('off')
+plt.title(u"欠陥画素補正後")
 plt.show()
 ```
 
@@ -234,8 +243,9 @@ plt.show()
 ```python
 # 画像の一部分を拡大表示。
 plt.figure(figsize=(16, 8))
-imshow(gmm_img[2110:2160, 1150:1210, :])
+plt.imshow(gmm_img[2110:2160, 1150:1210, :])
 plt.axis('off')
+plt.title(u"補正された欠陥画像")
 plt.show()
 ```
 
@@ -310,4 +320,4 @@ def defect_correction(raw_array, threshold):
 
 ## まとめ
 
-この節では欠陥画素補正を行いました。次は[カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb)を行います。
+この節では欠陥画素補正を行いました。次は[カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb)を行います。

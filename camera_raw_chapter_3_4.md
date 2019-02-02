@@ -24,12 +24,17 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロード
 !if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/raw_process.py; fi
 
 from raw_process import simple_demosaic, white_balance
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
@@ -50,6 +55,8 @@ raw_array = raw_array.reshape((h, w));
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 ## ブラックレベル補正とは
@@ -131,8 +138,9 @@ plt.figure(figsize=(8, 8))
 # imshowでは画像は0から1.0の値をとる必用があるので、ノーマライズする。
 dms_img[dms_img<0] = 0
 dms_img /= dms_img.max()
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"ブラックレベル補正後の画像")
 plt.show()
 ```
 
@@ -143,7 +151,7 @@ plt.show()
 だいぶきれいになりました。
 前回問題だった赤みがかった色も集成されています。
 
-ただし、だいぶ暗い画像になっています。これはガンマ補正がされていないためです。次はガンマ補正をかけてみましょう。
+ただし、だいぶ暗い画像になっています。これはガンマ補正がされていないためです。次の節ではガンマ補正をかけてみましょう。
 
 ## 処理の高速化
 
@@ -197,8 +205,9 @@ plt.figure(figsize=(8, 8))
 # imshowでは画像は0から1.0の値をとる必用があるので、ノーマライズする。
 dms_img[dms_img<0] = 0
 dms_img /= dms_img.max()
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"black_level_correction関数を使った出力")
 plt.show()
 ```
 

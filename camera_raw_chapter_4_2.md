@@ -24,10 +24,15 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロード
 !if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/camera_raw_process.py; fi
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 from raw_process import simple_demosaic, white_balance, black_level_correction, gamma_correction
 ```
@@ -35,6 +40,8 @@ from raw_process import simple_demosaic, white_balance, black_level_correction, 
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 次に画像のダウンロードと読み込みを行います。
@@ -88,8 +95,9 @@ gmm_img = gamma_correction(dms_img, 2.2)
 ```python
 # サイズ設定
 plt.figure(figsize=(16, 8))
-imshow(gmm_img)
+plt.imshow(gmm_img)
 plt.axis('off')
+plt.title(u"簡易デモザイクを使ったRAW現像結果")
 plt.show()
 ```
 
@@ -109,7 +117,7 @@ print("RAWデータのサイズ = ", raw_array.shape)
     RAWデータのサイズ =  (2464, 3280)
 
 
-この画像の大きさは縦1232ライン、横1640画素であることがわかります。それに対して元のRAW画像のサイズは縦2464ライン、横3280画素です。ちょうど２分の１ずつになっているのがわかります。
+この画像の大きさは縦1232ライン、横1640画素であることがわかります。それに対して元のRAW画像のサイズは縦2464ライン、横3280画素です。ちょうど２分の１ずつになっています。
 
 最初に表示したJPEG画像と大きさを合わせて並べてみましょう。まずはJPEG画像をnumpyのarrayとして読み込みます。
 
@@ -141,8 +149,9 @@ two_img[h//4:h//4+h//2, w//4:w//4+w//2, :] = gmm_img
 
 ```python
 plt.figure(figsize=(16, 8))
-imshow(two_img)
+plt.imshow(two_img)
 plt.axis('off')
+plt.title(u"簡易RAW現像結果（左）とJPEG画像(右)")
 plt.show()
 ```
 
@@ -167,8 +176,9 @@ plt.subplot(1, 2, 1)
 y1, x1 = 740, 835
 dy1, dx1 = 100, 100
 # 選択した範囲を表示
-imshow(gmm_img[y1:y1+dy1, x1:x1+dx1])
+plt.imshow(gmm_img[y1:y1+dy1, x1:x1+dx1])
 plt.axis('off')
+plt.title("簡易デモザイク結果")
 
 # 次にJPEG画像の表示。
 # 縦１列、横２列のうち２つめに表示。
@@ -176,9 +186,9 @@ plt.subplot(1, 2, 2)
 # 画像位置を簡易RAW現像のものに合わせる
 y2, x2 = y1 * 2, x1 * 2
 dy2, dx2 = dy1 * 2, dx1 * 2
-imshow(jpg_img[y2:y2+dy2, x2:x2+dx2])
+plt.imshow(jpg_img[y2:y2+dy2, x2:x2+dx2])
 plt.axis('off')
-
+plt.title(u"JPEG画像")
 # 実際に表示。
 plt.show()
 ```
@@ -270,8 +280,9 @@ gmm_full_img = gamma_correction(dms_img, 2.2)
 ```python
 # サイズ設定
 plt.figure(figsize=(16, 8))
-imshow(gmm_full_img)
+plt.imshow(gmm_full_img)
 plt.axis('off')
+plt.title(u"線形補間デモザイク画像")
 plt.show()
 ```
 
@@ -290,15 +301,17 @@ plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 y1, x1 = 740, 835
 dy1, dx1 = 100, 100
-imshow(gmm_img[y1:y1+dy1, x1:x1+dx1])
+plt.imshow(gmm_img[y1:y1+dy1, x1:x1+dx1])
 plt.axis('off')
+plt.title("簡易デモザイク結果")
 
 # 今回RAW現像した画像の描画。
 plt.subplot(1, 2, 2)
 y2, x2 = y1 * 2, x1 * 2
 dy2, dx2 = dy1 * 2, dx1 * 2
-imshow(gmm_full_img[y2:y2+dy2, x2:x2+dx2])
+plt.imshow(gmm_full_img[y2:y2+dy2, x2:x2+dx2])
 plt.axis('off')
+plt.title(u"線形補間デモザイク画像")
 
 # 実際に表示。
 plt.show()
@@ -407,20 +420,3 @@ $$ gout_{x, y}= \sum_{i=-1}^{+1}\sum_{j=-1}^{+1} gin_{x+i, y+i} g_{i, j}$$
 ## まとめ
 
 この節では線形補間によるデモザイク処理を行いました。次は[欠陥画素補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb)を行います。
-
-
-```python
-plt.figure(figsize=(16, 8))
-imshow(gmm2_full_img[2110:2160, 1150:1210, :])
-plt.axis('off')
-plt.show()
-```
-
-
-![png](camera_raw_chapter_4_2_files/camera_raw_chapter_4_2_39_0.png)
-
-
-
-```python
-
-```

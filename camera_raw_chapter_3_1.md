@@ -26,21 +26,7 @@ https://raw.githubusercontent.com/moizumi99/raw_process/master/sample.ARW
 
 ```python
 !if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
-
 ```
-
-    --2019-01-26 10:54:31--  https://raw.githubusercontent.com/moizumi99/raw_process/master/sample.ARW
-    Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.188.133
-    Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.188.133|:443... connected.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 24746752 (24M) [application/octet-stream]
-    Saving to: ‘sample.ARW.1’
-    
-    sample.ARW.1        100%[===================>]  23.60M  52.3MB/s    in 0.5s    
-    
-    2019-01-26 10:54:32 (52.3 MB/s) - ‘sample.ARW.1’ saved [24746752/24746752]
-    
-
 
 自分で撮影したRAWデータを使用する場合は次のコマンド利用してください。
 
@@ -76,7 +62,6 @@ rawpyの使用法については実際に使う時に説明します。
 
 ```python
 !pip install rawpy
-
 ```
 
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
@@ -164,28 +149,58 @@ raw_array = raw_array.reshape((h, w))
 ```
 
 これでraw_arrayは4024 x 6048の２次元配列になりました。
-
-
 画像データを表示するコマンドimshowを使って、画像として確認してみましょう。
+
+まずキャプション用に日本語フォントを用意します。
 
 
 ```python
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
+# 日本語フォントをインストール
+!apt -y install fonts-ipafont-gothic
 
+# 画像表示用ライブラリpyplotのインポート。
+import matplotlib.pyplot as plt
+# 日本語フォントを設定
+plt.rcParams['font.family'] = 'IPAPGothic'
+```
+
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+
+
+実際に画像を表示します。
+
+
+```python
+# 画像表示サイズを設定。figsizeの中身は横サイズ、縦サイズ。
+# 単位はインチだが実際の表示サイズはディスプレイ解像度によって異なる。
+plt.figure(figsize=(8, 6))
 # raw_arrayの中のデータをグレースケールで表示します。
-imshow(raw_array, cmap='gray')
+plt.imshow(raw_array, cmap='gray')
 # 軸を非表示にします。
 plt.axis('off')
+# 画像タイトルの設定
+plt.title(u"Bayer画像をそのまま表示")
 # 実際に表示します。
 plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_1_files/camera_raw_chapter_3_1_33_0.png)
+![png](camera_raw_chapter_3_1_files/camera_raw_chapter_3_1_35_0.png)
 
 
 ここでmatplotlibはnumpy用描画ライブラリーです。その中でpyplotは各種グラフを表示するモジュールです。ここではpltという名前でインポートしています。
+
+もし日本語のタイトルが文字化けしている場合は、もし日本語が文字化けしている場合は
+`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+Runtime->Restart Runtimeで再実行してみてください。
+
+
+```python
+# もし日本語が文字化けしている場合次の行の#を削除して実行。
+# ! rm /content/.cache/matplotlib/fontList.json
+# その後、Runtime->Restart and run allで再実行
+```
 
 ## この節のまとめ
 

@@ -27,13 +27,14 @@
 
   4.1 [この章について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)
 
-  4.1 [線形補間デモザイク](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_1.ipynb)
+  4.2 [線形補間デモザイク](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_2.ipynb)
 
-  4.2 欠陥画素補正
+  4.3 [欠陥画素補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb)
 
-  4.3 カラーマトリクス
+  4.4 [カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb)
 
-  4.4 レンズシェーディング補正
+
+  4.5 レンズシェーディング補正
   
 
 5. 画質を良くする処理
@@ -301,21 +302,7 @@ https://raw.githubusercontent.com/moizumi99/raw_process/master/sample.ARW
 
 ```python
 !if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
-
 ```
-
-    --2019-01-26 10:54:31--  https://raw.githubusercontent.com/moizumi99/raw_process/master/sample.ARW
-    Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.188.133
-    Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.188.133|:443... connected.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 24746752 (24M) [application/octet-stream]
-    Saving to: ‘sample.ARW.1’
-    
-    sample.ARW.1        100%[===================>]  23.60M  52.3MB/s    in 0.5s    
-    
-    2019-01-26 10:54:32 (52.3 MB/s) - ‘sample.ARW.1’ saved [24746752/24746752]
-    
-
 
 自分で撮影したRAWデータを使用する場合は次のコマンド利用してください。
 
@@ -351,7 +338,6 @@ rawpyの使用法については実際に使う時に説明します。
 
 ```python
 !pip install rawpy
-
 ```
 
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
@@ -439,28 +425,58 @@ raw_array = raw_array.reshape((h, w))
 ```
 
 これでraw_arrayは4024 x 6048の２次元配列になりました。
-
-
 画像データを表示するコマンドimshowを使って、画像として確認してみましょう。
+
+まずキャプション用に日本語フォントを用意します。
 
 
 ```python
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
+# 日本語フォントをインストール
+!apt -y install fonts-ipafont-gothic
 
+# 画像表示用ライブラリpyplotのインポート。
+import matplotlib.pyplot as plt
+# 日本語フォントを設定
+plt.rcParams['font.family'] = 'IPAPGothic'
+```
+
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+
+
+実際に画像を表示します。
+
+
+```python
+# 画像表示サイズを設定。figsizeの中身は横サイズ、縦サイズ。
+# 単位はインチだが実際の表示サイズはディスプレイ解像度によって異なる。
+plt.figure(figsize=(8, 6))
 # raw_arrayの中のデータをグレースケールで表示します。
-imshow(raw_array, cmap='gray')
+plt.imshow(raw_array, cmap='gray')
 # 軸を非表示にします。
 plt.axis('off')
+# 画像タイトルの設定
+plt.title(u"Bayer画像をそのまま表示")
 # 実際に表示します。
 plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_1_files/camera_raw_chapter_3_1_33_0.png)
+![png](camera_raw_chapter_3_1_files/camera_raw_chapter_3_1_35_0.png)
 
 
 ここでmatplotlibはnumpy用描画ライブラリーです。その中でpyplotは各種グラフを表示するモジュールです。ここではpltという名前でインポートしています。
+
+もし日本語のタイトルが文字化けしている場合は、もし日本語が文字化けしている場合は
+`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+Runtime->Restart Runtimeで再実行してみてください。
+
+
+```python
+# もし日本語が文字化けしている場合次の行の#を削除して実行。
+# ! rm /content/.cache/matplotlib/fontList.json
+# その後、Runtime->Restart and run allで再実行
+```
 
 ## この節のまとめ
 
@@ -492,7 +508,12 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
@@ -513,17 +534,8 @@ raw_array = raw_array.reshape((h, w))
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
-    --2019-01-26 15:56:51--  https://raw.githubusercontent.com/moizumi99/raw_process/master/sample.ARW
-    Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.188.133
-    Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.188.133|:443... connected.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 24746752 (24M) [application/octet-stream]
-    Saving to: ‘sample.ARW.1’
-    
-    sample.ARW.1        100%[===================>]  23.60M  52.3MB/s    in 0.5s    
-    
-    2019-01-26 15:56:51 (52.3 MB/s) - ‘sample.ARW.1’ saved [24746752/24746752]
-    
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 ## RAW画像の確認
@@ -533,10 +545,9 @@ raw_array = raw_array.reshape((h, w))
 
 ```python
 # raw_arrayの中のデータをグレースケールで表示します。
-imshow(raw_array, cmap='gray')
-# 軸を非表示にします。
+plt.imshow(raw_array, cmap='gray')
 plt.axis('off')
-# 実際に表示します。
+plt.title(u"RAW画像の確認")
 plt.show()
 ```
 
@@ -553,10 +564,9 @@ plt.show()
 plt.figure(figsize=(8, 8))
 
 # RAW画像の中から(1310, 2620)から60x60の領域を表示。
-imshow(raw_array[1310:1370, 2620:2680], cmap='gray')
-# 軸非表示
+plt.imshow(raw_array[1310:1370, 2620:2680], cmap='gray')
 plt.axis('off')
-# 画像表示
+plt.title(u"RAW画像の拡大表示")
 plt.show()
 ```
 
@@ -568,7 +578,7 @@ plt.show()
 
 ## 疑似カラー化
 
-Bayerの赤の部分を赤、青を青、緑を緑で表示してみましょう。
+Bayerの画素と色の関係を直感的に理解するために、Bayerの赤の部分を赤、青を青、緑を緑で表示してみましょう。
 
 まず、RAW画像の配列を確認しておきます。
 
@@ -637,12 +647,11 @@ raw_color = raw_color / raw_color.max()
 
 
 ```python
+# RAW画像に色を割り振ったものを表示。
 plt.figure(figsize=(8, 8))
-# RAW画像表示。
-imshow(raw_color)
-# 軸非表示
+plt.imshow(raw_color)
 plt.axis('off')
-# 画像表示
+plt.title(u"RAW画像の各画素に色を割り当てたもの")
 plt.show()
 ```
 
@@ -656,10 +665,9 @@ plt.show()
 ```python
 plt.figure(figsize=(8, 8))
 # RAW画像の中から(1310, 2620)から32x32の領域を表示。
-imshow(raw_color[1310:1342, 2620:2652])
-# 軸非表示
+plt.imshow(raw_color[1310:1342, 2620:2652])
 plt.axis('off')
-# 画像表示
+plt.title(u"RAW画像の各画素に色を割り当てたものを拡大表示")
 plt.show()
 ```
 
@@ -732,8 +740,9 @@ dms_img[dms_img < 0] = 0
 dms_img = dms_img / dms_img.max()
 # 表示
 plt.figure(figsize=(8, 8))
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"簡易デモザイク")
 plt.show()
 ```
 
@@ -794,8 +803,9 @@ dms_img[dms_img < 0] = 0
 dms_img = dms_img / dms_img.max()
 # 表示
 plt.figure(figsize=(8, 8))
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"simple_demosaic関数の出力")
 plt.show()
 ```
 
@@ -845,10 +855,15 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロード
 !if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/raw_process.py; fi
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 from raw_process import simple_demosaic
 
@@ -871,6 +886,8 @@ raw_array = raw_array.reshape((h, w))
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 ## ホワイトバランス補正とは
@@ -942,8 +959,9 @@ dms_img[dms_img < 0] = 0
 dms_img = dms_img / dms_img.max()
 # 表示
 plt.figure(figsize=(8, 8))
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"ホワイトバランス後の画像")
 plt.show()
 ```
 
@@ -1007,8 +1025,9 @@ dms_img = simple_demosaic(wb_img, raw.raw_pattern)
 dms_img[dms_img < 0] = 0
 dms_img = dms_img / dms_img.max()
 # 表示
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"white_balance関数を使った出力")
 plt.show()
 ```
 
@@ -1057,12 +1076,17 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロード
 !if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/raw_process.py; fi
 
 from raw_process import simple_demosaic, white_balance
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
@@ -1083,6 +1107,8 @@ raw_array = raw_array.reshape((h, w));
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 ## ブラックレベル補正とは
@@ -1164,8 +1190,9 @@ plt.figure(figsize=(8, 8))
 # imshowでは画像は0から1.0の値をとる必用があるので、ノーマライズする。
 dms_img[dms_img<0] = 0
 dms_img /= dms_img.max()
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"ブラックレベル補正後の画像")
 plt.show()
 ```
 
@@ -1176,7 +1203,7 @@ plt.show()
 だいぶきれいになりました。
 前回問題だった赤みがかった色も集成されています。
 
-ただし、だいぶ暗い画像になっています。これはガンマ補正がされていないためです。次はガンマ補正をかけてみましょう。
+ただし、だいぶ暗い画像になっています。これはガンマ補正がされていないためです。次の節ではガンマ補正をかけてみましょう。
 
 ## 処理の高速化
 
@@ -1230,8 +1257,9 @@ plt.figure(figsize=(8, 8))
 # imshowでは画像は0から1.0の値をとる必用があるので、ノーマライズする。
 dms_img[dms_img<0] = 0
 dms_img /= dms_img.max()
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"black_level_correction関数を使った出力")
 plt.show()
 ```
 
@@ -1281,12 +1309,17 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロード
 !if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/raw_process.py; fi
 
 from raw_process import simple_demosaic, white_balance, black_level_correction
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
@@ -1307,6 +1340,8 @@ raw_array = raw_array.reshape((h, w));
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 ## ガンマ補正とは
@@ -1326,12 +1361,15 @@ $$ y = x^{2.2} $$
 xs = np.arange(0.0, 1.0, 0.01)
 ys = np.power(xs, 2.2)
 plt.plot(xs, ys)
+plt.title(u"ガンマカーブ")
 plt.show()
 ```
 
 
 ![png](camera_raw_chapter_3_5_files/camera_raw_chapter_3_5_5_0.png)
 
+
+モニターなどの出力の強さはは入力に対してこのような特性になるので、入力の方をこれに合わせて調整しておく必用があります。これがガンマ補正です。
 
 ガンマ補正はこれを打ち消す必要があるので、このような式になります。
 
@@ -1344,6 +1382,7 @@ $$ y = x^{\frac{1}{2.2}} $$
 xs = np.arange(0.0, 1.0, 0.01)
 ys = np.power(xs, 1/2.2)
 plt.plot(xs, ys)
+plt.title(u"ガンマ補正カーブ")
 plt.show()
 ```
 
@@ -1374,10 +1413,13 @@ dms_img = simple_demosaic(wb_img, raw.raw_pattern)
 # 表示
 plt.figure(figsize=(8, 8))
 # imshowでは画像は0から1.0の値をとる必用があるので、ノーマライズする。
-dms_img[dms_img<0] = 0
-dms_img /= dms_img.max()
-imshow(dms_img)
+img = dms_img.copy()
+img[img<0] = 0
+img /= img.max()
+img[img>1] = 1
+plt.imshow(img)
 plt.axis('off')
+plt.title(u"ガンマ補正前")
 plt.show()
 ```
 
@@ -1393,7 +1435,7 @@ plt.show()
 gamma_img = dms_img.astype(float)
 # ガンマ関数は0-1の範囲で定義されているので、その範囲に正規化する。
 gamma_img[gamma_img < 0] = 0
-gamma_img = gamma_img/gamma_img.max()
+gamma_img /= gamma_img.max()
 # numpyのpower関数を使って、ガンマ関数を適用。
 gamma_img = np.power(gamma_img, 1/2.2)
 ```
@@ -1404,8 +1446,9 @@ gamma_img = np.power(gamma_img, 1/2.2)
 ```python
 # 表示
 plt.figure(figsize=(8, 8))
-imshow(gamma_img)
+plt.imshow(gamma_img)
 plt.axis('off')
+plt.title(u"ガンマ補正後")
 plt.show()
 ```
 
@@ -1461,7 +1504,7 @@ def gamma_correction(input_img, gamma):
 ## まとめ
 
 この節ではガンマ補正を行いました。これで基本的な処理はすべておわりです。
-次は[画像をきれいにする処理に移ります](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)
+次の章ではその他の[重要な処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)を扱います。
 
 #  4. 重要な処理
 
@@ -1483,21 +1526,23 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 しかし、これは多くの部分が元のRAWデータが良い状態であったという恵まれた条件によるものです。前章で扱ったRAWデータは、フルサイズセンサーのカメラで非常に明るい屋外で撮影したもので、歪みもノイズも少なく、最小限の画像処理でもそこそこの画質を再現することができました。
 
-しかし、RAW現像やカメラ画像処理で扱う画像は常にこのような理想的な状態で撮影されるわけではありません。撮影は室内などの暗いところで扱われることも多いですし、センサーもスマートフォン向けを始め非常に小さい物を使う事が多々あります。そういった状況で撮影されたRAW画像に対しては前章で扱ったようなRAW現像だけでは太刀打ちできません。
+しかし、RAW現像やカメラ画像処理で扱う画像は常にこのような理想的な状態で撮影されるわけではありません。撮影は室内などの暗いところで扱われることも多いですし、センサーもスマートフォン向けを始め非常に小さい物を使う事が多々あります。そういった画像データにはさまざまな理想的でない特性があり、そういったものは、各種の補正処理を行わないと最終的な画質は低品質になってしまいます。
 
-この章ではそういった通常のRAW画像を処理する上で最も重要な処理を紹介します。
+また、前章で扱ったデモザイクは簡易的なもので出力画像が入力画像の４分の１の大きさになるという重大な問題があります。これも解決しなくてはなりません。
+
+この章ではそういった通常のRAW画像を処理する上で重要な処理を紹介します。
 
 とりあげるのは以下の処理です。
 - デモザイク
 - 欠陥画素補正
-- カラーマトリクス
+- カラーマトリクス補正
 - レンズシェーディング補正
 
 最初に扱うデモザイクでは、出力サイズが入力サイズと同じになる通常のデモザイク処理を取り上げます。
 
 次の欠陥画素補正では、画像センサーにはつきものの欠陥画素を修正する方法を紹介します。
 
-カラーマトリクスは色再現性を向上する処理です。
+カラーマトリクス補正は色再現性を向上する処理です。
 
 レンズシェーディング補正は画像の周辺で明るさが低下する周辺減光・レンズシェーディングと呼ばれる現象を補正します。
 
@@ -1532,10 +1577,15 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロード
 !if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/camera_raw_process.py; fi
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 from raw_process import simple_demosaic, white_balance, black_level_correction, gamma_correction
 ```
@@ -1543,6 +1593,8 @@ from raw_process import simple_demosaic, white_balance, black_level_correction, 
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 次に画像のダウンロードと読み込みを行います。
@@ -1596,8 +1648,9 @@ gmm_img = gamma_correction(dms_img, 2.2)
 ```python
 # サイズ設定
 plt.figure(figsize=(16, 8))
-imshow(gmm_img)
+plt.imshow(gmm_img)
 plt.axis('off')
+plt.title(u"簡易デモザイクを使ったRAW現像結果")
 plt.show()
 ```
 
@@ -1617,7 +1670,7 @@ print("RAWデータのサイズ = ", raw_array.shape)
     RAWデータのサイズ =  (2464, 3280)
 
 
-この画像の大きさは縦1232ライン、横1640画素であることがわかります。それに対して元のRAW画像のサイズは縦2464ライン、横3280画素です。ちょうど２分の１ずつになっているのがわかります。
+この画像の大きさは縦1232ライン、横1640画素であることがわかります。それに対して元のRAW画像のサイズは縦2464ライン、横3280画素です。ちょうど２分の１ずつになっています。
 
 最初に表示したJPEG画像と大きさを合わせて並べてみましょう。まずはJPEG画像をnumpyのarrayとして読み込みます。
 
@@ -1649,8 +1702,9 @@ two_img[h//4:h//4+h//2, w//4:w//4+w//2, :] = gmm_img
 
 ```python
 plt.figure(figsize=(16, 8))
-imshow(two_img)
+plt.imshow(two_img)
 plt.axis('off')
+plt.title(u"簡易RAW現像結果（左）とJPEG画像(右)")
 plt.show()
 ```
 
@@ -1675,8 +1729,9 @@ plt.subplot(1, 2, 1)
 y1, x1 = 740, 835
 dy1, dx1 = 100, 100
 # 選択した範囲を表示
-imshow(gmm_img[y1:y1+dy1, x1:x1+dx1])
+plt.imshow(gmm_img[y1:y1+dy1, x1:x1+dx1])
 plt.axis('off')
+plt.title("簡易デモザイク結果")
 
 # 次にJPEG画像の表示。
 # 縦１列、横２列のうち２つめに表示。
@@ -1684,9 +1739,9 @@ plt.subplot(1, 2, 2)
 # 画像位置を簡易RAW現像のものに合わせる
 y2, x2 = y1 * 2, x1 * 2
 dy2, dx2 = dy1 * 2, dx1 * 2
-imshow(jpg_img[y2:y2+dy2, x2:x2+dx2])
+plt.imshow(jpg_img[y2:y2+dy2, x2:x2+dx2])
 plt.axis('off')
-
+plt.title(u"JPEG画像")
 # 実際に表示。
 plt.show()
 ```
@@ -1778,8 +1833,9 @@ gmm_full_img = gamma_correction(dms_img, 2.2)
 ```python
 # サイズ設定
 plt.figure(figsize=(16, 8))
-imshow(gmm_full_img)
+plt.imshow(gmm_full_img)
 plt.axis('off')
+plt.title(u"線形補間デモザイク画像")
 plt.show()
 ```
 
@@ -1798,15 +1854,17 @@ plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 y1, x1 = 740, 835
 dy1, dx1 = 100, 100
-imshow(gmm_img[y1:y1+dy1, x1:x1+dx1])
+plt.imshow(gmm_img[y1:y1+dy1, x1:x1+dx1])
 plt.axis('off')
+plt.title("簡易デモザイク結果")
 
 # 今回RAW現像した画像の描画。
 plt.subplot(1, 2, 2)
 y2, x2 = y1 * 2, x1 * 2
 dy2, dx2 = dy1 * 2, dx1 * 2
-imshow(gmm_full_img[y2:y2+dy2, x2:x2+dx2])
+plt.imshow(gmm_full_img[y2:y2+dy2, x2:x2+dx2])
 plt.axis('off')
+plt.title(u"線形補間デモザイク画像")
 
 # 実際に表示。
 plt.show()
@@ -1916,28 +1974,11 @@ $$ gout_{x, y}= \sum_{i=-1}^{+1}\sum_{j=-1}^{+1} gin_{x+i, y+i} g_{i, j}$$
 
 この節では線形補間によるデモザイク処理を行いました。次は[欠陥画素補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb)を行います。
 
-
-```python
-plt.figure(figsize=(16, 8))
-imshow(gmm2_full_img[2110:2160, 1150:1210, :])
-plt.axis('off')
-plt.show()
-```
-
-
-![png](camera_raw_chapter_4_2_files/camera_raw_chapter_4_2_39_0.png)
-
-
-
-```python
-
-```
-
 # 4.3 欠陥画素補正
 
 ## この節について
 
-この節では、画像サイズを変えないデモザイク処理を解説します。
+この節では、欠陥画素補正を解説します。
 
 この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
 
@@ -1958,12 +1999,17 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロード
 !if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/camera_raw_process.py; fi
 
 from raw_process import simple_demosaic, white_balance, black_level_correction, gamma_correction, demosaic
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f chart.jpg ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/chart.jpg; fi
@@ -1984,6 +2030,8 @@ raw_array = raw_array.reshape((h, w));
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 ## 欠陥画素
@@ -2003,8 +2051,9 @@ gmm_img = gamma_correction(dms_img, 2.2)
 
 # 画像の一部分を拡大表示。
 plt.figure(figsize=(16, 8))
-imshow(gmm_img[2110:2160, 1150:1210, :])
+plt.imshow(gmm_img[2110:2160, 1150:1210, :])
 plt.axis('off')
+plt.title(u"欠陥画素")
 plt.show()
 ```
 
@@ -2153,8 +2202,9 @@ gmm_img = gamma_correction(dms_img, 2.2)
 
 # 画像の一部分を拡大表示。
 plt.figure(figsize=(16, 8))
-imshow(gmm_img)
+plt.imshow(gmm_img)
 plt.axis('off')
+plt.title(u"欠陥画素補正後")
 plt.show()
 ```
 
@@ -2168,8 +2218,9 @@ plt.show()
 ```python
 # 画像の一部分を拡大表示。
 plt.figure(figsize=(16, 8))
-imshow(gmm_img[2110:2160, 1150:1210, :])
+plt.imshow(gmm_img[2110:2160, 1150:1210, :])
 plt.axis('off')
+plt.title(u"補正された欠陥画像")
 plt.show()
 ```
 
@@ -2244,4 +2295,319 @@ def defect_correction(raw_array, threshold):
 
 ## まとめ
 
-この節では欠陥画素補正を行いました。次は[カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb)を行います。
+この節では欠陥画素補正を行いました。次は[カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb)を行います。
+
+# 4.4 カラーマトリクス補正
+
+## この節について
+
+この節では、カラーマトリクス補正を解説します。
+
+この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+
+https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb
+
+## 準備
+
+まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
+内容については各節を参照ください。
+
+
+```python
+# rawpyとimageioのインストール
+!pip install rawpy;
+!pip install imageio;
+
+# rawpy, imageio, numpuy, pyplot, imshowのインポート
+import rawpy, imageio
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import imshow
+
+# 前節までに作成したモジュールのダウンロードとインポート
+!if [ ! -f raw_process.py ]; then wget raw_process.py; fi
+from raw_process import simple_demosaic, white_balance, black_level_correction, gamma_correction, demosaic, defect_correction
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
+
+# 画像をダウンロードします。
+!if [ ! -f chart.jpg ]; then wget chart.jpg; fi
+
+# 自分で撮影した画像を使用する場合は以下のコメントを取り除きアップロードします。
+# from google.colab import files
+# uploaded = files.upload()
+
+# RAWファイルの名前。
+# アップロードしたファイルを使う場合はその名前に変更。
+raw_file  = "chart.jpg"
+raw = rawpy.imread(raw_file)
+raw_array = raw.raw_image
+h, w = raw.sizes.raw_height, raw.sizes.raw_width
+raw_array = raw_array.reshape((h, w));
+```
+
+    Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
+    Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
+    Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+
+
+## カラーマトリクスとは
+
+前節までにRAW現像した画像と、JPEG画像を並べて比較してみましょう。
+こちらがJPEG画像をJPEGとしてそのまま表示したものです。
+
+
+```python
+# JPEG画像をnumpyのarrayとして取得
+# [4.2節参照](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_2.ipynb)
+from matplotlib import image
+import matplotlib
+jpg_img = image.imread("chart.jpg")
+jpg_img = jpg_img / jpg_img.max()
+
+# JPEG画像表示
+plt.figure(figsize=(16, 8))
+imshow(jpg_img)
+plt.axis('off')
+plt.title(u"JPEG画像")
+plt.show()
+```
+
+
+![png](camera_raw_chapter_4_4_files/camera_raw_chapter_4_4_5_0.png)
+
+
+それに対してこちらが、前回までに現像したものです。
+
+
+```python
+# ブラックレベル補正。
+blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
+# 前節で作成したdefect_correction関数を使って、欠陥画素補正。
+dpc_raw = defect_correction(blc_raw, 16)
+# 残りの現像処理
+wb_raw = white_balance(dpc_raw, raw.camera_whitebalance, raw.raw_colors)
+dms_img = demosaic(wb_raw, raw.raw_colors)
+gmm_img = gamma_correction(dms_img, 2.2)
+
+# 画像表示。
+plt.figure(figsize=(16, 8))
+imshow(gmm_img)
+plt.axis('off')
+plt.title(u"RAW現像した画像")
+plt.show()
+```
+
+
+![png](camera_raw_chapter_4_4_files/camera_raw_chapter_4_4_7_0.png)
+
+
+２つの画像を見比べると、色の鮮やかさが違うことがわかると思います。また色合いも完全には一致していません。実際の見た目も最初のJPEGの画像に近くなっています。
+
+どうしてこうなってしまうかというと、最大の原因はカメラのセンサーの色ごとの感度が人間の目とは完全には一致しないことです。例えば人間の目はある光の周波数の範囲を赤、青、緑、と感じるのですが、センサーが緑を検知する範囲は人間が緑と感じる領域とは微妙に異なっています。同じように青や赤の範囲も違います。これは、センサーが光をなるべく沢山取り込むため、だとか、製造上の制限、などの理由があるようです。 さらに、人間の目には、ある色を抑制するような領域まであります。これはセンサーで言えばマイナスの感度があるようなものですが、そんなセンサーは作れません。
+
+こういったセンサー感度と人間の目の間隔とがなるべく小さくなるように、3色を混ぜて、より人間の感覚に近い色を作り出す必要があります。この処理を通常は行列を使って行い、これをカラーマトリクス補正と呼びます。
+
+カラーマトリクス補正というのは処理的には3x3の行列に、3色の値を成分としたベクトルをかけるという処理になります。
+
+$$ 
+\left(
+    \begin{matrix}
+        R_{out} \\
+        G_{out} \\
+        B_{out} \\
+    \end{matrix}
+\right) = 
+\left(
+    \begin{matrix}
+        c_0 & c_1 & c_2 \\
+        c_3 & c_4 & c_5 \\
+        c_6 & c_7 & c_8 \\
+    \end{matrix}
+\right)
+\left(
+    \begin{matrix}
+        R_{in} \\
+        G_{in} \\
+        B_{in} \\
+    \end{matrix}
+\right)
+$$
+
+このような処理で、色の深み・鮮やかさ（Saturationと呼ばれます）、色合い（Hueと呼ばれます）をある程度修正することができます。
+
+## カラーマトリクス補正
+
+それでは実際にカラーマトリクス補正をかけてみましょう。
+
+まず、撮影されたRAW画像に保存されているカラーマトリクスの値を読んでみましょう。
+RAWPYにもカラーマトリクスを読み取る機能はあるのですが、実際に実行するとこうなってしまいます。
+
+
+```python
+print(raw.color_matrix)
+```
+
+    [[0. 0. 0. 0.]
+     [0. 0. 0. 0.]
+     [0. 0. 0. 0.]]
+
+
+これでは仕方がないので、exiftoolを使います。exiftoolはコマンドラインから各種画像ファイルの情報を取り出すツールです。
+
+まずcolabの環境にexiftoolをインストールします。
+
+
+```python
+! apt install exiftool
+```
+
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+
+
+Exiftoolをつかって、カラーマトリクスの内容を見てみましょう。
+
+Raspberry PiのRAW画像の場合、カラーマトリクスはメーカーノート情報（カメラメーカー独自のデータ）に含まれています[^1]。メーカーノートは`-b`オプションで読むことができます。
+
+[^1]: α7IIIのRAW画像ではEXIF情報に含まれているので、`-b`オプションをつけなくとも`! exiftool sample.ARW`で読み取ることができます。
+
+
+```python
+! exiftool chart.jpg -b | head -c 512
+```
+
+    11.10chart.jpg.154593162019:01:26 20:15:58-08:002019:02:02 09:13:14-08:002019:01:26 20:16:11-08:00664JPEGJPGimage/jpegMMRaspberryPiRP_imx219727222018:10:20 18:10:0110.0629982312502202018:10:20 18:10:012018:10:20 18:10:011 2 3 00.062998007062321722.62203.039ev=-1 mlux=-1 exp=62998 ag=556 focus=255 gain_r=1.128 gain_b=2.546 greenness=3 ccm=6022,-2314,394,-936,4728,310,300,-4324,8126,0,0,0 md=0 tg=262 262 oth=0 0 b=0 f=262 262 fi=0 ISP Build Date: Oct  8 2018, 17:46:45 VC_BUILD_ID_VERSION: 656741eb5ba785fc4f10
+
+ここで`head -c 512`は先頭部分のみを取り出すのに使っています。
+
+繋がっていて読みにくいですが、よく見てみるとこのような部分があるのがわかります。
+
+> ccm=6022,-2314,394,-936,4728,310,300,-4324,8126,0,0,0
+
+これは、カラーマトリクス(CCM: Color Correction Matrix)が次のような値であることを示しています。
+
+$$ \left(
+    \begin{matrix}
+        6022 & -2314 & 394 \\
+        -936 & 4728 & 310 \\
+        300 & -4324 & 8126 \\
+    \end{matrix}
+\right) $$
+
+このままでは入力と掛け合わせた時に非常に大きくなってしまうので、何かの値で正規化しなくてはなりません。Exifのメーカーノートには特に記載がありませんが、各行の和が4096に近いので、4096で正規化しておくことにしましょう。
+
+それではこの値を使ってカラーマトリクス補正を行ってみましょう。カラーマトリクス補正は線形な色空間で行う必用があるので、ガンマ補正の前に行います。
+
+
+```python
+# カラーマトリクス
+# [[6022,-2314,394]
+#  [-936,4728,310]
+#  [300,-4324,8126]] / 4096
+color_matrix = np.array([[6022,-2314,394],[-936,4728,310],[300,-4324,8126]]) / 4096
+
+# 出力先を作成しておく
+ccm_img = np.zeros_like(dms_img)
+# 実際に１画素毎に処理
+# 入力はデモザイク処理後の画像。
+for y in range(0, h):
+    for x in range(0, w):
+        pixel = dms_img[y, x, :]
+        # numpyのdotは行列同士の掛け算を計算する関数
+        pixel = np.dot(color_matrix, pixel)
+        ccm_img[y, x, :] = pixel
+```
+
+残っているガンマ補正を行います。
+
+
+```python
+ccm_gmm_img = gamma_correction(ccm_img, 2.2)
+```
+
+最終的な画像を表示して、カラーマトリクス補正なしのものと比較してみましょう。
+
+
+```python
+# 表示領域設定
+plt.figure(figsize=(12, 16))
+# 2 x 1 (縦２，横１)のうち１つめの表示
+plt.subplot(2, 1, 1)
+# CCM補正なしの画像を表示
+plt.imshow(gmm_img)
+plt.axis('off')
+plt.title(u"CCM補正なし")
+# 2 x 1 (縦２，横１)のうち２つめの表示
+plt.subplot(2, 1, 2)
+# CCM補正ありの画像を表示
+plt.imshow(ccm_gmm_img)
+plt.axis('off')
+plt.title(u"CCM補正あり")
+# 画像を描画
+plt.show()
+```
+
+
+![png](camera_raw_chapter_4_4_files/camera_raw_chapter_4_4_21_0.png)
+
+
+CCMありのほうが色が鮮やかになっているのがわかると思います。
+
+## モジュールへの追加
+
+この処理も高速化して、関数としてモジュールへ追加しておきましょう。
+
+
+```python
+def color_correction_matrix(rgb_array, color_matrix):
+    """
+    カラーマトリクス補正を行う。
+    
+    Parameters
+    ----------
+    rgb_array: numpy array
+        入力RGB画像
+    color_matrix: 2D (3x3) array like
+        3x3 Color Correction Matrix
+        Need to be normalized to 1.0
+    
+    Returns
+    -------
+    ccm_img: numpy array
+        出力RGB画像
+    """
+    
+    # 出力先を作成
+    ccm_img = np.zeros_like(rgb_array)
+    # CCMが3x3フォーマットでない場合、3x3に変換
+    ccm = np.array(color_matrix).reshape((3, 3))
+    # 各色毎に処理。この方が各画素ごとに処理するよりも高速なようだ。
+    for color in (0, 1, 2):
+        # 行列と入力画像の各色を掛け合わせる。
+        ccm_img[:, :, color] = ccm[color, 0] * rgb_array[:, :, 0] + \
+                               ccm[color, 1] * rgb_array[:, :, 1] + \
+                               ccm[color, 2] * rgb_array[:, :, 2]
+    return ccm_img
+```
+
+この`color_correction_matrix()`関数は`raw_process.py`モジュールの一部として[githubにアップロード](https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py)されています。
+使用する場合は、
+
+`!wget https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py`
+
+としてダウンロードした後、
+
+`from raw_process import color_correction_matrix`
+
+としてインポートしてください。
+
+## まとめ
+
+この節ではカラーマトリクス補正を行いました。次は[レンズシェーディング補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_5.ipynb)を行います。

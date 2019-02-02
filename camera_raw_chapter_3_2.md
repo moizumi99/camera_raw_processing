@@ -24,7 +24,12 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
@@ -45,17 +50,8 @@ raw_array = raw_array.reshape((h, w))
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
-    --2019-01-26 15:56:51--  https://raw.githubusercontent.com/moizumi99/raw_process/master/sample.ARW
-    Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.188.133
-    Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.188.133|:443... connected.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 24746752 (24M) [application/octet-stream]
-    Saving to: ‘sample.ARW.1’
-    
-    sample.ARW.1        100%[===================>]  23.60M  52.3MB/s    in 0.5s    
-    
-    2019-01-26 15:56:51 (52.3 MB/s) - ‘sample.ARW.1’ saved [24746752/24746752]
-    
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 ## RAW画像の確認
@@ -65,10 +61,9 @@ raw_array = raw_array.reshape((h, w))
 
 ```python
 # raw_arrayの中のデータをグレースケールで表示します。
-imshow(raw_array, cmap='gray')
-# 軸を非表示にします。
+plt.imshow(raw_array, cmap='gray')
 plt.axis('off')
-# 実際に表示します。
+plt.title(u"RAW画像の確認")
 plt.show()
 ```
 
@@ -85,10 +80,9 @@ plt.show()
 plt.figure(figsize=(8, 8))
 
 # RAW画像の中から(1310, 2620)から60x60の領域を表示。
-imshow(raw_array[1310:1370, 2620:2680], cmap='gray')
-# 軸非表示
+plt.imshow(raw_array[1310:1370, 2620:2680], cmap='gray')
 plt.axis('off')
-# 画像表示
+plt.title(u"RAW画像の拡大表示")
 plt.show()
 ```
 
@@ -100,7 +94,7 @@ plt.show()
 
 ## 疑似カラー化
 
-Bayerの赤の部分を赤、青を青、緑を緑で表示してみましょう。
+Bayerの画素と色の関係を直感的に理解するために、Bayerの赤の部分を赤、青を青、緑を緑で表示してみましょう。
 
 まず、RAW画像の配列を確認しておきます。
 
@@ -169,12 +163,11 @@ raw_color = raw_color / raw_color.max()
 
 
 ```python
+# RAW画像に色を割り振ったものを表示。
 plt.figure(figsize=(8, 8))
-# RAW画像表示。
-imshow(raw_color)
-# 軸非表示
+plt.imshow(raw_color)
 plt.axis('off')
-# 画像表示
+plt.title(u"RAW画像の各画素に色を割り当てたもの")
 plt.show()
 ```
 
@@ -188,10 +181,9 @@ plt.show()
 ```python
 plt.figure(figsize=(8, 8))
 # RAW画像の中から(1310, 2620)から32x32の領域を表示。
-imshow(raw_color[1310:1342, 2620:2652])
-# 軸非表示
+plt.imshow(raw_color[1310:1342, 2620:2652])
 plt.axis('off')
-# 画像表示
+plt.title(u"RAW画像の各画素に色を割り当てたものを拡大表示")
 plt.show()
 ```
 
@@ -264,8 +256,9 @@ dms_img[dms_img < 0] = 0
 dms_img = dms_img / dms_img.max()
 # 表示
 plt.figure(figsize=(8, 8))
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"簡易デモザイク")
 plt.show()
 ```
 
@@ -326,8 +319,9 @@ dms_img[dms_img < 0] = 0
 dms_img = dms_img / dms_img.max()
 # 表示
 plt.figure(figsize=(8, 8))
-imshow(dms_img)
+plt.imshow(dms_img)
 plt.axis('off')
+plt.title(u"simple_demosaic関数の出力")
 plt.show()
 ```
 

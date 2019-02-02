@@ -27,13 +27,14 @@
 
   4.1 [この章について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)
 
-  4.1 [線形補間デモザイク](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_1.ipynb)
+  4.2 [線形補間デモザイク](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_2.ipynb)
 
-  4.2 欠陥画素補正
+  4.3 [欠陥画素補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb)
 
-  4.3 カラーマトリクス
+  4.4 [カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb)
 
-  4.4 レンズシェーディング補正
+
+  4.5 レンズシェーディング補正
   
 
 5. 画質を良くする処理

@@ -24,12 +24,17 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロード
 !if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/raw_process.py; fi
 
 from raw_process import simple_demosaic, white_balance, black_level_correction
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
@@ -50,6 +55,8 @@ raw_array = raw_array.reshape((h, w));
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
     Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
     Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
 ## ガンマ補正とは
@@ -69,12 +76,15 @@ $$ y = x^{2.2} $$
 xs = np.arange(0.0, 1.0, 0.01)
 ys = np.power(xs, 2.2)
 plt.plot(xs, ys)
+plt.title(u"ガンマカーブ")
 plt.show()
 ```
 
 
 ![png](camera_raw_chapter_3_5_files/camera_raw_chapter_3_5_5_0.png)
 
+
+モニターなどの出力の強さはは入力に対してこのような特性になるので、入力の方をこれに合わせて調整しておく必用があります。これがガンマ補正です。
 
 ガンマ補正はこれを打ち消す必要があるので、このような式になります。
 
@@ -87,6 +97,7 @@ $$ y = x^{\frac{1}{2.2}} $$
 xs = np.arange(0.0, 1.0, 0.01)
 ys = np.power(xs, 1/2.2)
 plt.plot(xs, ys)
+plt.title(u"ガンマ補正カーブ")
 plt.show()
 ```
 
@@ -117,10 +128,13 @@ dms_img = simple_demosaic(wb_img, raw.raw_pattern)
 # 表示
 plt.figure(figsize=(8, 8))
 # imshowでは画像は0から1.0の値をとる必用があるので、ノーマライズする。
-dms_img[dms_img<0] = 0
-dms_img /= dms_img.max()
-imshow(dms_img)
+img = dms_img.copy()
+img[img<0] = 0
+img /= img.max()
+img[img>1] = 1
+plt.imshow(img)
 plt.axis('off')
+plt.title(u"ガンマ補正前")
 plt.show()
 ```
 
@@ -136,7 +150,7 @@ plt.show()
 gamma_img = dms_img.astype(float)
 # ガンマ関数は0-1の範囲で定義されているので、その範囲に正規化する。
 gamma_img[gamma_img < 0] = 0
-gamma_img = gamma_img/gamma_img.max()
+gamma_img /= gamma_img.max()
 # numpyのpower関数を使って、ガンマ関数を適用。
 gamma_img = np.power(gamma_img, 1/2.2)
 ```
@@ -147,8 +161,9 @@ gamma_img = np.power(gamma_img, 1/2.2)
 ```python
 # 表示
 plt.figure(figsize=(8, 8))
-imshow(gamma_img)
+plt.imshow(gamma_img)
 plt.axis('off')
+plt.title(u"ガンマ補正後")
 plt.show()
 ```
 
@@ -204,4 +219,4 @@ def gamma_correction(input_img, gamma):
 ## まとめ
 
 この節ではガンマ補正を行いました。これで基本的な処理はすべておわりです。
-次は[画像をきれいにする処理に移ります](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)
+次の章ではその他の[重要な処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)を扱います。
