@@ -2322,6 +2322,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 import rawpy, imageio
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロードとインポート
 !if [ ! -f raw_process.py ]; then wget raw_process.py; fi
@@ -2372,7 +2373,7 @@ jpg_img = jpg_img / jpg_img.max()
 
 # JPEG画像表示
 plt.figure(figsize=(16, 8))
-plt.imshow(jpg_img)
+imshow(jpg_img)
 plt.axis('off')
 plt.title(u"JPEG画像")
 plt.show()
@@ -2397,7 +2398,7 @@ gmm_img = gamma_correction(dms_img, 2.2)
 
 # 画像表示。
 plt.figure(figsize=(16, 8))
-plt.imshow(gmm_img)
+imshow(gmm_img)
 plt.axis('off')
 plt.title(u"RAW現像した画像")
 plt.show()
@@ -2473,18 +2474,16 @@ print(raw.color_matrix)
 
 Exiftoolをつかって、カラーマトリクスの内容を見てみましょう。
 
-Raspberry PiのRAW画像の場合、カラーマトリクスはメーカーノート情報（カメラメーカー独自のデータ）に含まれています[^1]。メーカーノートは`-b`オプションで読むことができます。
+Raspberry PiのRAW画像の場合、カラーマトリクスはメーカーノート情報（カメラメーカー独自のデータ）に含まれています[^1]。メーカーノートは`-EXIF:MakerNoteUnknownText -b`オプションで読むことができます。
 
-[^1]: α7IIIのRAW画像ではEXIF情報に含まれているので、`-b`オプションをつけなくとも`! exiftool sample.ARW`で読み取ることができます。
+[^1]: α7IIIのRAW画像ではEXIF情報に含まれているのでオプションをつけなくとも`! exiftool sample.ARW`で読み取ることができます。
 
 
 ```python
-! exiftool chart.jpg -b | head -c 512
+! exiftool -EXIF:MakerNoteUnknownText -b chart.jpg -b
 ```
 
-    11.10chart.jpg.154593162019:01:26 20:15:58-08:002019:02:02 09:13:14-08:002019:01:26 20:16:11-08:00664JPEGJPGimage/jpegMMRaspberryPiRP_imx219727222018:10:20 18:10:0110.0629982312502202018:10:20 18:10:012018:10:20 18:10:011 2 3 00.062998007062321722.62203.039ev=-1 mlux=-1 exp=62998 ag=556 focus=255 gain_r=1.128 gain_b=2.546 greenness=3 ccm=6022,-2314,394,-936,4728,310,300,-4324,8126,0,0,0 md=0 tg=262 262 oth=0 0 b=0 f=262 262 fi=0 ISP Build Date: Oct  8 2018, 17:46:45 VC_BUILD_ID_VERSION: 656741eb5ba785fc4f10
-
-ここで`head -c 512`は先頭部分のみを取り出すのに使っています。
+    ev=-1 mlux=-1 exp=62998 ag=556 focus=255 gain_r=1.128 gain_b=2.546 greenness=3 ccm=6022,-2314,394,-936,4728,310,300,-4324,8126,0,0,0 md=0 tg=262 262 oth=0 0 b=0 f=262 262 fi=0 ISP Build Date: Oct  8 2018, 17:46:45 VC_BUILD_ID_VERSION: 656741eb5ba785fc4f1014a3a3b1c0e9c2cc8487 (clean) VC_BUILD_ID_USER: dc4 VC_BUILD_ID_BRANCH: master 
 
 繋がっていて読みにくいですが、よく見てみるとこのような部分があるのがわかります。
 
@@ -2574,8 +2573,8 @@ def color_correction_matrix(rgb_array, color_matrix):
     rgb_array: numpy array
         入力RGB画像
     color_matrix: 2D (3x3) array like
-        3x3のカラーマトリクス行列
-        1.0で正規化されていること。
+        3x3 Color Correction Matrix
+        Need to be normalized to 1.0
     
     Returns
     -------
@@ -3217,6 +3216,8 @@ plt.show()
 また、補正パラメータも、明るさや光源の種類、オートフォーカスの場合はフォーカス位置、などにより調整します。
 
 一見単純そうな見た目や効果と比べて、実際には遥かに複雑で非常に重要な処理です。ある意味カメラの出力画像の画質を決める肝と言ってもよいと思います。
+
+これで第４章は終わりです。次は[第五章 画像をきれいにする処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5.ipynb)に入ります。
 
 
 ```python
