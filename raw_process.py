@@ -242,3 +242,49 @@ def color_correction_matrix(rgb_array, color_matrix):
                                ccm[color, 1] * rgb_array[:, :, 1] + \
                                ccm[color, 2] * rgb_array[:, :, 2]
     return ccm_img
+
+
+def lens_shading_correction(raw_array, coef):
+    """
+    レンズシェーディング補正を行う。
+
+    Parameters
+    ----------
+    raw_array: numpy array
+        Bayerフォーマット入力RAW画像
+    coef: array of size 4x2
+        coef[c][1]: 定数項
+        coef[c][0]: 傾き
+        cはBayer配列内のカラーチャンネル
+        c = 0: 左上
+        c = 1: 右上
+        c = 2: 左下
+        c = 3: 右下
+    
+    Returns
+    -------
+    lsc_raw: numpy array
+        出力RAW画像
+    """
+    
+    # ゲインマップの保存場所。
+    gain_map = np.zeros(raw_array.shape)
+    # 起点となる画像の中心位置。
+    center_y, center_x = h // 2, w // 2
+    # 中心からの距離を配列に保存。
+    x = np.arange(0, w) - center_x
+    y = np.arange(0, h) - center_y
+    # numpyのmeshgridは,x, yを並べた配列を生成する。
+    # この場合範囲内のi, jに対し、xs[i, j] = x[j]
+    # 同様にi, jに対し、ys[i, j] = y[i]
+    xs, ys = np.meshgrid(x, y, sparse=True)
+    # 各点ごとの中心からの距離を計算
+    r2 = ys * ys + xs * xs
+    # 中心からの距離に係数をかけて各点のゲインを計算。
+    gain_map[::2, ::2] = r2[::2, ::2] * coef[0][0] + coef[0][1]
+    gain_map[1::2, ::2] = r2[1::2, ::2] * coef[1][0] + coef[1][1]
+    gain_map[::2, 1::2] = r2[::2, 1::2] * coef[2][0] + coef[2][1]
+    gain_map[1::2, 1::2] = r2[1::2, 1::2] * coef[3][0] + coef[3][1]
+    # 入力画像にゲインをかけ合わせる。
+    lsc_array = raw_array * gain_map
+    return lsc_array
