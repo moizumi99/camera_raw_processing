@@ -73,7 +73,9 @@
 
 # 1. はじめに
 
-## この本について
+## 1.1 はじめに
+
+### この本について
 
 この本では、カメラ画像処理・RAW画像現像の内容を実際の動作レベルで解説し、なるべくスクラッチからPython上で実行してみる事を目的としています。
 
@@ -87,7 +89,7 @@
   
 全てのコードへのリンクはこちらの[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)からたどることができます。
 
-## 対象読者
+### 対象読者
 
 この本は以下のような読者を対象としています。
 - カメラ内部の画像処理またはRAW現像の内容に興味がある。
@@ -96,7 +98,7 @@
 - Pythonプログラミングの基本的な内容について知っている。
 - 高校で学ぶ程度の数学の知識がある。
 
-## Colabについて
+### Colabについて
 
 
 Google Colab (グーグル・コラボ)とはGoogleが提供するサービスの一つで、ブラウザ上で実行可能なPythonのインタラクティブ環境です。
@@ -105,7 +107,7 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 詳しくは[Google自身によるColabの解説](https://colab.research.google.com/notebooks/welcome.ipynb?hl=ja)をご覧ください。
 
-## この本で扱うもの
+### この本で扱うもの
 
 
 この本で扱う内容は基本的に以下のとおりです。
@@ -116,7 +118,7 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 一部例外はありますが、そういったものは関連した話題として触れられるだけにとどまります。
 
-## この記事で扱わないもの
+### この記事で扱わないもの
 
 
 この本で基本的に扱わない物は以下のとおりです。ただし、記事の解説上最低限必要なものについては触れることがあります。
@@ -127,12 +129,12 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 - 画像圧縮
 
 
-## 環境について
+### 環境について
 
 この記事で解説する内容は一般的なものですが、使用した画像ファイルは特定のカメラに依存しています。
 他のカメラでもわずかな変更で同等の処理ができるとは予想されますが、検証はしていません。
 
-### 使用カメラ
+#### 使用カメラ
 
 
 
@@ -142,7 +144,7 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 なお、使用したファイルはGithubからダウンロードできるので、これらのカメラをお持ちでなくても、紹介した処理の内容を実行することは可能です。
 
-### 実行環境
+#### 実行環境
 
 この内容を再現するには通常のPC環境に加えて以下の環境等が必用です。
 
@@ -157,13 +159,14 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 - [exiftool](https://www.sno.phy.queensu.ca/~phil/exiftool/)
 
-## 次の章
+### 次の章
 
-次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1pynb)簡単に解説します。
+次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.pynb)簡単に解説します。
 
-# 2. カメラ画像処理について
+## 2. カメラ画像処理について
 
-## この章について
+## カメラ画像処理について
+### この章について
 
 この章ではカメラのしくみやRAW画像からはじめて、カメラ画像処理やRAW現像ソフトの中でどのような処理が行われているのかを説明します。
 
@@ -171,11 +174,11 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.ipynb
 
-## カメラのしくみ
+### カメラのしくみ
 
 (TODO: 追加)
 
-## RAW画像、RAWファイルとは？
+### RAW画像、RAWファイルとは？
 
 RAWファイルやRAWデータというのは厳密な定義はないのですが、カメラ処理でRAWというとBayerフォーマットの画像データを指すことが多いようです。したがって多くの場合、RAWデータはBayerフォーマットの画像データ、RAWファイルはそのRAWデータを含んだファイルということになります。
 
@@ -216,7 +219,7 @@ RAWファイルやRAWデータというのは厳密な定義はないのです�
 などがあります。最後の点に関して言うと、RAWデータといってもセンサー出力をそのままファイルに書き出すことはまずなく、欠陥画素除去など最低限の前処理が行われいるのが普通です。
 しかし、実際にどんな前処理がおこなわれているのかは必ずしも公開されていません。
 
-## カメラ画像処理のあらまし
+### カメラ画像処理のあらまし
 
 Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画像処理のうち、メインになる部分の例はこんな感じになります。[^2]
 
@@ -268,17 +271,19 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 ![単純化したカメラ画像処理パイプライン](fig3.png "単純化したカメラ画像処理パイプライン")
 
 
-## この章のまとめ
+### この章のまとめ
 
 カメラ内部の仕組みとRAW現像処理・カメラ画像処理を、画像処理の観点から説明しました。
 
-## 次の章
+### 次の章
 
 次は[RAW画像の準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1pynb)を行います。
 
-# 3.1 準備と簡易デモザイク
+# 3 基本的な処理
 
-## この節について
+## 3.1 準備と簡易デモザイク
+
+### この節について
 
 この節ではまずRAW画像を準備し、簡易的なデモザイクを行ってみます。
 
@@ -286,7 +291,7 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb
 
-## RAW画像の準備
+### RAW画像の準備
 
 まずRAW画像を用意します。今回はSony α 7 IIIで撮影したこの画像を使います。
 
@@ -482,12 +487,12 @@ Runtime->Restart Runtimeで再実行してみてください。
 # その後、Runtime->Restart and run allで再実行
 ```
 
-## この節のまとめ
+### この節のまとめ
 
 必用なモジュールをインポートしてRAW画像をcolab上に読み込みました。
 次は[簡易デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_2.ipynb)を行います。
 
-# 3.2 簡易デモザイク処理
+## 3.2 簡易デモザイク処理
 
 ## この節について
 
@@ -497,7 +502,7 @@ Runtime->Restart Runtimeで再実行してみてください。
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_2.ipynb
 
-## 準備
+### 準備
 
 まず前節で行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
 内容については前節を参照ください。
@@ -541,7 +546,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## RAW画像の確認
+### RAW画像の確認
 
 読み込んだRAW画像を表示してみます。
 
@@ -579,7 +584,7 @@ plt.show()
 
 明るいところが緑、暗いところが赤や青の画素のはずです。
 
-## 疑似カラー化
+### 疑似カラー化
 
 Bayerの画素と色の関係を直感的に理解するために、Bayerの赤の部分を赤、青を青、緑を緑で表示してみましょう。
 
@@ -680,7 +685,7 @@ plt.show()
 
 これではなんだかよくわかりません。そういうわけでBayerをフルカラーのRGBに変換する処理が必用になるわけです。
 
-## 簡易デモザイク処理
+### 簡易デモザイク処理
 
 それではBayer配列からフルカラーの画像を作ってみましょう。
 
@@ -757,7 +762,7 @@ plt.show()
 
 まだ色が正しくない、全体的に暗い、などの問題があります。次の節でこのあたりを修正していきます。
 
-## 処理の高速化
+### 処理の高速化
 
 上記のコードは、画像処理とコードの対応がわかりやすいように各画素ごとの処理をループを使って記述してあります。
 
@@ -829,13 +834,13 @@ plt.show()
 
 としてインポートしてください。
 
-## この節のまとめ
+### この節のまとめ
 
-RAW画像に対して簡易デモザイク処理を行いました。次は[ホワイトバランス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_2.ipynb)を行います。
+RAW画像に対して簡易デモザイク処理を行いました。次は[ホワイトバランス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_3.ipynb)を行います。
 
-# 3.3 ホワイトバランス補正
+## 3.3 ホワイトバランス補正
 
-## この節について
+### この節について
 
 この節では、ホワイトバランス補正を行い画像の色を修正します。
 
@@ -843,7 +848,7 @@ RAW画像に対して簡易デモザイク処理を行いました。次は[ホ�
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_3.ipynb
 
-## 準備
+### 準備
 
 まず3.1節で行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
 内容については3.1節を参照ください
@@ -892,14 +897,14 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## ホワイトバランス補正とは
+### ホワイトバランス補正とは
 
 ホワイトバランス補正とは、センサーの色ごとの感度や、光のスペクトラムなどの影響を除去して、本来の白を白として再現するための処理です。 
 そのためには各色の画素に、別途計算したゲイン値をかけてあげます。
 
 実際のカメラではホワイトバランスの推定はAWB（オートホワイトバランス）と呼ばれる複雑な処理によって行いますが、今回はカメラが撮影時に計算したゲイン値をRAWファイルから抽出して使います。
 
-## ホワイトバランス補正処理
+### ホワイトバランス補正処理
 
 ますはどんなホワイトバランス値かみてみましょう。RAWファイルの中に記録されたゲインを見てみましょう。
 
@@ -975,7 +980,7 @@ plt.show()
 
 まだ赤みが強い画像になっています。ブラックレベルの補正がされていないためだと思われます。ブラックレベル補正は次の節で扱います。
 
-## 処理の高速化
+### 処理の高速化
 
 先程扱ったホワイトバランスの処理は、コードの読みやすさを優先したものなので低速です。
 
@@ -1049,13 +1054,13 @@ plt.show()
 
 としてインポートしてください。
 
-## この節のまとめ
+### この節のまとめ
 
 この節ではホワイトバランスの調整を行いました。次は[ブラックレベル補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_4.ipynb)を行い、色再現を向上します。
 
-# 3.4 ブラックレベル補正
+## 3.4 ブラックレベル補正
 
-## この節について
+### この節について
 
 この節では、ブラックレベル補正を行い画像の明るさと色を修正します。
 
@@ -1063,7 +1068,7 @@ plt.show()
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_4.ipynb
 
-## 準備
+### 準備
 
 まず3.1節で行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
 内容については各節を参照ください。
@@ -1112,7 +1117,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## ブラックレベル補正とは
+### ブラックレベル補正とは
 
 RAWデータの黒に対応する値は通常０より大きくなっています。
 
@@ -1120,7 +1125,7 @@ RAWデータの黒に対応する値は通常０より大きくなっていま�
 
 したがって、正しい画像処理を行うにはブラックレベルを調整して置かなくてはなりません。これをやって置かないと黒が十分黒くない、カスミがかかったような眠い画像になってしまいますし、色もずれてしまいます。
 
-## ブラックレベル補正処理
+### ブラックレベル補正処理
 
 ますはどんなブラックレベル値かみてみましょう。
 
@@ -1170,7 +1175,7 @@ print("ブラックレベル補正前: 最小値=", blc_raw.min(), ", 最大値=
 
 どうやら正常に処理が行われたようです。
 
-## ブラックレベル後の画像の確認
+### ブラックレベル後の画像の確認
 
 ホワイトバランスと簡易デモザイク処理を行って、ブラックレベルが正常に補正されたか確認しましょう。
 
@@ -1206,7 +1211,7 @@ plt.show()
 
 ただし、だいぶ暗い画像になっています。これはガンマ補正がされていないためです。次の節ではガンマ補正をかけてみましょう。
 
-## 処理の高速化
+### 処理の高速化
 
 今回のブラックレベル補正処理もコードの読みやすさを優先して、非常に遅いものになっています。
 
@@ -1281,13 +1286,13 @@ plt.show()
 
 としてインポートしてください。
 
-## まとめ
+### まとめ
 
 この節ではブラックレベル補正を行いました。次は[ガンマ補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_5.ipynb)を行い、明るさとトーンを補正します。
 
-# 3.5 ガンマ補正
+## 3.5 ガンマ補正
 
-## この節について
+### この節について
 
 この節では、ガンマ補正を行い画像の明るさとトーンを修正します。
 
@@ -1295,7 +1300,7 @@ plt.show()
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_5.ipynb
 
-## 準備
+### 準備
 
 まずこれまで行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
 内容については各節を参照ください。
@@ -1344,7 +1349,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## ガンマ補正とは
+### ガンマ補正とは
 
 ガンマ補正というのは、もともとテレビがブラウン管だった頃にテレビの出力特性と信号の強度を調整するために使われていたものです。 
 
@@ -1390,7 +1395,7 @@ plt.show()
 ![png](camera_raw_chapter_3_5_files/camera_raw_chapter_3_5_7_0.png)
 
 
-## ガンマ補正処理
+### ガンマ補正処理
 
 それではガンマ補正をかけてみましょう。
 
@@ -1458,7 +1463,7 @@ plt.show()
 
 ガンマ補正により明るさが適正になりました。
 
-## 処理のモジュール化
+### 処理のモジュール化
 
 今回のガンマ補正もモジュールの一部としておきましょう。
 
@@ -1501,16 +1506,16 @@ def gamma_correction(input_img, gamma):
 
 としてインポートしてください。
 
-## まとめ
+### まとめ
 
 この節ではガンマ補正を行いました。これで基本的な処理はすべておわりです。
 次の章ではその他の[重要な処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)を扱います。
 
 #  4. 重要な処理
 
-# 4.1 この章について
+## 4.1 この章について
 
-## はじめに
+### はじめに
 
 この章ではカメラ画像処理の中でも重要な処理を紹介します。
 
@@ -1519,7 +1524,7 @@ def gamma_correction(input_img, gamma):
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb
 
 
-## この章で扱う処理について
+### この章で扱う処理について
 
 前章でRAW画像に最低限の処理を行いフルRGBとして表示することができました。
 処理が単純な割には以外のきれいな画像ができたのではないでしょうか？
@@ -1548,13 +1553,13 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 また、これらの処理の効果を見るために、この章以降では、ラズベリーパイのカメラ(v1.2)で撮影したRAW画像を使用します。
 
-## まとめ
+### まとめ
 
 この章で扱う内容について概要を説明しました。次は[デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_1.ipynb)です。
 
-# 4.2 線形補間デモザイク
+## 4.2 線形補間デモザイク
 
-## この節について
+### この節について
 
 この節では、画像サイズを変えないデモザイク処理を解説します。
 
@@ -1562,7 +1567,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_2.ipynb
 
-## 準備
+### 準備
 
 まず3章で行ったライブラリーのインストールと、モジュールのインポートを行います。
 内容については各節を参照ください。
@@ -1622,7 +1627,7 @@ h, w = raw_array.shape
 
 ラズベリーパイによるRAW画像の撮影方法については付録を参照ください。
 
-## 簡易デモザイク処理の問題点
+### 簡易デモザイク処理の問題点
 
 前節では、デモザイク処理（Bayer配列の画像からフルカラーの画像を作り出す処理）として、簡易的な画像サイズが1/4になるものを使いました。
 単純な処理の割に意外なほどきれいな出力が得られるのですが、いかんせん画像が小さくなるのは問題です。また、出力画像が1/4になるので、細かい部分は潰れてしまいます。
@@ -1757,7 +1762,7 @@ plt.show()
 
 現代のカメラ内部のデモザイクはかなり高度な処理をしているはずなので、右側のJPEG画像並みの解像度を得るのは難しいと思いますが、せめてもとの画像サイズを取り戻せるような処理を導入してみましょう。
 
-## 線形補完法
+### 線形補完法
 
 デモザイクアルゴリズムの中で、縮小する方法の次に簡単なのは、線形補間法です。
 線形補間というとものものしいですが、ようするに、距離に応じて間の値をとるわけです。たとえば、緑の画素ならこうなります。
@@ -1881,7 +1886,7 @@ plt.show()
 
 なお、より高性能なデモザイクは６章の応用編でとりあげます。
 
-## 処理の高速化
+### 処理の高速化
 
 今回のデモザイクもコードの読みやすさを優先させてあります。高速化しておきましょう。
 
@@ -1973,13 +1978,13 @@ $$ gout_{x, y}= \sum_{i=-1}^{+1}\sum_{j=-1}^{+1} gin_{x+i, y+i} g_{i, j}$$
 
 としてインポートしてください。
 
-## まとめ
+### まとめ
 
 この節では線形補間によるデモザイク処理を行いました。次は[欠陥画素補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb)を行います。
 
-# 4.3 欠陥画素補正
+## 4.3 欠陥画素補正
 
-## この節について
+### この節について
 
 この節では、欠陥画素補正を解説します。
 
@@ -1987,7 +1992,7 @@ $$ gout_{x, y}= \sum_{i=-1}^{+1}\sum_{j=-1}^{+1} gin_{x+i, y+i} g_{i, j}$$
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb
 
-## 準備
+### 準備
 
 まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
 内容については各節を参照ください。
@@ -2036,7 +2041,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## 欠陥画素
+### 欠陥画素
 
 ライブラリーを使って対象画像を現像して拡大表示すると、こんな部分があります。
 
@@ -2238,7 +2243,7 @@ plt.show()
 
 どうやら修正されたようです。
 
-## モジュールへの追加
+### モジュールへの追加
 
 この処理も関数としてモジュールへ追加しておきましょう。
 
@@ -2301,13 +2306,13 @@ def defect_correction(raw_array, threshold):
 
 としてインポートしてください。
 
-## まとめ
+### まとめ
 
 この節では欠陥画素補正を行いました。次は[カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb)を行います。
 
-# 4.4 カラーマトリクス補正
+## 4.4 カラーマトリクス補正
 
-## この節について
+### この節について
 
 この節では、カラーマトリクス補正を解説します。
 
@@ -2315,7 +2320,7 @@ def defect_correction(raw_array, threshold):
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb
 
-## 準備
+### 準備
 
 まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
 内容については各節を参照ください。
@@ -2364,7 +2369,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## カラーマトリクスとは
+### カラーマトリクスとは
 
 前節までにRAW現像した画像と、JPEG画像を並べて比較してみましょう。
 こちらがJPEG画像をJPEGとしてそのまま表示したものです。
@@ -2452,7 +2457,7 @@ $$
 
 このような処理で、色の深み・鮮やかさ（Saturationと呼ばれます）、色合い（Hueと呼ばれます）をある程度修正することができます。
 
-## カラーマトリクス補正
+### カラーマトリクス補正
 
 それでは実際にカラーマトリクス補正をかけてみましょう。
 
@@ -2568,7 +2573,7 @@ plt.show()
 
 CCMありのほうが色が鮮やかになっているのがわかると思います。
 
-## モジュールへの追加
+### モジュールへの追加
 
 この処理も高速化して、関数としてモジュールへ追加しておきましょう。
 
@@ -2616,13 +2621,13 @@ def color_correction_matrix(rgb_array, color_matrix):
 
 としてインポートしてください。
 
-## まとめ
+### まとめ
 
 この節ではカラーマトリクス補正を行いました。次は[レンズシェーディング補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_5.ipynb)を行います。
 
-# 4.5 シェーディング補正
+## 4.5 シェーディング補正
 
-## この節について
+### この節について
 
 この節では、シェーディング補正について解説します。
 
@@ -2630,7 +2635,7 @@ def color_correction_matrix(rgb_array, color_matrix):
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_5.ipynb
 
-## 準備
+### 準備
 
 まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
 内容については各節を参照ください。
@@ -2673,7 +2678,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## レンズシェーディング（周辺減光）とは
+### レンズシェーディング（周辺減光）とは
 
 デジタルカメラに限らず、レンズを通して結像した画像は中央部より周辺部のほうが暗くなっています。
 
@@ -2694,7 +2699,7 @@ h, w = raw_array.shape
 シェーディングを起こす要因はこのように多岐にわたり、一概に、これが原因だとは言うことはできません。
 したがってモデル計算で減光量を求めるよりも、実際のレンズで測定した結果を元に画像補正する必要があります。
 
-## レンズシェーディングの確認
+### レンズシェーディングの確認
 
 では実際にシェーディングの影響を見てみましょう。
 
@@ -2804,7 +2809,7 @@ plt.show()
 
 また、赤画素と、緑・青画素とではシェーディングの様子がだいぶ違います。画像の色が中央と周辺部でだいぶ違うのはこのせいでしょう。
 
-## レンズシェーディングのモデル化
+### レンズシェーディングのモデル化
 
 レンズシェーディングを補正するために、まずどの程度の減光があるのか測定してみましょう。
 
@@ -2949,7 +2954,7 @@ plt.show()
 
 良さそうです。
 
-## レンズシェーディング補正
+### レンズシェーディング補正
 
 ではいよいよ、実際の画像のレンズシェーディングを補正してみましょう。
 
@@ -3063,7 +3068,7 @@ plt.show()
 シェーディングがほぼなくなりフラットになりました。
 また、赤色と緑・青色との違いもほぼ消えました。成功のようです。
 
-## 通常画像への適用
+### 通常画像への適用
 
 それではテスト用の平坦画像(Flat Field)ではなく、実際の画像にレンズシェーディング補正を適用してみましょう。
 
@@ -3224,7 +3229,7 @@ plt.show()
 
 正常に処理できているようです。
 
-## まとめ
+### まとめ
 
 今回はレンズシェーディング補正（周辺減光補正）をとりあげました。
 おそらく、『カメラ』画像処理以外のいわゆる画像処理では取り上げることのない特殊な処理だと思います。
@@ -3239,10 +3244,10 @@ plt.show()
 
 # 5 画質を良くする処理
 
-# 5.1 この章について
+## 5.1 この章について
 
 
-## はじめに
+### はじめに
 
 この章では画像の画質を良くする処理を紹介します。
 
@@ -3251,7 +3256,7 @@ plt.show()
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5.ipynb
 
 
-## この章で扱う処理について
+### この章で扱う処理について
 
 前章まででカメラ画像処理に最低限必用な処理の説明を行いました。
 
@@ -3270,16 +3275,13 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 この章でも、ラズベリーパイのカメラ(v1.2)で撮影したRAW画像を使用します。
 
-## まとめ
+### まとめ
 
 この章で扱う内容について概要を説明しました。次は[ノイズフィルター](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_2.ipynb)です。
 
-# 5.2ノイズフィルター
+## 5.2ノイズフィルター
 
-この節未完成
-
-
-## この節について
+### この節について
 
 この節では、ノイズフィルターについて解説します。
 
@@ -3287,7 +3289,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_2.ipynb
 
-## 準備
+### 準備
 
 まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
 内容については各節を参照ください。
@@ -3338,7 +3340,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## デジタル画像のノイズ
+### デジタル画像のノイズ
 
 デジタル画像にも当然ながらノイズはあります。
 
@@ -3356,7 +3358,7 @@ $$ \sigma^{2} \left( n \right) = n $$
 
 最近のカメラ画像処理では、こういったカリブレーションによるノイズ量の推定はノイズモデルと呼ばれ重要視されています。
 
-## 実際の画像のノイズ
+### 実際の画像のノイズ
 
 それでは前章で処理した画像のノイズを観察してみましょう。
 
@@ -3486,7 +3488,7 @@ plt.show()
 
 ほぼ近似できているようです。
 
-## ノイズフィルターの定番バイラテラルフィルター
+### ノイズフィルターの定番バイラテラルフィルター
 
 ノイズフィルターに求められる特性として、ノイズは取り除いてほしいが、元の画像に含まれる情報は残しておきたい、というものがあります。
 
@@ -3547,7 +3549,7 @@ RAW画像から処理する場合はこのような処理が行われていな�
 
 次は測定したノイズの特性を利用してノイズ処理を行っていきます。
 
-## バイラテラルノイズフィルターの適用
+### バイラテラルノイズフィルターの適用
 
 ではこのノイズフィルターを実際の画像に適用してみましょう。
 
@@ -3737,7 +3739,7 @@ plt.show()
 
 平坦部のノイズは減っていますが、ディテールの大部分は残っていることがわかります。
 
-## ノイズフィルター処理の高速化
+### ノイズフィルター処理の高速化
 
 最後にもう一点だけ、処理の高速化について触れます。この項はPythonでの最適化に興味のない方は読み飛ばしてかまいません。
 
@@ -3927,7 +3929,7 @@ plt.show()
 これでノイズ処理からループが一掃されました。
 処理の速度も数倍になり、実用的になりました。
 
-## モジュール化
+### モジュール化
 
 ノイズフィルターもモジュール化しておきます。
 
@@ -4024,7 +4026,7 @@ plt.show()
 
 このメソッドは`raw_process`モジュールに追加してあります。
 
-## まとめ
+### まとめ
 
 今回はノイズフィルターをとりあげ、エッジを残すノイズフィルターとしてよく使われるバイラテラル・フィルターを解説し、実装しました。
 
@@ -4045,16 +4047,11 @@ plt.show()
 また、最後にnumpyによる画像処理の高速化テクニックについても触れました。
 画像処理としては本質的ではありませんが、実用上は重要な点です。
 
-つぎは[エッジ強調](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_2.ipynb)を扱います。
+つぎは[エッジ強調](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_3.ipynb)を扱います。
 
+## 5.3エッジ強調
 
-```python
-
-```
-
-# 5.3エッジ強調
-
-## この節について
+### この節について
 
 この節ではエッジ強調について解説します。
 
@@ -4062,7 +4059,7 @@ plt.show()
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_3.ipynb
 
-## 準備
+### 準備
 
 まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
 内容については各節を参照ください。
@@ -4118,7 +4115,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## 画像の解像感
+### 画像の解像感
 
 前回までに作成した画像の細部をもう一度よく見てみましょう。
 
@@ -4332,7 +4329,7 @@ plt.show()
 
 カラー画像でも細部がはっきりしたのが確認できました
 
-## モジュールへの追加
+### モジュールへの追加
 
 エッジ強調もモジュールとして追加しておきます。
 
@@ -4446,21 +4443,16 @@ plt.show()
 
 うまく処理できているようです。
 
-## まとめ
+### まとめ
 
 今回は古典的なアンシャープマスキングによるエッジ強調を行いました。
 昔から知られている処理ですが、現代のエッジ強調アルゴリズムにも通じる部分の多い重要なアルゴリズムです。
 
 次は[トーンカーブ補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_4.ipynb)をあつかいます。
 
+## 5.4 トーンカーブ補正
 
-```python
-
-```
-
-# 5.4 トーンカーブ補正
-
-## この節について
+### この節について
 
 この節ではトーンカーブ補正について解説します。
 
@@ -4468,7 +4460,7 @@ plt.show()
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_4.ipynb
 
-## 準備
+### 準備
 
 まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
 内容については各節を参照ください。
@@ -4520,7 +4512,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## 画像の解像感
+### ヒストグラムとトーンカーブ
 
 前回までに作成した画像を表示します。
 
@@ -4688,7 +4680,7 @@ plt.show()
 
 補正前の画像より黒がより黒く白も若干明るくなり、メリハリがついて画像の印象がパリッとしました。
 
-## モジュールへの追加
+### モジュールへの追加
 
 エッジ強調もモジュールとして追加しておきます。
 
@@ -4766,7 +4758,7 @@ plt.show()
 
 うまく処理できているようです。
 
-## まとめ
+### まとめ
 
 今回はトーンカーブ補正を行いました。ここではトーンカーブを手動で設定しましたが、カメラの中では画像の内容や状況に応じて自動的に最適なトーンカーブを設定します。この本の範囲を超えるのであつかいませんが、こういったアルゴリズムもそれ自体かなり重要な処理です。
 またここで扱ったものは画像全体に一律のトーンカーブを使いますがこういったものはグローバル・トーンカーブ補正と呼ばれます。さらに高度な処理では画像内の領域ごとにコントラストの調整を行ったりします。興味がある方は論文など参照されてはどうでしょうか？
@@ -4774,8 +4766,3 @@ plt.show()
 これで画質を良くする処理の章は終わりです。次は[応用編](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6.ipynb)に入ります。
 
 
-
-
-```python
-
-```

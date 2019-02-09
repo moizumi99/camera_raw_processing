@@ -1,10 +1,10 @@
 
 # 5 画質を良くする処理
 
-# 5.1 この章について
+## 5.1 この章について
 
 
-## はじめに
+### はじめに
 
 この章では画像の画質を良くする処理を紹介します。
 
@@ -13,7 +13,7 @@
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5.ipynb
 
 
-## この章で扱う処理について
+### この章で扱う処理について
 
 前章まででカメラ画像処理に最低限必用な処理の説明を行いました。
 
@@ -32,6 +32,6 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 この章でも、ラズベリーパイのカメラ(v1.2)で撮影したRAW画像を使用します。
 
-## まとめ
+### まとめ
 
 この章で扱う内容について概要を説明しました。次は[ノイズフィルター](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_2.ipynb)です。

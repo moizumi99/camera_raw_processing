@@ -1,7 +1,9 @@
 
-# 3.1 準備と簡易デモザイク
+# 3 基本的な処理
 
-## この節について
+## 3.1 準備と簡易デモザイク
+
+### この節について
 
 この節ではまずRAW画像を準備し、簡易的なデモザイクを行ってみます。
 
@@ -9,7 +11,7 @@
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb
 
-## RAW画像の準備
+### RAW画像の準備
 
 まずRAW画像を用意します。今回はSony α 7 IIIで撮影したこの画像を使います。
 
@@ -205,7 +207,7 @@ Runtime->Restart Runtimeで再実行してみてください。
 # その後、Runtime->Restart and run allで再実行
 ```
 
-## この節のまとめ
+### この節のまとめ
 
 必用なモジュールをインポートしてRAW画像をcolab上に読み込みました。
 次は[簡易デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_2.ipynb)を行います。

@@ -1,7 +1,7 @@
 
-# 4.3 欠陥画素補正
+## 4.3 欠陥画素補正
 
-## この節について
+### この節について
 
 この節では、欠陥画素補正を解説します。
 
@@ -9,7 +9,7 @@
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb
 
-## 準備
+### 準備
 
 まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
 内容については各節を参照ください。
@@ -58,7 +58,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## 欠陥画素
+### 欠陥画素
 
 ライブラリーを使って対象画像を現像して拡大表示すると、こんな部分があります。
 
@@ -260,7 +260,7 @@ plt.show()
 
 どうやら修正されたようです。
 
-## モジュールへの追加
+### モジュールへの追加
 
 この処理も関数としてモジュールへ追加しておきましょう。
 
@@ -323,6 +323,6 @@ def defect_correction(raw_array, threshold):
 
 としてインポートしてください。
 
-## まとめ
+### まとめ
 
 この節では欠陥画素補正を行いました。次は[カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb)を行います。

@@ -1,5 +1,5 @@
 
-# 3.2 簡易デモザイク処理
+## 3.2 簡易デモザイク処理
 
 ## この節について
 
@@ -9,7 +9,7 @@
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_2.ipynb
 
-## 準備
+### 準備
 
 まず前節で行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
 内容については前節を参照ください。
@@ -53,7 +53,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## RAW画像の確認
+### RAW画像の確認
 
 読み込んだRAW画像を表示してみます。
 
@@ -91,7 +91,7 @@ plt.show()
 
 明るいところが緑、暗いところが赤や青の画素のはずです。
 
-## 疑似カラー化
+### 疑似カラー化
 
 Bayerの画素と色の関係を直感的に理解するために、Bayerの赤の部分を赤、青を青、緑を緑で表示してみましょう。
 
@@ -192,7 +192,7 @@ plt.show()
 
 これではなんだかよくわかりません。そういうわけでBayerをフルカラーのRGBに変換する処理が必用になるわけです。
 
-## 簡易デモザイク処理
+### 簡易デモザイク処理
 
 それではBayer配列からフルカラーの画像を作ってみましょう。
 
@@ -269,7 +269,7 @@ plt.show()
 
 まだ色が正しくない、全体的に暗い、などの問題があります。次の節でこのあたりを修正していきます。
 
-## 処理の高速化
+### 処理の高速化
 
 上記のコードは、画像処理とコードの対応がわかりやすいように各画素ごとの処理をループを使って記述してあります。
 
@@ -341,6 +341,6 @@ plt.show()
 
 としてインポートしてください。
 
-## この節のまとめ
+### この節のまとめ
 
-RAW画像に対して簡易デモザイク処理を行いました。次は[ホワイトバランス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_2.ipynb)を行います。
+RAW画像に対して簡易デモザイク処理を行いました。次は[ホワイトバランス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_3.ipynb)を行います。

@@ -1,9 +1,9 @@
 
 #  4. 重要な処理
 
-# 4.1 この章について
+## 4.1 この章について
 
-## はじめに
+### はじめに
 
 この章ではカメラ画像処理の中でも重要な処理を紹介します。
 
@@ -12,7 +12,7 @@
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb
 
 
-## この章で扱う処理について
+### この章で扱う処理について
 
 前章でRAW画像に最低限の処理を行いフルRGBとして表示することができました。
 処理が単純な割には以外のきれいな画像ができたのではないでしょうか？
@@ -41,6 +41,6 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 また、これらの処理の効果を見るために、この章以降では、ラズベリーパイのカメラ(v1.2)で撮影したRAW画像を使用します。
 
-## まとめ
+### まとめ
 
 この章で扱う内容について概要を説明しました。次は[デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_1.ipynb)です。

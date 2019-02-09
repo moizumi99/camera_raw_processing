@@ -1,7 +1,7 @@
 
-# 4.4 カラーマトリクス補正
+## 4.4 カラーマトリクス補正
 
-## この節について
+### この節について
 
 この節では、カラーマトリクス補正を解説します。
 
@@ -9,7 +9,7 @@
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb
 
-## 準備
+### 準備
 
 まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
 内容については各節を参照ください。
@@ -58,7 +58,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## カラーマトリクスとは
+### カラーマトリクスとは
 
 前節までにRAW現像した画像と、JPEG画像を並べて比較してみましょう。
 こちらがJPEG画像をJPEGとしてそのまま表示したものです。
@@ -146,7 +146,7 @@ $$
 
 このような処理で、色の深み・鮮やかさ（Saturationと呼ばれます）、色合い（Hueと呼ばれます）をある程度修正することができます。
 
-## カラーマトリクス補正
+### カラーマトリクス補正
 
 それでは実際にカラーマトリクス補正をかけてみましょう。
 
@@ -262,7 +262,7 @@ plt.show()
 
 CCMありのほうが色が鮮やかになっているのがわかると思います。
 
-## モジュールへの追加
+### モジュールへの追加
 
 この処理も高速化して、関数としてモジュールへ追加しておきましょう。
 
@@ -310,6 +310,6 @@ def color_correction_matrix(rgb_array, color_matrix):
 
 としてインポートしてください。
 
-## まとめ
+### まとめ
 
 この節ではカラーマトリクス補正を行いました。次は[レンズシェーディング補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_5.ipynb)を行います。

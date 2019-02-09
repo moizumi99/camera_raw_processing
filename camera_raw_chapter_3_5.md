@@ -1,7 +1,7 @@
 
-# 3.5 ガンマ補正
+## 3.5 ガンマ補正
 
-## この節について
+### この節について
 
 この節では、ガンマ補正を行い画像の明るさとトーンを修正します。
 
@@ -9,7 +9,7 @@
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_5.ipynb
 
-## 準備
+### 準備
 
 まずこれまで行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
 内容については各節を参照ください。
@@ -58,7 +58,7 @@ h, w = raw_array.shape
     E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
 
 
-## ガンマ補正とは
+### ガンマ補正とは
 
 ガンマ補正というのは、もともとテレビがブラウン管だった頃にテレビの出力特性と信号の強度を調整するために使われていたものです。 
 
@@ -104,7 +104,7 @@ plt.show()
 ![png](camera_raw_chapter_3_5_files/camera_raw_chapter_3_5_7_0.png)
 
 
-## ガンマ補正処理
+### ガンマ補正処理
 
 それではガンマ補正をかけてみましょう。
 
@@ -172,7 +172,7 @@ plt.show()
 
 ガンマ補正により明るさが適正になりました。
 
-## 処理のモジュール化
+### 処理のモジュール化
 
 今回のガンマ補正もモジュールの一部としておきましょう。
 
@@ -215,7 +215,7 @@ def gamma_correction(input_img, gamma):
 
 としてインポートしてください。
 
-## まとめ
+### まとめ
 
 この節ではガンマ補正を行いました。これで基本的な処理はすべておわりです。
 次の章ではその他の[重要な処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)を扱います。

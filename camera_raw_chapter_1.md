@@ -1,7 +1,9 @@
 
 # 1. はじめに
 
-## この本について
+## 1.1 はじめに
+
+### この本について
 
 この本では、カメラ画像処理・RAW画像現像の内容を実際の動作レベルで解説し、なるべくスクラッチからPython上で実行してみる事を目的としています。
 
@@ -15,7 +17,7 @@
   
 全てのコードへのリンクはこちらの[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)からたどることができます。
 
-## 対象読者
+### 対象読者
 
 この本は以下のような読者を対象としています。
 - カメラ内部の画像処理またはRAW現像の内容に興味がある。
@@ -24,7 +26,7 @@
 - Pythonプログラミングの基本的な内容について知っている。
 - 高校で学ぶ程度の数学の知識がある。
 
-## Colabについて
+### Colabについて
 
 
 Google Colab (グーグル・コラボ)とはGoogleが提供するサービスの一つで、ブラウザ上で実行可能なPythonのインタラクティブ環境です。
@@ -33,7 +35,7 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 詳しくは[Google自身によるColabの解説](https://colab.research.google.com/notebooks/welcome.ipynb?hl=ja)をご覧ください。
 
-## この本で扱うもの
+### この本で扱うもの
 
 
 この本で扱う内容は基本的に以下のとおりです。
@@ -44,7 +46,7 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 一部例外はありますが、そういったものは関連した話題として触れられるだけにとどまります。
 
-## この記事で扱わないもの
+### この記事で扱わないもの
 
 
 この本で基本的に扱わない物は以下のとおりです。ただし、記事の解説上最低限必要なものについては触れることがあります。
@@ -55,12 +57,12 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 - 画像圧縮
 
 
-## 環境について
+### 環境について
 
 この記事で解説する内容は一般的なものですが、使用した画像ファイルは特定のカメラに依存しています。
 他のカメラでもわずかな変更で同等の処理ができるとは予想されますが、検証はしていません。
 
-### 使用カメラ
+#### 使用カメラ
 
 
 
@@ -70,7 +72,7 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 なお、使用したファイルはGithubからダウンロードできるので、これらのカメラをお持ちでなくても、紹介した処理の内容を実行することは可能です。
 
-### 実行環境
+#### 実行環境
 
 この内容を再現するには通常のPC環境に加えて以下の環境等が必用です。
 
@@ -85,6 +87,6 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 - [exiftool](https://www.sno.phy.queensu.ca/~phil/exiftool/)
 
-## 次の章
+### 次の章
 
-次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1pynb)簡単に解説します。
+次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.pynb)簡単に解説します。
