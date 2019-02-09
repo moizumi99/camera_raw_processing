@@ -340,3 +340,97 @@ def noise_filter(rgb_img, noise_model, coef=0.1):
         single_out = (weight * single_boxes).sum(axis=(2, 3)) / weight_sum
         flt_img[2:h-2, 2:w-2, color] = single_out
     return flt_img
+
+# RGB to YCbCr 変換マトリクス
+RGB_TO_YCBCR = np.array([[0.299, 0.587, 0.144],
+                         [-0.168736, -0.331264, 0.5],
+                         [0.5, -0.418688, -0.081312]])
+
+
+def apply_matrix(rgb_img, matrix):
+    """
+    画像に3x3の色変換行列をかける。
+
+    Parameters
+    ----------
+    rgb_img: numpy 3d array
+        入力RGB画像
+    matrix: float 2d array
+        3x3の色空間変換マトリクス
+
+    Returns
+    -------
+    out_img: numpy array
+        色空間変換後の画像
+    """
+    out_img = np.zeros_like(rgb_img)
+    for c in (0, 1, 2):
+        out_img[:, :, c] = matrix[c, 0] * rgb_img[:, :, 0] + \
+                           matrix[c, 1] * rgb_img[:, :, 1] + \
+                           matrix[c, 2] * rgb_img[:, :, 2]
+    return out_img
+
+
+def edge_enhancement(rgb_img, sigma=2, coef=0.25):
+    """
+    アンシャープマスクによるエッジ強調。
+
+    Parameters
+    ----------
+    rgb_img: numpy 3d array
+        入力RGB画像
+    sigma: float
+        ガウシアンフィルターのsigma
+    coef: float
+        アンシャープマスクの強度。
+
+    Returns
+    -------
+    out_img: numpy array
+        エッジ強調後の画像
+    """
+    
+    # 色空間をRGBからYCbCrに変換。
+    ycr_img = apply_matrix(rgb_img, RGB_TO_YCBCR)
+    # 輝度成分のみとりだしガウシアンフィルターでぼかす。
+    luma = ycr_img[:, :, 0]
+    unsharpen = scipy.ndimage.gaussian_filter(luma, sigma=sigma)
+    # アンシャープマスク処理。
+    sharpen = luma + coef * (luma - unsharpen)
+    ycr_img[:, :, 0] = sharpen
+    
+    #　逆行列を求め、YCbCrからRGBへの変換行列を求める。
+    ycbcr2rgb = np.linalg.inv(RGB_TO_YCBCR)
+    # RGB画像を生成して調整。
+    shp_img = apply_matrix(ycr_img, ycbcr2rgb)
+    shp_img[shp_img < 0] = 0
+    shp_img[shp_img > 1] = 1
+    return shp_img
+
+
+def tone_curve_correction(rgb_img, xs=(0, 0.25, 0.75, 1.0), ys=(0, 0.25, 0.75, 1.0)):
+    """
+    トーンカーブ補正。
+
+    Parameters
+    ----------
+    rgb_img: numpy 3d array
+        入力RGB画像
+    xs: float array
+        トーンカーブのアンカーポイントのX座標（入力値）。
+    ys: float array
+        トーンカーブのアンカーポイントのY座標（出力値）。
+
+    Returns
+    -------
+    out_img: numpy array
+        トーンカーブ補正後の画像
+    """
+    func = scipy.interpolate.splrep(xs, ys)
+    ycr_img = apply_matrix(rgb_img, RGB_TO_YCBCR)
+    ycr_img[:, :, 0] = scipy.interpolate.splev(ycr_img[:, :, 0], func)
+    ycbcr2rgb = np.linalg.inv(RGB_TO_YCBCR)
+    rgb_out = apply_matrix(ycr_img, ycbcr2rgb)
+    rgb_out[rgb_out<0] = 0
+    rgb_out[rgb_out>1] = 1
+    return rgb_out
