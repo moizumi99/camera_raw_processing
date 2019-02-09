@@ -48,8 +48,7 @@ plt.rcParams['font.family'] = 'IPAPGothic'
 raw_file  = "chart.jpg"
 raw = rawpy.imread(raw_file)
 raw_array = raw.raw_image
-h, w = raw.sizes.raw_height, raw.sizes.raw_width
-raw_array = raw_array.reshape((h, w));
+h, w = raw_array.shape
 ```
 
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
@@ -71,6 +70,9 @@ blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw
 wb_raw = white_balance(blc_raw, raw.camera_whitebalance, raw.raw_colors)
 # raw_processからインポートしたsimple_demosaic()関数を使って、簡易デモザイク処理。
 dms_img = demosaic(wb_raw, raw.raw_colors)
+# ラズベリーパイのRAW画像は10bitなので、1024で正規化しておく。
+white_level = 1024.0
+dms_img = dms_img / white_level
 # raw_processからインポートしたgamma_crrection()関数を使って、ガンマ補正。
 gmm_img = gamma_correction(dms_img, 2.2)
 
@@ -222,6 +224,9 @@ for (yo, xo) in ((0, 0), (1, 0), (0, 1), (1, 1)):
 wb_raw = white_balance(dpc_raw, raw.camera_whitebalance, raw.raw_colors)
 # raw_processからインポートしたsimple_demosaic()関数を使って、簡易デモザイク処理。
 dms_img = demosaic(wb_raw, raw.raw_colors)
+# ラズベリーパイのRAW画像は10bitなので、1024で正規化しておく。
+white_level = 1024.0
+dms_img = dms_img / white_level
 # raw_processからインポートしたgamma_crrection()関数を使って、ガンマ補正。
 gmm_img = gamma_correction(dms_img, 2.2)
 

@@ -140,13 +140,16 @@ raw_array = raw.raw_image
 
 raw_imageはRAW画像データをnumpyの配列して渡すアトリビュートです。
 
-このままでは１次元配列で扱いにくいので、reshapeを使って２次元配列に変換します。
+縦横の大きさを取得しておきます。
 
 
 ```python
-h, w = raw.sizes.raw_height, raw.sizes.raw_width
-raw_array = raw_array.reshape((h, w))
+h, w = raw_array.shape
+print(h, w)
 ```
+
+    4024 6048
+
 
 これでraw_arrayは4024 x 6048の２次元配列になりました。
 画像データを表示するコマンドimshowを使って、画像として確認してみましょう。

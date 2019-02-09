@@ -48,8 +48,7 @@ plt.rcParams['font.family'] = 'IPAPGothic'
 raw_file  = "sample.ARW"
 raw = rawpy.imread(raw_file)
 raw_array = raw.raw_image
-h, w = raw.sizes.raw_height, raw.sizes.raw_width
-raw_array = raw_array.reshape((h, w));
+h, w = raw_array.shape
 ```
 
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)

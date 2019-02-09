@@ -48,8 +48,7 @@ plt.rcParams['font.family'] = 'IPAPGothic'
 raw_file  = "sample.ARW"
 raw = rawpy.imread(raw_file)
 raw_array = raw.raw_image
-h, w = raw.sizes.raw_height, raw.sizes.raw_width
-raw_array = raw_array.reshape((h, w));
+h, w = raw_array.shape
 ```
 
     Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
@@ -180,26 +179,26 @@ plt.show()
 
 ```python
 def gamma_correction(input_img, gamma):
-    """ 
+    """
     ガンマ補正処理を行う。
-    
+
     Parameters
     ----------
     input_img: numpy array [h, w, 3]
         入力RGB画像データ。
+        0-1の範囲で正規化されていること。
     gamma: float
         ガンマ補正値。通常は2.2。
-        
+
     Returns
     -------
     gamma_img: numpy array [h, 2, 3]
         出力RGB画像。
-    """    
+    """
     # デモザイク後の画像をfloatタイプとしてコピー。
-    gamma_img = input_img.astype(float)
-    # ガンマ関数は0-1の範囲で定義されているので、その範囲に正規化する。
+    gamma_img = input_img.copy()
     gamma_img[gamma_img < 0] = 0
-    gamma_img = gamma_img/gamma_img.max()
+    gamma_img[gamma_img > 1] = 1.0
     # numpyのpower関数を使って、ガンマ関数を適用。
     gamma_img = np.power(gamma_img, 1/gamma)
     return gamma_img

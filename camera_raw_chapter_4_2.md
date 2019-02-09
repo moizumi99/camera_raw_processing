@@ -64,8 +64,7 @@ from raw_process import simple_demosaic, white_balance, black_level_correction, 
 raw_file  = "chart.jpg"
 raw = rawpy.imread(raw_file)
 raw_array = raw.raw_image
-h, w = raw.sizes.raw_height, raw.sizes.raw_width
-raw_array = raw_array.reshape((h, w));
+h, w = raw_array.shape
 ```
 
 ラズベリーパイによるRAW画像の撮影方法については付録を参照ください。
@@ -85,6 +84,9 @@ blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw
 wb_raw = white_balance(blc_raw, raw.camera_whitebalance, raw.raw_colors)
 # raw_processからインポートしたsimple_demosaic()関数を使って、簡易デモザイク処理。
 dms_img = simple_demosaic(wb_raw, raw.raw_pattern)
+# ラズベリーパイのRAW画像は10bitなので、1024で正規化しておく。
+white_level = 1024.0
+dms_img = dms_img / white_level
 # raw_processからインポートしたgamma_crrection()関数を使って、ガンマ補正。
 gmm_img = gamma_correction(dms_img, 2.2)
 ```
@@ -265,13 +267,14 @@ print(dms_img.shape)
     (2464, 3280, 3)
 
 
-元のRAW画像の同じサイズになっているようです。
+元のRAW画像と同じサイズになっているようです。
 
 画像を確認してみましょう。まずは残っているガンマ補正処理を行います。
 
 
 ```python
-gmm_full_img = gamma_correction(dms_img, 2.2)
+# ガンマ補正
+gmm_full_img = gamma_correction(dms_img / white_level, 2.2)
 ```
 
 表示します。

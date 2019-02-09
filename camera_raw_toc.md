@@ -3,6 +3,8 @@
 # PythonとColabで作る - RAW現像ソフト作成入門
 
 
+注: この一連の記事は現時点で未完成です（2/3/2019時点）
+
 ## 目次
 
 1. [はじめに](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_1.ipynb)
@@ -11,7 +13,7 @@
 2. [カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.ipynb)
 
 
-3. 基本的な処理
+3. [基本的な処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb)
 
   3.1 [準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb)
 
@@ -33,15 +35,14 @@
 
   4.4 [カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb)
 
-
-  4.5 レンズシェーディング補正
+  4.5 [レンズシェーディング補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_5.ipynb)
   
 
-5. 画質を良くする処理
+5. [画質を良くする処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5.ipynb)
 
-  5.1 この章について
+  5.1 [この章について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5.ipynb)
 
-  5.2 ノイズフィルター
+  5.2 [ノイズフィルター](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_2.ipynb)
 
   5.3 エッジ強調
 

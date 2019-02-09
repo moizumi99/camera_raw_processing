@@ -4,6 +4,7 @@ RAW画像処理ライブラリ。
 
 import numpy as np
 import scipy
+from numpy.lib.stride_tricks import as_strided
 from scipy import signal
 
 
@@ -289,3 +290,53 @@ def lens_shading_correction(raw_array, coef):
     # 入力画像にゲインをかけ合わせる。
     lsc_array = raw_array * gain_map
     return lsc_array
+
+
+def noise_filter(rgb_img, noise_model, coef=0.1):
+    """
+    バイラテラルノイズフィルター処理を行う。
+
+    Parameters
+    ----------
+    rgb_img: numpy array
+        入力RGB画像
+    noise_model: array of 2 
+        ノイズモデル。
+        noise[0]:傾き
+        noise[1]:切片
+    coef: float
+        ノイズフィルター強度。
+        チューニングパラメーター。
+
+    Returns
+    -------
+    flt_img: numpy array
+        ノイズ除去後のRGB画像
+    """
+    h, w, _ = rgb_img.shape
+    # 平均画像からノイズ量を見積もる。
+    luma_img = rgb_img.mean(2)
+    average = scipy.ndimage.filters.uniform_filter(luma_img, 5, mode='mirror')
+    sigma_map = average * noise_model[0] + noise_model[1]
+    sigma_map[sigma_map < 0.1] = 0.1
+    sy, sx = sigma_map.strides
+    sigma_tile = as_strided(sigma_map, strides=(sy, sx, 0, 0), shape=(h, w, 5, 5))
+    sigma_tile = sigma_tile[2:h-2, 2:w-2, : , :]
+    # 各画素に与える重みを求める。
+    sy, sx = luma_img.strides
+    luma_tile = as_strided(luma_img, strides=(sy, sx, 0, 0), shape=(h, w, 5, 5))
+    luma_tile = luma_tile[2:h-2, 2:w-2, : , :]
+    luma_box = as_strided(luma_img, strides=(sy, sx, sy, sx), shape=(h-4, w-4, 5, 5))
+    diff = luma_box - luma_tile
+    weight = np.exp(-coef * diff * diff / sigma_tile)
+    weight_sum = weight.sum(axis=(2, 3))
+    
+    # 各色毎にノイズフィルターをかける。
+    flt_img = rgb_img.copy()
+    for color in (0, 1, 2):
+        single = rgb_img[:, :, color]
+        sy, sx = single.strides
+        single_boxes = as_strided(single, strides=(sy, sx, sy, sx), shape=(h-4, w-4, 5, 5))
+        single_out = (weight * single_boxes).sum(axis=(2, 3)) / weight_sum
+        flt_img[2:h-2, 2:w-2, color] = single_out
+    return flt_img
