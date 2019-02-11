@@ -434,3 +434,80 @@ def tone_curve_correction(rgb_img, xs=(0, 0.25, 0.75, 1.0), ys=(0, 0.25, 0.75, 1
     rgb_out[rgb_out<0] = 0
     rgb_out[rgb_out>1] = 1
     return rgb_out
+
+
+def advanced_demosaic(raw_array, bayer_pattern):
+    """
+    ベイヤー配列の周波数特性を利用したデモザイク処理。
+    
+    Parameters
+    ----------
+    raw_array: numpy 2d array
+        入力RAW画像
+    bayer_pattern: [2, 2] array
+        2x2のBayer配列。0: R, 1:Gr(or G), 2:B, 3:Gb
+        通常はRAWPYのrawpy.raw_patternの値を渡す。
+
+    Returns
+    -------
+    dms_img: numpy array
+        デモザイク後の画像
+    """
+    # 横方向ローパスフィルター
+    hlpf = np.array([[1, 2, 3, 4, 3, 2, 1]]) / 16
+    # 縦方向ローパスフィルター
+    vlpf = np.transpose(hlpf)
+    # 横方向ハイパスフィルター
+    hhpf = np.array([[-1, 2, -3, 4, -3, 2, -1]]) / 16
+    # 縦方向ハイパスフィルター
+    vhpf = np.transpose(hhpf)
+    # 等価フィルター
+    identity_filter = np.zeros((7, 7))
+    identity_filter[3, 3] = 1
+
+    # 必用な周波数領域に対応するフィルター
+    FC1 = np.matmul(vhpf, hhpf)
+    FC2H = np.matmul(vlpf, hhpf)
+    FC2V = np.matmul(vhpf, hlpf)
+    FL = identity_filter - FC1 - FC2V - FC2H
+
+    # f_C1 (四つ角の成分)をとりだす。
+    c1_mod = scipy.signal.convolve2d(raw_array, FC1, boundary='symm', mode='same')
+    # f_C2H (横軸方向の端)
+    c2h_mod = scipy.signal.convolve2d(raw_array, FC2H, boundary='symm', mode='same')
+    # f_C2V (縦軸方向の端)
+    c2v_mod = scipy.signal.convolve2d(raw_array, FC2V, boundary='symm', mode='same')
+    # f_L (中心部)
+    f_L = scipy.signal.convolve2d(raw_array, FL, boundary='symm', mode='same')
+
+    # C1を復調。周波数空間で(Pi, Pi)シフトして中心を(0, 0)に戻すのに相当。
+    f_c1 = c1_mod.copy()
+    f_c1[:, 1::2] *= -1
+    f_c1[1::2, :] *= -1
+    # 緑画像が左上にある場合、位相を１８０度ずらす。
+    if bayer_pattern[0, 0] == 1 or bayer_pattern[0, 0] == 3:
+        f_c1 *= -1
+    # C2Hを復調。周波数空間で(Pi, 0)シフトして中心を(0, 0)に戻すのに相当。
+    c2h = c2h_mod.copy()
+    c2h[:, 1::2] *= -1
+    # 青画像が左上か左下にある場合、位相を１８０度ずらす。
+    if bayer_pattern[0, 0] == 2 or bayer_pattern[1, 0] == 2:
+        c2h *= -1
+    # C2Vを復調。周波数空間で(0, Pi)シフトして中心を(0, 0)に戻すのに相当。
+    c2v = c2v_mod.copy()
+    c2v[1::2, :] *= -1
+    # 青画像が左上か右上にある場合、位相を１８０度ずらす。
+    if bayer_pattern[0, 0] == 2 or bayer_pattern[0, 1] == 2:
+        c2v *= -1
+    # C2HとC2Vの平均からC2を求める。
+    f_c2 = (c2v + c2h) / 2
+
+    # R/G/B画像の合成。
+    # [R, G, B] = [[1, 1, 2], [1, -1, 0], [1, 1, - 2]] x [L, C1, C2]
+    height, width = raw_array.shape
+    dms_img = np.zeros((height, width, 3))
+    dms_img[:, :, 0] = f_L + f_c1 + 2 * f_c2
+    dms_img[:, :, 1] = f_L - f_c1
+    dms_img[:, :, 2] = f_L + f_c1 - 2 * f_c2
+
+    return dms_img
