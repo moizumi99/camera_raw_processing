@@ -15,7 +15,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロードとインポート
-!if [ ! -f raw_process.py ]; wget https://github.com/moizumi99/camera_raw_processing/raw/master/raw_process.py; fi
+!if [ ! -f raw_process.py ]; then wget https://github.com/moizumi99/camera_raw_processing/raw/master/raw_process.py; fi
 from raw_process import simple_demosaic, white_balance, black_level_correction, gamma_correction
 from raw_process import demosaic, defect_correction, color_correction_matrix, lens_shading_correction
 from raw_process import noise_filter
@@ -35,8 +35,6 @@ from raw_process import noise_filter
 # 日本語フォントの設定
 !apt -y install fonts-ipafont-gothic
 plt.rcParams['font.family'] = 'IPAPGothic'
-# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
-# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f chart.jpg ]; then wget https://github.com/moizumi99/camera_raw_processing/raw/master/chart.jpg; fi
@@ -53,24 +51,33 @@ raw_array = raw.raw_image
 h, w = raw_array.shape
 ```
 
-    Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
-    Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
-    [33mYou are using pip version 19.0.1, however version 19.0.2 is available.
-    You should consider upgrading via the 'pip install --upgrade pip' command.[0m
-    Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
-    [33mYou are using pip version 19.0.1, however version 19.0.2 is available.
-    You should consider upgrading via the 'pip install --upgrade pip' command.[0m
-    /bin/sh: 1: Syntax error: "fi" unexpected (expecting "then")
-    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
-    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+    Requirement already satisfied: rawpy in /usr/local/lib/python3.6/dist-packages (0.13.1)
+    Requirement already satisfied: numpy in /usr/local/lib/python3.6/dist-packages (from rawpy) (1.14.6)
+    Requirement already satisfied: imageio in /usr/local/lib/python3.6/dist-packages (2.4.1)
+    Requirement already satisfied: numpy in /usr/local/lib/python3.6/dist-packages (from imageio) (1.14.6)
+    Requirement already satisfied: pillow in /usr/local/lib/python3.6/dist-packages (from imageio) (4.0.0)
+    Requirement already satisfied: olefile in /usr/local/lib/python3.6/dist-packages (from pillow->imageio) (0.46)
+    Reading package lists... Done
+    Building dependency tree       
+    Reading state information... Done
+    fonts-ipafont-gothic is already the newest version (00303-18ubuntu1).
+    0 upgraded, 0 newly installed, 0 to remove and 8 not upgraded.
 
+
+
+```
+# もし日本語が文字化けしている場合以下の３行の行頭の#を削除して実行後、Runtime->Restart Runtime
+# import matplotlib
+# target_dir = matplotlib.get_cachedir()
+# ! rm {target_dir}/*.json
+```
 
 ### 画像の解像感
 
 前回までに作成した画像の細部をもう一度よく見てみましょう。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
        np.array([6.32044369e-07, 9.70694361e-01]), 
@@ -89,7 +96,7 @@ gmm_img = gamma_correction(ccm_img / white_level, 2.2)
 ```
 
 
-```python
+```
 # 最終画像表示
 plt.figure(figsize=(8, 8))
 plt.imshow(gmm_img[1500:1700, 1650:1850, :])
@@ -99,7 +106,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_6_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_7_0.png)
 
 
 どことなくぼやっとしていて、コントラストも少し低いようです。
@@ -134,7 +141,7 @@ sRGBからJPEGで使われるYCbCr空間への変換マトリクスはこのよ�
 
 $$
 \left(
-\begin{array}{rr}
+\begin{array}{rrr}
 0.299 &0.587 &0.144 \\\
 -0.168736 &-0.331264 &0.5 \\\ 
 0.5 &-0.418688 &-0.081312\\\
@@ -147,7 +154,7 @@ $$
 ではRGB信号をYCbCrに分解してみます。
 
 
-```python
+```
 rgb2ycbcr = np.array([[0.299, 0.587, 0.144], [-0.168736, -0.331264, 0.5], [0.5, -0.418688, -0.081312]])
 
 # 色空間の変換
@@ -161,7 +168,7 @@ for c in (0, 1, 2):
 このうち輝度成分を取り出して確認してみましょう。
 
 
-```python
+```
 luma = ycb_img[:, :, 0]
 plt.figure(figsize=(8, 8))
 plt.imshow(luma, cmap='gray')
@@ -171,7 +178,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_10_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_11_0.png)
 
 
 うまく変換できているようです。
@@ -181,7 +188,7 @@ plt.show()
 まずはぼやけた画像を作成します。このためにscipyのgaussian_filterという機能を使います。
 
 
-```python
+```
 import scipy
 # scipyのgaussian_filterによってガウシアンフィルターをかける。
 blurred = scipy.ndimage.gaussian_filter(luma, sigma = 2)
@@ -190,7 +197,7 @@ blurred = scipy.ndimage.gaussian_filter(luma, sigma = 2)
 どんな画像になったか見てみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 plt.imshow(luma[1500:1700, 1650:1850], cmap='gray')
@@ -204,7 +211,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_14_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_15_0.png)
 
 
 ガウシアンフィルターをかけた画像はかなりぼやけているのがわかります。
@@ -212,7 +219,7 @@ plt.show()
 元の画像からフィルターをかけた画像を引き明るさを調整します。
 
 
-```python
+```
 # アンシャープマスクの強度。
 coef = 0.25
 unsharp = luma + coef * (luma - blurred)
@@ -221,7 +228,7 @@ unsharp = luma + coef * (luma - blurred)
 表示して確認してみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 plt.imshow(luma[1500:1700, 1650:1850], cmap='gray')
@@ -235,7 +242,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_18_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_19_0.png)
 
 
 解像感が上がっているのが確認できました。
@@ -243,7 +250,7 @@ plt.show()
 次にカラー画像に戻します。
 
 
-```python
+```
 # YCbCrからRGBへの変換の逆行列を求める。
 ycbcr2rgb = np.linalg.inv(rgb2ycbcr)
 shp_img = ycb_img.copy()
@@ -260,7 +267,7 @@ for c in (0, 1, 2):
 カラーでも画像を確認しておきます。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 plt.imshow(gmm_img[1500:1700, 1650:1850, :])
@@ -274,7 +281,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_22_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_23_0.png)
 
 
 カラー画像でも細部がはっきりしたのが確認できました
@@ -284,7 +291,7 @@ plt.show()
 エッジ強調もモジュールとして追加しておきます。
 
 
-```python
+```
 # RGB to YCbCr 変換マトリクス
 RGB_TO_YCBCR = np.array([[0.299, 0.587, 0.144],
                          [-0.168736, -0.331264, 0.5],
@@ -353,7 +360,7 @@ def edge_enhancement(rgb_img, sigma=2, coef=0.25):
 全処理を行って動作を確認します。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
        np.array([6.32044369e-07, 9.70694361e-01]), 
@@ -373,7 +380,7 @@ shp_img = edge_enhancement(gmm_img, 2, 0.25)
 ```
 
 
-```python
+```
 # 最終画像表示
 plt.figure(figsize=(8, 16))
 plt.subplot(2, 1, 1)
@@ -388,7 +395,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_28_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_29_0.png)
 
 
 うまく処理できているようです。

@@ -66,9 +66,10 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 
 
+この本で扱う画像を撮影するのに使ったカメラは以下の２つです。
 
-- Sony Alpha 7 III
 - Raspberry Pi Camera v2.1
+- Sony Alpha 7 III
 
 なお、使用したファイルはGithubからダウンロードできるので、これらのカメラをお持ちでなくても、紹介した処理の内容を実行することは可能です。
 
@@ -81,12 +82,6 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 - ColabにアクセスできるGoogleアカウント
 
-必須ではありませんが、次の物があれば、本書の内容を更に深く理解することができます
-
-- PC上で実行できるPerl環境（ExifToolの実行に必用)
-
-- [exiftool](https://www.sno.phy.queensu.ca/~phil/exiftool/)
-
 ### 次の章
 
-次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.pynb)簡単に解説します。
+次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.ipynb)簡単に解説します。

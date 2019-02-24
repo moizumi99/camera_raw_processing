@@ -13,17 +13,17 @@
 2. [カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.ipynb)
 
 
-3. [基本的な処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb)
+3. [基本的な処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3.ipynb)
 
-  3.1 [準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb)
+  3.1 [準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3.ipynb#scrollTo=xamnD5Vtx0vL&line=5&uniqifier=1)
 
-  3.2 [簡易デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_2.ipynb)
+  3.2 [簡易デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3.ipynb#scrollTo=4QCA4GP7QpFU)
 
-  3.3 [ブラックレベル調整](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_3.ipynb)
+  3.3 [ホワイトバランス調整](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3.ipynb#scrollTo=IZoaCYmxSm8a)
 
-  3.4 [ホワイトバランス調整](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_4.ipynb)
+  3.4 [ブラックレベル調整](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3.ipynb#scrollTo=CI321RybT12c)
 
-  3.5 [ガンマ補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_5.ipynb)
+  3.5 [ガンマ補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3.ipynb#scrollTo=tqGZesmEVCkP)
 
 4. [重要な処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)
 
@@ -49,11 +49,11 @@
   5.4 [トーンカーブ補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_4.ipynb)
 
 
-6. 応用編
+6. [応用編](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6_1.ipynb)
 
-  6.1 線形補間デモザイクの周波数特性
+  6.1 [線形補間デモザイクの周波数特性](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6_1.ipynb)
 
-  6.2 高度なデモザイク処理
+  6.2 [高度なデモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6_2.ipynb)
 
 
 7. まとめ
@@ -65,11 +65,6 @@
   
   8.2. RAW画像の撮影方法
   
-
-
-```python
-
-```
 
 # 1. はじめに
 
@@ -138,9 +133,10 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 
 
+この本で扱う画像を撮影するのに使ったカメラは以下の２つです。
 
-- Sony Alpha 7 III
 - Raspberry Pi Camera v2.1
+- Sony Alpha 7 III
 
 なお、使用したファイルはGithubからダウンロードできるので、これらのカメラをお持ちでなくても、紹介した処理の内容を実行することは可能です。
 
@@ -153,15 +149,9 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 - ColabにアクセスできるGoogleアカウント
 
-必須ではありませんが、次の物があれば、本書の内容を更に深く理解することができます
-
-- PC上で実行できるPerl環境（ExifToolの実行に必用)
-
-- [exiftool](https://www.sno.phy.queensu.ca/~phil/exiftool/)
-
 ### 次の章
 
-次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.pynb)簡単に解説します。
+次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.ipynb)簡単に解説します。
 
 ## 2. カメラ画像処理について
 
@@ -196,7 +186,7 @@ RAWファイルやRAWデータというのは厳密な定義はないのです�
 
 
 
-![BayerとRGB配列](fig1.png "BayerとRGB配列")
+![BayerとRGB配列](Figures/fig1.png "BayerとRGB配列")
 
 カメラ用センサーでは2000年代初頭までは、補色フィルターや３板方式もそれなりの割合で使われていたのですが、センサーの性能向上やカメラの小型化と高画質化の流れの中でほとんどがBayer方式にかわりました。今では、SigmaのFoveonのような意欲的な例外を除くと、DSLRやスマートフォンで使われているカラー画像センサーの殆どがBayer方式を採用しています。したがって、ほとんどのカメラの中ではBayerフォーマットの画像データをセンサーから受取り、フルカラーの画像に変換するという処理が行われている、ということになります。
 
@@ -225,7 +215,7 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 
 [^2]: これはあくまで一例です。実際のカメラやRAW現像ソフト内で行われる処理はメーカーや機種ごとに異なります。
 
-![カメラ画像処理パイプライン](fig2.png "カメラ画像処理パイプライン")
+![カメラ画像処理パイプライン](Figures/fig2.png "カメラ画像処理パイプライン")
 
 このうち、最低限必要な処理は、以下のものです。
 
@@ -266,10 +256,12 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 
 などの処理が行われるのが普通です。今回はベーシックな処理のみとりあげるので、こういった高度な処理は行いません。
 
-結局、今回扱うのは次の部分のみです。
+今回、まず最初の**基本的な処理**では次の部分の処理を行います。
 
-![単純化したカメラ画像処理パイプライン](fig3.png "単純化したカメラ画像処理パイプライン")
+![単純化したカメラ画像処理パイプライン](Figures/fig3.png "単純化したカメラ画像処理パイプライン")
 
+
+次の章以降で残りの処理を行います。
 
 ### この章のまとめ
 
@@ -277,11 +269,11 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 
 ### 次の章
 
-次は[RAW画像の準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1pynb)を行います。
+次は[RAW画像の準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb)を行います。
 
 # 3 基本的な処理
 
-## 3.1 準備と簡易デモザイク
+## 3.1 準備
 
 ### この節について
 
@@ -289,25 +281,27 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 
 この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
 
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb
+https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3.ipynb
 
 ### RAW画像の準備
 
-まずRAW画像を用意します。今回はSony α 7 IIIで撮影したこの画像を使います。
+まずRAW画像を用意します。今回はラズベリーパイで撮影したこの画像を使います[^1]。
 
-  ![最終的な画像](fig2_1.png "最終的な画像")
+[^1]: 撮影方法は付録１で解説します。
 
-ここで表示している画像は使用するRAWファイルから作成したRGB画像（PNGファイル）です。
+  ![チャート画像](Figures/chart_small.jpg "チャート画像")
 
 元になるRAWファイルはこのURLにあります。
 
-https://raw.githubusercontent.com/moizumi99/raw_process/master/sample.ARW
+Figures/chart.jpg
 
-では、colab上にダウンロードしてみましょう。
+拡張子はJPGになっていて実際にJPEG画像としても表示できますが、データ中にRAW画像が埋め込まれています。
+
+では、colab上にダウンロードしてみましょう。colabでは行の最初に!をつけることでLinuxのコマンドが実行できます。
 
 
 ```python
-!if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
+!if [ ! -f chart.jpg ]; then wget chart.jpg; fi
 ```
 
 自分で撮影したRAWデータを使用する場合は次のコマンド利用してください。
@@ -324,18 +318,18 @@ https://raw.githubusercontent.com/moizumi99/raw_process/master/sample.ARW
 
 
 ```python
-raw_file  = "sample.ARW"
+raw_file  = "chart.jpg"
 ```
 
-## RAW画像の読み込み
+### RAW画像の読み込み
 
 まず必用なモジュールをインストールします。
 
 まずインストールするのはrawpyです。
 
-rawpyはpythonでRAW画像を操作するためのモジュールです。
+rawpyはpythonでRAW画像を操作するためのモジュールです[^2]。
 
-https://pypi.org/project/rawpy/
+[^2]: https://pypi.org/project/rawpy/
 
 rawpyを使うとRAW画像からRAW画像データを取り出したり、画像サイズなどのパラメータを読み出したり、また簡易現像をすることができます。
 
@@ -346,11 +340,7 @@ rawpyの使用法については実際に使う時に説明します。
 !pip install rawpy
 ```
 
-    Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
-    Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
-
-
-colabではコマンドの最初に!をつけると、linuxコマンドが実行できます。pipはpythonのモジュール管理用のコマンドです。
+pipはpythonのモジュール管理用のコマンドです。
 
 次にimageioをインストールします。
 
@@ -360,9 +350,6 @@ imageioは画像の表示やロード・セーブなどを行うモジュール�
 ```python
 !pip install imageio
 ```
-
-    Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
-
 
 次にこれらのモジュールをインポートします。
 
@@ -391,10 +378,10 @@ raw = rawpy.imread(raw_file)
 print(raw.sizes)
 ```
 
-    ImageSizes(raw_height=4024, raw_width=6048, height=4024, width=6024, top_margin=0, left_margin=0, iheight=4024, iwidth=6024, pixel_aspect=1.0, flip=0)
+    ImageSizes(raw_height=2464, raw_width=3280, height=2464, width=3280, top_margin=0, left_margin=0, iheight=2464, iwidth=3280, pixel_aspect=1.0, flip=0)
 
 
-raw_heightとraw_widthはRAWデータのサイズです。この画像のサイズは縦4024ライン、横6048画素、ということになります。
+raw_heightとraw_widthはRAWデータのサイズです。この画像のサイズは縦2464ライン、横3280画素、ということになります。
 
 heightとwidthは、画像処理後の出力画像のサイズです。
 
@@ -417,6 +404,7 @@ import numpy as np
 
 
 ```python
+# raw_imageはrawpyのアトリビュート。numpyの配列を返す。
 raw_array = raw.raw_image
 ```
 
@@ -430,10 +418,10 @@ h, w = raw_array.shape
 print(h, w)
 ```
 
-    4024 6048
+    2464 3280
 
 
-これでraw_arrayは4024 x 6048の２次元配列になりました。
+これでraw_arrayは2464 x 3280の２次元配列になりました。
 画像データを表示するコマンドimshowを使って、画像として確認してみましょう。
 
 まずキャプション用に日本語フォントを用意します。
@@ -449,8 +437,11 @@ import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'IPAPGothic'
 ```
 
-    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
-    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+    Reading package lists... Done
+    Building dependency tree       
+    Reading state information... Done
+    fonts-ipafont-gothic is already the newest version (00303-18ubuntu1).
+    0 upgraded, 0 newly installed, 0 to remove and 8 not upgraded.
 
 
 実際に画像を表示します。
@@ -471,30 +462,39 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_1_files/camera_raw_chapter_3_1_35_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_35_0.png)
 
 
 ここでmatplotlibはnumpy用描画ライブラリーです。その中でpyplotは各種グラフを表示するモジュールです。ここではpltという名前でインポートしています。
 
-もし日本語のタイトルが文字化けしている場合は、もし日本語が文字化けしている場合は
-`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+もし日本語のタイトルが文字化けしている場合は、
+
+```bash
+import matplotlib
+target_dir = matplotlib.get_cachedir()
+! rm {target_dir}/*.json
+```
+
+を実行して
 Runtime->Restart Runtimeで再実行してみてください。
 
 
 ```python
-# もし日本語が文字化けしている場合次の行の#を削除して実行。
-# ! rm /content/.cache/matplotlib/fontList.json
+# もし日本語が文字化けしている場合次の3行の#を削除して実行。
+# import matplotlib
+# target_dir = matplotlib.get_cachedir()
+# ! rm {target_dir}/*.json
 # その後、Runtime->Restart and run allで再実行
 ```
 
 ### この節のまとめ
 
 必用なモジュールをインポートしてRAW画像をcolab上に読み込みました。
-次は[簡易デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_2.ipynb)を行います。
+次は簡易デモザイク処理を行います。
 
 ## 3.2 簡易デモザイク処理
 
-## この節について
+### この節について
 
 この節では、RAWデータの簡易でモザイク処理を行い、画像をフルカラーで表示してみます。
 
@@ -502,68 +502,9 @@ Runtime->Restart Runtimeで再実行してみてください。
 
 https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_2.ipynb
 
-### 準備
-
-まず前節で行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
-内容については前節を参照ください。
-
-
-```python
-# rawpyとimageioのインストール
-!pip install rawpy
-!pip install imageio
-
-# rawpy, imageio, numpuy, pyplot, imshowのインポート
-import rawpy, imageio
-import numpy as np
-import matplotlib.pyplot as plt
-
-# 日本語フォントの設定
-!apt -y install fonts-ipafont-gothic
-plt.rcParams['font.family'] = 'IPAPGothic'
-# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
-# Runtime->Restart Runtimeで再実行
-
-# 画像をダウンロードします。
-!if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
-
-# 自分で撮影した画像を使用する場合は以下のコメントを取り除きアップロードします。
-# from google.colab import files
-# uploaded = files.upload()
-
-# RAWファイルの名前。
-# アップロードしたファイルを使う場合はその名前に変更。
-raw_file  = "sample.ARW"
-raw = rawpy.imread(raw_file)
-raw_array = raw.raw_image
-h, w = raw_array.shape
-```
-
-    Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
-    Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
-    Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
-    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
-    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
-
-
 ### RAW画像の確認
 
-読み込んだRAW画像を表示してみます。
-
-
-```python
-# raw_arrayの中のデータをグレースケールで表示します。
-plt.imshow(raw_array, cmap='gray')
-plt.axis('off')
-plt.title(u"RAW画像の確認")
-plt.show()
-```
-
-
-![png](camera_raw_chapter_3_2_files/camera_raw_chapter_3_2_8_0.png)
-
-
-拡大して見てみましょう。
+先程読み込んだRAW画像を拡大して見てみましょう。。
 
 
 ```python
@@ -572,19 +513,17 @@ plt.show()
 plt.figure(figsize=(8, 8))
 
 # RAW画像の中から(1310, 2620)から60x60の領域を表示。
-plt.imshow(raw_array[1310:1370, 2620:2680], cmap='gray')
+plt.imshow(raw_array[1340:1400, 2640:2700], cmap='gray')
 plt.axis('off')
 plt.title(u"RAW画像の拡大表示")
 plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_2_files/camera_raw_chapter_3_2_10_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_41_0.png)
 
 
-明るいところが緑、暗いところが赤や青の画素のはずです。
-
-### 疑似カラー化
+明るいところが緑、暗いところが赤や青の画素のはずです
 
 Bayerの画素と色の関係を直感的に理解するために、Bayerの赤の部分を赤、青を青、緑を緑で表示してみましょう。
 
@@ -595,8 +534,8 @@ Bayerの画素と色の関係を直感的に理解するために、Bayerの赤�
 print(raw.raw_pattern)
 ```
 
-    [[0 1]
-     [3 2]]
+    [[2 3]
+     [1 0]]
 
 
 raw_patternはrawpyのアトリビュートで、Bayer配列の2x2行列を示します。
@@ -624,11 +563,9 @@ raw_patternはrawpyのアトリビュートで、Bayer配列の2x2行列を示�
 のように並んでいることがわかります。これを図示するとこうなります。
 
 
-![この画像のBayer配列](fig3_1_1.png)
+![この画像のBayer配列](Figures/fig1_bayer_bggr.png)
 
 では、これに対応するRGB画像を作ってみましょう。
-
-
 
 
 ```python
@@ -636,20 +573,21 @@ raw_patternはrawpyのアトリビュートで、Bayer配列の2x2行列を示�
 # zerosは指定された大きさの０行列を作るコマンド。
 raw_color = np.zeros((h, w, 3))
 
-# 偶数列、偶数行の画素は赤なので、赤チャンネル（0）にコピー。
-raw_color[0::2, 0::2, 0] = raw_array[0::2, 0::2]
+# 偶数列、偶数行の画素は青なので、青チャンネル（2）にコピー。
+raw_color[0::2, 0::2, 2] = raw_array[0::2, 0::2]
 # 奇数列、偶数行の画素は緑なので、緑チャンネル（1）にコピー。
 raw_color[0::2, 1::2, 1] = raw_array[0::2, 1::2]
 # 偶数列、奇数行の画素は緑なので、緑チャンネル（1）にコピー。
 raw_color[1::2, 0::2, 1] = raw_array[1::2, 0::2]
-# 奇数列、奇数行の画素は赤なので、青チャンネル（2）にコピー。
-raw_color[1::2, 1::2, 2] = raw_array[1::2, 1::2]
+# 奇数列、奇数行の画素は赤なので、赤チャンネル(0）にコピー。
+raw_color[1::2, 1::2, 0] = raw_array[1::2, 1::2]
 
 # 0から1の範囲にノーマライズ
 raw_color[raw_color < 0] = 0
-# max()はnumpy行列の最大値を得る関数。
-raw_color = raw_color / raw_color.max()
+raw_color = raw_color / 1024
 ```
+
+最後に1024で割ったのはラズベリーパイのRAW画像は１０ビットだからです。１０ビットで表せる範囲の最大値は1023ですが、ここでは1024で正規化しています。
 
 これでBayerに対応するRGB画像ができたはずです。表示してみましょう。
 
@@ -664,7 +602,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_2_files/camera_raw_chapter_3_2_17_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_47_0.png)
 
 
 さらに拡大してみます。
@@ -673,14 +611,14 @@ plt.show()
 ```python
 plt.figure(figsize=(8, 8))
 # RAW画像の中から(1310, 2620)から32x32の領域を表示。
-plt.imshow(raw_color[1310:1342, 2620:2652])
+plt.imshow(raw_color[1340:1400, 2640:2700])
 plt.axis('off')
 plt.title(u"RAW画像の各画素に色を割り当てたものを拡大表示")
 plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_2_files/camera_raw_chapter_3_2_19_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_49_0.png)
 
 
 これではなんだかよくわかりません。そういうわけでBayerをフルカラーのRGBに変換する処理が必用になるわけです。
@@ -693,11 +631,11 @@ plt.show()
 
 その簡単な処理というのは、3色の情報を持つ最小単位の2x2のブロックから、1画素のみをとりだす、というものです。
 
-![Bayer配列からRGB１画素への簡単な変換](fig2_2.png "Bayer配列からRGB１画素への簡単な変換")
+![Bayer配列からRGB１画素への簡単な変換](Figures/fig2_2.png "Bayer配列からRGB１画素への簡単な変換")
 
 結果として得られる画像サイズは1/4になりますが、もとが24Mもあるので、まだ6M残っていますので簡易処理としては十分でしょう。
 
-なお、解像度低下をともなわないデモザイクアルゴリズムは応用編以降でとりあげます。
+なお、解像度低下をともなわないデモザイクアルゴリズムは次章でとりあげます。
 
 
 では、簡易デモザイク処理してみましょう。なお、2x2ピクセルの中に2画素ある緑は平均値をとります。
@@ -713,8 +651,8 @@ bayer_pattern[bayer_pattern==3] = 1
 print(bayer_pattern)
 ```
 
-    [[0 1]
-     [1 2]]
+    [[2 1]
+     [1 0]]
 
 
 では、2x2画素毎に平均をとってRGB画像を作ります。
@@ -745,7 +683,7 @@ for y in range(0, h, 2):
 ```python
 # 画像を0と1の間でノーマライズ
 dms_img[dms_img < 0] = 0
-dms_img = dms_img / dms_img.max()
+dms_img /= 1024
 # 表示
 plt.figure(figsize=(8, 8))
 plt.imshow(dms_img)
@@ -755,7 +693,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_2_files/camera_raw_chapter_3_2_27_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_56_0.png)
 
 
 このようにRGBのフルカラー画像を作ることができました。
@@ -808,7 +746,7 @@ dms_img = simple_demosaic(raw_array, raw.raw_pattern)
 
 # 画像を0と1の間でノーマライズ
 dms_img[dms_img < 0] = 0
-dms_img = dms_img / dms_img.max()
+dms_img /= 1024
 # 表示
 plt.figure(figsize=(8, 8))
 plt.imshow(dms_img)
@@ -818,84 +756,28 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_2_files/camera_raw_chapter_3_2_33_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_61_0.png)
 
-
-同様の画像が出力されたようです。
-
-この`simple_demosaic()`関数を含んだモジュールが`raw_process.py`として[githubにアップロード](https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py)されています。
-使用する場合は、
-
-`!wget https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py`
-
-としてダウンロードした後、
-
-`from raw_process import simple_demosaic`
-
-としてインポートしてください。
-
-### この節のまとめ
-
-RAW画像に対して簡易デモザイク処理を行いました。次は[ホワイトバランス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_3.ipynb)を行います。
-
-## 3.3 ホワイトバランス補正
-
-### この節について
-
-この節では、ホワイトバランス補正を行い画像の色を修正します。
-
-この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
-
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_3.ipynb
-
-### 準備
-
-まず3.1節で行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
-内容については3.1節を参照ください
 
 
 ```python
-# rawpyとimageioのインストール
-!pip install rawpy
-!pip install imageio
 
-# rawpy, imageio, numpuy, pyplot, imshowのインポート
-import rawpy, imageio
-import numpy as np
-import matplotlib.pyplot as plt
-
-# 前節までに作成したモジュールのダウンロード
-!if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/raw_process.py; fi
-
-# 日本語フォントの設定
-!apt -y install fonts-ipafont-gothic
-plt.rcParams['font.family'] = 'IPAPGothic'
-# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
-# Runtime->Restart Runtimeで再実行
-
-from raw_process import simple_demosaic
-
-# 画像をダウンロードします。
-!if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
-
-# 自分で撮影した画像を使用する場合は以下のコメントを取り除きアップロードします。
-# from google.colab import files
-# uploaded = files.upload()
-
-# RAWファイルの名前。
-# アップロードしたファイルを使う場合はその名前に変更。
-raw_file  = "sample.ARW"
-raw = rawpy.imread(raw_file)
-raw_array = raw.raw_image
-h, w = raw_array.shape
 ```
 
-    Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
-    Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
-    Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
-    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
-    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+同様の画像が出力されたようです。
 
+### この節のまとめ
+
+RAW画像に対して簡易デモザイク処理を行いました。次はホワイトバランス補正を行います。
+
+## 3.3 ホワイトバランス補正
+
+### ホワイトバランス補正とは
+
+ホワイトバランス補正とは、センサーの色ごとの感度や、光のスペクトラムなどの影響を除去して、本来の白を白として再現するための処理です。 
+そのためには各色の画素に、別途計算したゲイン値をかけてあげます。
+
+実際のカメラではホワイトバランスの推定はAWB（オートホワイトバランス）と呼ばれる複雑な処理によって行いますが、今回はカメラが撮影時に計算したゲイン値をRAWファイルから抽出して使います。
 
 ### ホワイトバランス補正とは
 
@@ -916,22 +798,17 @@ wb = raw.camera_whitebalance
 print(wb)
 ```
 
-    [2288.0, 1024.0, 1544.0, 1024.0]
+    [1.128000020980835, 1.0, 2.5460000038146973, 1.0]
 
 
-これは、赤、緑（赤と同じ行）、青、緑（青と同じ行）のゲインがそれぞれ、2288、1024、1544、1024に比例することをあらわしています。
+これは、赤、緑（赤と同じ行）、青、緑（青と同じ行）のゲインがそれぞれ、1.128、1.0、2.546、1.0ということをあらわしています。
 
-通常もっとも感度の良い緑に対するゲインを1.0倍として処理するのが普通なので、今回もこのゲインを1024で正規化します。
-
-結局、赤、青に対して、2288/1024倍、1544/1024倍のゲインを与えればよい事がわかります。
+緑のゲインは1.0倍なので、赤、青をそれぞれ、1.128倍、2.546倍にしてやればカラーバランスが取れることがわかります。
 
 処理してみましょう。
 
 
 ```python
-# 緑画素のゲインでノーマライズします。
-norm = wb[1]
-
 # 元のRAWデータをコピーします。
 wb_img = raw_array.copy()
 # RAWデータのベイヤーパターン。
@@ -940,10 +817,8 @@ for y in range(0, h):
     for x in range(0, w):
         # cは画素に対応する色チャンネル
         c = bayer_pattern[y % 2, x % 2]
-        # 画素の色に対応するゲイン
-        gain = wb[c] / norm
-        # 各画素にゲインをかけ合わせる
-        wb_img[y, x] *= gain
+        # 各画素に画素の色に対応するゲインをかけ合わせる
+        wb_img[y, x] *= wb[c]
 ```
 
 これでホワイトバランスがそろったかみてみましょう。
@@ -952,18 +827,12 @@ for y in range(0, h):
 
 ```python
 # 簡易デモザイク。
-# 詳細は3.2節を参照
-dms_img = np.zeros((h//2, w//2, 3))
-bayer_pattern[bayer_pattern==3] = 1
-dms_img[:, :, bayer_pattern[0, 0]] = wb_img[0::2, 0::2]
-dms_img[:, :, bayer_pattern[0, 1]] += wb_img[0::2, 1::2]
-dms_img[:, :, bayer_pattern[1, 0]] += wb_img[1::2, 0::2]
-dms_img[:, :, bayer_pattern[1, 1]] += wb_img[1::2, 1::2]
-dms_img[:, :, 1] /= 2
+dms_img = simple_demosaic(wb_img, raw.raw_pattern)
 
 # 画像を0と1の間でノーマライズ
+dms_img /= 1024
 dms_img[dms_img < 0] = 0
-dms_img = dms_img / dms_img.max()
+dms_img[dms_img > 1] = 1.0
 # 表示
 plt.figure(figsize=(8, 8))
 plt.imshow(dms_img)
@@ -973,16 +842,16 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_3_files/camera_raw_chapter_3_3_10_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_71_0.png)
 
 
-これでだいぶ色がよくなりました。
+これでだいぶ色味がよくなりました。
 
-まだ赤みが強い画像になっています。ブラックレベルの補正がされていないためだと思われます。ブラックレベル補正は次の節で扱います。
+しかしまだ青みが強い画像になっています。ブラックレベルの補正がされていないために色ズレがおきてしまったのだと思われます。ブラックレベル補正は次の節で扱います
 
 ### 処理の高速化
 
-先程扱ったホワイトバランスの処理は、コードの読みやすさを優先したものなので低速です。
+先程扱ったホワイトバランスの処理はコードの読みやすさを優先したものなので低速です。
 
 numpyの機能を利用して高速化した関数は次のようになります。
 
@@ -1029,8 +898,9 @@ wb_img = white_balance(raw_array, raw.camera_whitebalance, raw.raw_colors)
 dms_img = simple_demosaic(wb_img, raw.raw_pattern)
 
 # 画像を0と1の間でノーマライズ
+dms_img /= 1024
 dms_img[dms_img < 0] = 0
-dms_img = dms_img / dms_img.max()
+dms_img[dms_img > 1] = 1.0
 # 表示
 plt.imshow(dms_img)
 plt.axis('off')
@@ -1039,97 +909,30 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_3_files/camera_raw_chapter_3_3_18_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_78_0.png)
 
 
 同様の画像が出力されたようです。
 
-この`white_balance()`関数は`raw_process.py`モジュールの一部としてgithubからダウンロードできます。 使用する場合は、
-
-`!wget https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py`
-
-としてダウンロードした後、
-
-`from raw_process import white_balance`
-
-としてインポートしてください。
-
 ### この節のまとめ
 
-この節ではホワイトバランスの調整を行いました。次は[ブラックレベル補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_4.ipynb)を行い、色再現を向上します。
+この節ではホワイトバランスの調整を行いました。次はブラックレベル補正を行い色再現を向上します。
 
 ## 3.4 ブラックレベル補正
-
-### この節について
-
-この節では、ブラックレベル補正を行い画像の明るさと色を修正します。
-
-この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
-
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_4.ipynb
-
-### 準備
-
-まず3.1節で行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
-内容については各節を参照ください。
-
-
-```python
-# rawpyとimageioのインストール
-!pip install rawpy;
-!pip install imageio;
-
-# rawpy, imageio, numpuy, pyplot, imshowのインポート
-import rawpy, imageio
-import numpy as np
-import matplotlib.pyplot as plt
-
-# 前節までに作成したモジュールのダウンロード
-!if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/raw_process.py; fi
-
-from raw_process import simple_demosaic, white_balance
-
-# 日本語フォントの設定
-!apt -y install fonts-ipafont-gothic
-plt.rcParams['font.family'] = 'IPAPGothic'
-# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
-# Runtime->Restart Runtimeで再実行
-
-# 画像をダウンロードします。
-!if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
-
-# 自分で撮影した画像を使用する場合は以下のコメントを取り除きアップロードします。
-# from google.colab import files
-# uploaded = files.upload()
-
-# RAWファイルの名前。
-# アップロードしたファイルを使う場合はその名前に変更。
-raw_file  = "sample.ARW"
-raw = rawpy.imread(raw_file)
-raw_array = raw.raw_image
-h, w = raw_array.shape
-```
-
-    Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
-    Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
-    Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
-    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
-    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
-
 
 ### ブラックレベル補正とは
 
 RAWデータの黒に対応する値は通常０より大きくなっています。
 
-これは、センサーの読み出しノイズがマイナスの値を取ることがあるために、画像の値を０以上にしてしまうと、ノイズのクリッピングがおきて非常に暗い領域で色ズレがおきてしまうためです。
+これは、センサーの読み出しノイズがマイナスの値を取ることがあるために、画像の値を０以上にしてしまうとノイズのクリッピングがおきて非常に暗い領域で色ズレがおきてしまうためです。
 
-したがって、正しい画像処理を行うにはブラックレベルを調整して置かなくてはなりません。これをやって置かないと黒が十分黒くない、カスミがかかったような眠い画像になってしまいますし、色もずれてしまいます。
+したがって正しい画像処理を行うにはブラックレベルを調整して置かなくてはなりません。これをやって置かないと黒が十分黒くないカスミがかかったような眠い画像になってしまいますし、色もずれてしまいます。
 
 ### ブラックレベル補正処理
 
 ますはどんなブラックレベル値かみてみましょう。
 
-まず、rawpyのアトリビュートを使ってブラックレベルを確認しましょう。
+まずrawpyのアトリビュートを使ってブラックレベルを確認しましょう。
 
 
 ```python
@@ -1137,13 +940,12 @@ blc = raw.black_level_per_channel
 print(blc)
 ```
 
-    [512, 512, 512, 512]
+    [66, 66, 66, 66]
 
 
-これは全チャンネルでブラックレベルは512であるという事をしめしています。
+これは全チャンネルでブラックレベルは66であるという事をしめしています。
 
-今回は全チャンネルで同じ値でしたが、他のRAWファイルでもこのようになっているとは限りません。各画素ごとのチャンネルに対応した値を引くようにしておきましょう。
-
+今回は全チャンネルで同じ値でしたが他のRAWファイルでもこのようになっているとは限りません。各画素ごとのチャンネルに対応した値を引くようにしておきましょう。
 
 
 ```python
@@ -1161,7 +963,7 @@ for y in range(0, h, 2):
         blc_raw[y + 1, x + 1] -= blc[bayer_pattern[1, 1]]
 ```
 
-処理が正常に行われたか、最大値と最小値を比較しておきましょう。
+処理が正常に行われたか最大値と最小値を比較して確認しておきましょう。
 
 
 ```python
@@ -1169,11 +971,12 @@ print("ブラックレベル補正前: 最小値=", raw_array.min(), ", 最大�
 print("ブラックレベル補正前: 最小値=", blc_raw.min(), ", 最大値=", blc_raw.max())
 ```
 
-    ブラックレベル補正前: 最小値= 0 , 最大値= 8180
-    ブラックレベル補正前: 最小値= -512 , 最大値= 7668
+    ブラックレベル補正前: 最小値= 53 , 最大値= 1023
+    ブラックレベル補正前: 最小値= -13 , 最大値= 957
 
 
-どうやら正常に処理が行われたようです。
+最大値最小値ともちょうと66減っています。これで全ての値が66減少している事が示せたわけではありませんが、処理が正しく行われている可能性は高そうです。
+
 
 ### ブラックレベル後の画像の確認
 
@@ -1194,8 +997,10 @@ dms_img = simple_demosaic(wb_img, raw.raw_pattern)
 # 表示
 plt.figure(figsize=(8, 8))
 # imshowでは画像は0から1.0の値をとる必用があるので、ノーマライズする。
+dms_img /= 1024
 dms_img[dms_img<0] = 0
-dms_img /= dms_img.max()
+dms_img[dms_img>1] = 1
+# 画像表示
 plt.imshow(dms_img)
 plt.axis('off')
 plt.title(u"ブラックレベル補正後の画像")
@@ -1203,17 +1008,15 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_4_files/camera_raw_chapter_3_4_15_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_91_0.png)
 
 
 だいぶきれいになりました。
-前回問題だった赤みがかった色も集成されています。
-
-ただし、だいぶ暗い画像になっています。これはガンマ補正がされていないためです。次の節ではガンマ補正をかけてみましょう。
+前回問題だった青みがかった色も集成されています。後は画像全体の暗さを直す必用がありそうです。これは次の節で扱うガンマ補正で修正できます。
 
 ### 処理の高速化
 
-今回のブラックレベル補正処理もコードの読みやすさを優先して、非常に遅いものになっています。
+今回のブラックレベル補正処理も、コードの読みやすさを優先して非常に遅いものになっています。
 
 numpyの機能を利用して高速化すると次のようになります。
 
@@ -1247,7 +1050,7 @@ def black_level_correction(raw_array, blc, bayer_pattern):
     return blc_raw
 ```
 
-簡易デモザイク処理を行って確認しましょう。
+簡易デモザイク処理などを使ってこの関数の動作を確認しましょう。
 
 
 ```python
@@ -1261,8 +1064,10 @@ dms_img = simple_demosaic(wb_img, raw.raw_pattern)
 # 表示
 plt.figure(figsize=(8, 8))
 # imshowでは画像は0から1.0の値をとる必用があるので、ノーマライズする。
+dms_img /= 1024
 dms_img[dms_img<0] = 0
-dms_img /= dms_img.max()
+dms_img[dms_img>1] = 1
+# 画像表示
 plt.imshow(dms_img)
 plt.axis('off')
 plt.title(u"black_level_correction関数を使った出力")
@@ -1270,84 +1075,16 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_4_files/camera_raw_chapter_3_4_21_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_96_0.png)
 
 
 同様の画像が出力されたようです。
 
-この`black_level_correction()`関数は`raw_process.py`モジュールの一部として[githubにアップロード](https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py)されています。
-使用する場合は、
-
-`!wget https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py`
-
-としてダウンロードした後、
-
-`from raw_process import black_level_correction`
-
-としてインポートしてください。
-
 ### まとめ
 
-この節ではブラックレベル補正を行いました。次は[ガンマ補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_5.ipynb)を行い、明るさとトーンを補正します。
+この節ではブラックレベル補正を行いました。次はガンマ補正を行い明るさとトーンを補正します。
 
 ## 3.5 ガンマ補正
-
-### この節について
-
-この節では、ガンマ補正を行い画像の明るさとトーンを修正します。
-
-この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
-
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_5.ipynb
-
-### 準備
-
-まずこれまで行ったライブラリーのインストールと、モジュールのインポート、画像のダウンロード、及びRAW画像の読み込みを行います。
-内容については各節を参照ください。
-
-
-```python
-# rawpyとimageioのインストール
-!pip install rawpy;
-!pip install imageio;
-
-# rawpy, imageio, numpuy, pyplot, imshowのインポート
-import rawpy, imageio
-import numpy as np
-import matplotlib.pyplot as plt
-
-# 前節までに作成したモジュールのダウンロード
-!if [ ! -f raw_process.py ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/raw_process.py; fi
-
-from raw_process import simple_demosaic, white_balance, black_level_correction
-
-# 日本語フォントの設定
-!apt -y install fonts-ipafont-gothic
-plt.rcParams['font.family'] = 'IPAPGothic'
-# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
-# Runtime->Restart Runtimeで再実行
-
-# 画像をダウンロードします。
-!if [ ! -f sample.ARW ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/sample.ARW; fi
-
-# 自分で撮影した画像を使用する場合は以下のコメントを取り除きアップロードします。
-# from google.colab import files
-# uploaded = files.upload()
-
-# RAWファイルの名前。
-# アップロードしたファイルを使う場合はその名前に変更。
-raw_file  = "sample.ARW"
-raw = rawpy.imread(raw_file)
-raw_array = raw.raw_image
-h, w = raw_array.shape
-```
-
-    Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
-    Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
-    Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
-    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
-    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
-
 
 ### ガンマ補正とは
 
@@ -1363,15 +1100,21 @@ $$ y = x^{2.2} $$
 
 
 ```python
+# 0~1.0の範囲の値を0.01刻みで作る。
 xs = np.arange(0.0, 1.0, 0.01)
+# xsに対応したx^2.2の値を作る。
 ys = np.power(xs, 2.2)
+# Pyplotの機能でグラフ表示。
 plt.plot(xs, ys)
+# ｘ軸とｙ軸の範囲を0-1.0に設定。
+plt.xlim(0, 1.0)
+plt.ylim(0, 1.0)
 plt.title(u"ガンマカーブ")
 plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_5_files/camera_raw_chapter_3_5_5_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_100_0.png)
 
 
 モニターなどの出力の強さはは入力に対してこのような特性になるので、入力の方をこれに合わせて調整しておく必用があります。これがガンマ補正です。
@@ -1387,19 +1130,21 @@ $$ y = x^{\frac{1}{2.2}} $$
 xs = np.arange(0.0, 1.0, 0.01)
 ys = np.power(xs, 1/2.2)
 plt.plot(xs, ys)
+plt.xlim(0, 1.0)
+plt.ylim(0, 1.0)
 plt.title(u"ガンマ補正カーブ")
 plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_5_files/camera_raw_chapter_3_5_7_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_102_0.png)
 
 
 ### ガンマ補正処理
 
 それではガンマ補正をかけてみましょう。
 
-ガンマをかけるのはデモザイクまで行ったRGB画像が対象ですので、まずブラックレベル補正、ホワイトバランス補正、簡易でモザイク処理をかけます。
+ガンマをかけるのはデモザイクまで行ったRGB画像が対象ですので、まずブラックレベル補正、ホワイトバランス補正、簡易デモザイク処理をかけます。
 
 
 ```python
@@ -1411,7 +1156,7 @@ wb_img = white_balance(blc_raw, raw.camera_whitebalance, raw.raw_colors)
 dms_img = simple_demosaic(wb_img, raw.raw_pattern)
 ```
 
-画像が正常に処理できているか確認しておきましょう。
+正常に処理できているか確認しておきましょう。
 
 
 ```python
@@ -1419,8 +1164,8 @@ dms_img = simple_demosaic(wb_img, raw.raw_pattern)
 plt.figure(figsize=(8, 8))
 # imshowでは画像は0から1.0の値をとる必用があるので、ノーマライズする。
 img = dms_img.copy()
+img /= 1024
 img[img<0] = 0
-img /= img.max()
 img[img>1] = 1
 plt.imshow(img)
 plt.axis('off')
@@ -1429,10 +1174,10 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_5_files/camera_raw_chapter_3_5_11_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_106_0.png)
 
 
-デモザイクまでの処理は正常に行われたようなので実際にガンマ補正をかけてみましょう。
+デモザイクまでの処理は正常に行われたようです。次は実際にガンマ補正をかけてみましょう。
 
 
 ```python
@@ -1458,14 +1203,14 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_3_5_files/camera_raw_chapter_3_5_15_0.png)
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_110_0.png)
 
 
 ガンマ補正により明るさが適正になりました。
 
 ### 処理のモジュール化
 
-今回のガンマ補正もモジュールの一部としておきましょう。
+今回のガンマ補正も関数にしておきましょう。
 
 
 ```python
@@ -1495,21 +1240,69 @@ def gamma_correction(input_img, gamma):
     return gamma_img
 ```
 
-この`gamma_correction()`関数は`raw_process.py`モジュールの一部として[githubにアップロード](https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py)されています。
-使用する場合は、
+なお、このgamma_correction()を含めこの章で扱った関数ははraw_process.pyモジュールの一部としてgithubにアップロードされています。 使用する場合は、
 
-`!wget https://raw.githubusercontent.com/moizumi99/raw_process/master/raw_process.py`
+```
+!wget https://raw.githubusercontent.com/moizumi99/camera_raw_processing/master/raw_process.py
+```
 
 としてダウンロードした後、
 
-`from raw_process import gamma_correction`
+
+```
+import raw_process
+```
+
 
 としてインポートしてください。
 
+
+```python
+! wget https://raw.githubusercontent.com/moizumi99/camera_raw_processing/master/raw_process.py
+
+import raw_process
+```
+
+実際に使用するにはこのようにします。
+
+
+```python
+# raw_processのblack_level_correction関数を使用してブラックレベル補正。
+blc_raw = raw_process.black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
+# raw_processのwhite_balance()関数を使って、ホワイトバランス調整。
+wb_img = raw_process.white_balance(blc_raw, raw.camera_whitebalance, raw.raw_colors)
+# raw_processのsimple_demosaic()関数を使って、簡易デモザイク処理。
+dms_img = raw_process.simple_demosaic(wb_img, raw.raw_pattern)
+# raw_processのgamma_correction()関数を使って、ガンマ補正
+gmm_img = raw_process.gamma_correction(dms_img, 2.2)
+```
+
+表示してみます。
+
+
+```python
+# 表示
+plt.figure(figsize=(8, 8))
+plt.imshow(gamma_img)
+plt.axis('off')
+plt.title(u"モジュールを使った処理の結果")
+plt.show()
+```
+
+
+![png](camera_raw_chapter_3_files/camera_raw_chapter_3_119_0.png)
+
+
+先ほどと同じ画像ができました。
+
 ### まとめ
 
-この節ではガンマ補正を行いました。これで基本的な処理はすべておわりです。
+この節ではガンマ補正を行いました。またこの章で扱った処理をモジュールのメソッドとして登録しました。
+
+これで基本的な処理はすべておわりです。
 次の章ではその他の[重要な処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb)を扱います。
+
+<a href="https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
 #  4. 重要な処理
 
@@ -1529,9 +1322,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 前章でRAW画像に最低限の処理を行いフルRGBとして表示することができました。
 処理が単純な割には以外のきれいな画像ができたのではないでしょうか？
 
-しかし、これは多くの部分が元のRAWデータが良い状態であったという恵まれた条件によるものです。前章で扱ったRAWデータは、フルサイズセンサーのカメラで非常に明るい屋外で撮影したもので、歪みもノイズも少なく、最小限の画像処理でもそこそこの画質を再現することができました。
-
-しかし、RAW現像やカメラ画像処理で扱う画像は常にこのような理想的な状態で撮影されるわけではありません。撮影は室内などの暗いところで扱われることも多いですし、センサーもスマートフォン向けを始め非常に小さい物を使う事が多々あります。そういった画像データにはさまざまな理想的でない特性があり、そういったものは、各種の補正処理を行わないと最終的な画質は低品質になってしまいます。
+でもこれは画像を随分小さく表示しているせいで粗が目立っていないという面が大きいのです。またRAW現像やカメラ画像処理で扱う画像は常に理想的な状態で撮影されるわけではありません。撮影は室内などの暗いところで扱われることも多いですし、センサーもスマートフォン向けを始め非常に小さい物を使う事が多々あります。そういった画像データにはさまざまな理想的でない特性があり、そういったものは、各種の補正処理を行わないと最終的な画質は低品質になってしまいます。
 
 また、前章で扱ったデモザイクは簡易的なもので出力画像が入力画像の４分の１の大きさになるという重大な問題があります。これも解決しなくてはなりません。
 
@@ -1551,11 +1342,9 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 レンズシェーディング補正は画像の周辺で明るさが低下する周辺減光・レンズシェーディングと呼ばれる現象を補正します。
 
-また、これらの処理の効果を見るために、この章以降では、ラズベリーパイのカメラ(v1.2)で撮影したRAW画像を使用します。
-
 ### まとめ
 
-この章で扱う内容について概要を説明しました。次は[デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_1.ipynb)です。
+この章で扱う内容について概要を説明しました。次は[線形補間デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_2.ipynb)です。
 
 ## 4.2 線形補間デモザイク
 
@@ -1573,7 +1362,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -1609,7 +1398,7 @@ from raw_process import simple_demosaic, white_balance, black_level_correction, 
 ![チャート画像](https://raw.githubusercontent.com/moizumi99/raw_process/master/chart.jpg)
 
 
-```python
+```
 # 画像をダウンロードします。
 !if [ ! -f chart.jpg ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/chart.jpg; fi
 
@@ -1635,7 +1424,7 @@ h, w = raw_array.shape
 この点を確認するために、先程の画像を`raw_process`モジュールを使ってRGB画像に変換してみましょう。
 
 
-```python
+```
 # raw_processからインポートしたblack_level_correction関数を使用してブラックレベル補正。
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 # raw_processからインポートしたwhite_balance()関数を使って、ホワイトバランス調整。
@@ -1652,7 +1441,7 @@ gmm_img = gamma_correction(dms_img, 2.2)
 表示してみます。
 
 
-```python
+```
 # サイズ設定
 plt.figure(figsize=(16, 8))
 plt.imshow(gmm_img)
@@ -1668,7 +1457,7 @@ plt.show()
 この画像のサイズとRAWデータのサイズを見てみましょう。
 
 
-```python
+```
 print("現像後のサイズ = ", gmm_img.shape)
 print("RAWデータのサイズ = ", raw_array.shape)
 ```
@@ -1682,7 +1471,7 @@ print("RAWデータのサイズ = ", raw_array.shape)
 最初に表示したJPEG画像と大きさを合わせて並べてみましょう。まずはJPEG画像をnumpyのarrayとして読み込みます。
 
 
-```python
+```
 # matplotlibのモジュールimageを使ってJPEG画像を読み込みます。
 from matplotlib import image
 jpg_img = image.imread("chart.jpg")
@@ -1695,7 +1484,7 @@ h2, w2, c = jpg_img.shape
 次に、このJPEGから作ったデータと、先程簡易RAW現像したデータを同じnumpy arrayに代入してみます。
 
 
-```python
+```
 # JPEG画像の横幅の倍の幅を持つnumpy arrayを作成
 two_img = np.zeros((h2, w2 * 2, c))
 # numpy arrayの右半分にJPEG画像のデータをはめこむ。
@@ -1707,7 +1496,7 @@ two_img[h//4:h//4+h//2, w//4:w//4+w//2, :] = gmm_img
 ならべてた画像データを表示してみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.imshow(two_img)
 plt.axis('off')
@@ -1724,7 +1513,7 @@ plt.show()
 次は拡大してみましょう。こんどは表示サイズが同じになるように調整します。
 
 
-```python
+```
 # 表示サイズ設定
 plt.figure(figsize=(16, 8))
 
@@ -1767,18 +1556,18 @@ plt.show()
 デモザイクアルゴリズムの中で、縮小する方法の次に簡単なのは、線形補間法です。
 線形補間というとものものしいですが、ようするに、距離に応じて間の値をとるわけです。たとえば、緑の画素ならこうなります。
 
-![緑画像の線形補間](fig_4_2_1.png "緑画像の線形補間")
+![緑画像の線形補間](Figures/fig_4_2_1.png "緑画像の線形補間")
 
 赤の画素ではこうです。
 
-![赤画像の線形補間](fig_4_2_2.png "赤画像の線形補間")
+![赤画像の線形補間](Figures/fig_4_2_2.png "赤画像の線形補間")
 
 青の画素でも、赤の場合と同じような補完を行います。
 
 では実際やってみましょう。
 
 
-```python
+```
 # 画像のヘリの部分で折り返すためのヘルパー関数
 def mirror(x, min, max):
     if x < min:
@@ -1818,7 +1607,7 @@ for y in range(0, h):
 画像のサイズを確認します。
 
 
-```python
+```
 print(dms_img.shape)
 ```
 
@@ -1830,7 +1619,7 @@ print(dms_img.shape)
 画像を確認してみましょう。まずは残っているガンマ補正処理を行います。
 
 
-```python
+```
 # ガンマ補正
 gmm_full_img = gamma_correction(dms_img / white_level, 2.2)
 ```
@@ -1838,7 +1627,7 @@ gmm_full_img = gamma_correction(dms_img / white_level, 2.2)
 表示します。
 
 
-```python
+```
 # サイズ設定
 plt.figure(figsize=(16, 8))
 plt.imshow(gmm_full_img)
@@ -1854,7 +1643,7 @@ plt.show()
 それでは、JPEG画像と並べて表示してみましょう。
 
 
-```python
+```
 # 表示サイズ設定
 plt.figure(figsize=(16, 8))
 
@@ -1893,7 +1682,7 @@ plt.show()
 高速化に当たっては、数値計算ライブラリscipyのsignalモジュールを使います。
 
 
-```python
+```
 from scipy import signal
 
 def demosaic(raw_array, raw_colors):
@@ -2043,7 +1832,7 @@ h, w = raw_array.shape
 
 ### 欠陥画素
 
-ライブラリーを使って対象画像を現像して拡大表示すると、こんな部分があります。
+ライブラリーを使って対象画像の左下の方、グレイチャートの一部（図の赤でかこった部分）を現像して拡大表示すると、こんな部分があります。
 
 
 ```python
@@ -2058,6 +1847,22 @@ white_level = 1024.0
 dms_img = dms_img / white_level
 # raw_processからインポートしたgamma_crrection()関数を使って、ガンマ補正。
 gmm_img = gamma_correction(dms_img, 2.2)
+```
+
+
+```python
+# 画像を表示。
+plt.figure(figsize=(16, 8))
+plt.imshow(gmm_img)
+# 欠陥のある部分を示す赤い四角を描画。
+# x=2210, y=1150から50x50の正方形を、塗りつぶしなし、赤色、線の太さ2で作成。
+box = plt.Rectangle((1150, 2110), 50, 50, fill=False, edgecolor='red', linewidth=2)
+# Pyplotのgca()を使ってAxesインスタンス（描画用の軸インスタンス）を取得。
+# そのAxesインスタンスに先程のBoxをadd_patchを使って追加。
+plt.gca().add_patch(box)
+plt.axis('off')
+plt.title(u"全体画像")
+plt.show()
 
 # 画像の一部分を拡大表示。
 plt.figure(figsize=(16, 8))
@@ -2068,7 +1873,11 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_5_0.png)
+![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_6_0.png)
+
+
+
+![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_6_1.png)
 
 
 これはいわゆる欠陥画素です。 「欠陥」という名前がついていますが、製品の欠陥ではなく、一部の画素が正常な値を出力しない状態です。 多くの場合このように、常に明るく見えますが（ホットピクセル）、常に暗い（デッドピクセルまたはコールドピクセル）こともあれば、本来の信号とずれた値を示すという捕まえにくいケースもあります。
@@ -2222,7 +2031,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_20_0.png)
+![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_21_0.png)
 
 
 欠陥画素が修正されたか、先ほどと同じ部分を拡大して確認しましょう。
@@ -2238,7 +2047,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_22_0.png)
+![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_23_0.png)
 
 
 どうやら修正されたようです。
@@ -2641,7 +2450,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -2687,7 +2496,7 @@ h, w = raw_array.shape
 このような事が起きてしまう第一の原因は、レンズを通してセンサーにあたる光の量が、センサーの中央部と、センサーの周辺部とで異なる事です。
 良く説明に出されるのが二枚のレンズを持つ単純な系の場合です。
 
-![レンズシェーディングが起こるしくみ](fig_4_5_1.png)
+![レンズシェーディングが起こるしくみ](Figures/fig_4_5_1.png)
 
 この図の例では、センサー中央部分にあたる光はレンズの開口部全体を通ってくるのに対して、センサー周辺部にあたる光はレンズの一部分しか通過できません。
 結果的に中心部が明るく、周辺部が暗くなります。
@@ -2708,7 +2517,7 @@ h, w = raw_array.shape
 まずはダウンロードしてみます。
 
 
-```python
+```
 ! wget flat.jpg
 ```
 
@@ -2734,7 +2543,7 @@ h, w = raw_array.shape
 まだレンズシェーディング補正は行いません。
 
 
-```python
+```
 # RAW画像の読み込み。
 raw_file  = "flat.jpg"
 raw = rawpy.imread(raw_file)
@@ -2770,7 +2579,7 @@ plt.show()
 画面の高さ方向中央付近、上下３２画素幅で左から右まで帯状の画像をとりだし、明るさがどう変わるをグラフにしてみます。
 
 
-```python
+```
 # 基準となる画像中央部の位置
 center_y, center_x = h // 2, w // 2
 # 明るさの配列を保存する配列
@@ -2791,7 +2600,7 @@ shading_profile = [np.array(a) / max(a) for a in shading_profile]
 ```
 
 
-```python
+```
 plt.axis(ymin=0, ymax=1.1)
 plt.plot(shading_profile[0], color='red')
 plt.plot(shading_profile[1], color='green')
@@ -2823,7 +2632,7 @@ plt.show()
 ゼロレベルを正しく取る必用があるので、測定する対象はブラックレベル補正後の画像です。
 
 
-```python
+```
 # 測定値を入れる配列を色の数分だけ準備する。
 vals = [[], [], [], []]
 # 中心からの距離を保存
@@ -2851,7 +2660,7 @@ for y in range(0, h, 32):
 最大値でノーマライズしてグラフにして確認してみます。
 
 
-```python
+```
 # 扱いやすいようにnumpyの配列に変換。
 rs = np.array(radials)
 vs = np.array(vals)
@@ -2883,7 +2692,7 @@ plt.show()
 逆数のグラフを書いてみましょう。
 
 
-```python
+```
 # 明るさの逆数を求める。
 gs = 1 / vs
 # 明るさの逆数のグラフ。
@@ -2911,7 +2720,7 @@ plt.show()
 で、xsは入力、ysは出力、oは次数です。psには各次の係数が入ります。
 
 
-```python
+```
 # 係数をしまう配列を色の数分だけ準備。
 par = [[], [], [], []]
 # 各色ごとに１次式で近似。
@@ -2923,7 +2732,7 @@ for color in range(4):
 確認してみましょう。
 
 
-```python
+```
 print(par)
 ```
 
@@ -2933,7 +2742,7 @@ print(par)
 それらしい値が入っています。グラフにしてでみてみましょう。
 
 
-```python
+```
 # 各色ごとの１次式の出力
 es = [[], [], [], []]
 # 各色ごとに、中心からの距離(rs)に応じた値を求める
@@ -2961,7 +2770,7 @@ plt.show()
 まず、レンズシェーディング補正前の、ブラックレベル補正のみをかけたRAW画像がこちらです。
 
 
-```python
+```
 plt.figure(figsize=(8, 8))
 plt.imshow(blc_raw, cmap='gray')
 plt.axis('off')
@@ -2975,7 +2784,7 @@ plt.show()
 先に各画素ごとに掛け合わせるゲインを、先程の近似関数から計算しておきます。
 
 
-```python
+```
 gain_map = np.zeros((h, w))
 center_y, center_x = h // 2, w // 2
 for y in range(0, h, 2):
@@ -2991,12 +2800,12 @@ for y in range(0, h, 2):
 このゲインをブラックレベル補正した画像にかけ合わせます。
 
 
-```python
+```
 lsc_raw = blc_raw * gain_map
 ```
 
 
-```python
+```
 outimg = lsc_raw.copy()
 outimg /= 1024
 outimg[outimg < 0] = 0
@@ -3016,7 +2825,7 @@ plt.show()
 残りの処理（ホワイトバランス補正、デモザイク、カラーマトリクス補正、ガンマ補正）を行ってフルカラー画像を出力してみましょう。
 
 
-```python
+```
 dpc_raw = defect_correction(lsc_raw, 16)
 wb_raw = white_balance(dpc_raw, raw.camera_whitebalance, raw.raw_colors)
 dms_img = demosaic(wb_raw, raw.raw_colors)
@@ -3042,7 +2851,7 @@ RGB画像で効果が確認できました。
 残っているシェーディング量を測定してみましょう。
 
 
-```python
+```
 #画素の明るさの横方向の分布の測定。 
 center_y, center_x = h // 2, w // 2
 shading_after = [[], [], []]
@@ -3075,7 +2884,7 @@ plt.show()
 今回も`chart.jpg`を使います。
 
 
-```python
+```
 # 画像をダウンロードします。
 !if [ ! -f chart.jpg ]; then wget chart.jpg; fi
 
@@ -3094,7 +2903,7 @@ h, w = raw_array.shape
 ではRAW画像データを取り出し、まずはレンズシェーディング補正なしで現像してみます。
 
 
-```python
+```
 #RAW現像処理
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 dpc_raw = defect_correction(blc_raw, 16)
@@ -3123,7 +2932,7 @@ plt.show()
 それでは次にレンズシェーディング補正を入れて処理してみます。補正パラメータは先程の平坦画像で計算したものを使います。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 #先程計算したゲインマップを使いシェーディング補正。
 lsc_raw = blc_raw * gain_map
@@ -3154,7 +2963,7 @@ plt.show()
 この処理も関数としてモジュールへ追加しておきましょう。
 
 
-```python
+```
 def lens_shading_correction(raw_array, coef):
     """
     レンズシェーディング補正を行う。
@@ -3205,7 +3014,7 @@ def lens_shading_correction(raw_array, coef):
 正常に動作するか確認しておきます。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc_raw = lens_shading_correction(blc_raw, par)
 dpc_raw = defect_correction(lsc_raw, 16)
@@ -3295,7 +3104,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -3365,7 +3174,7 @@ $$ \sigma^{2} \left( n \right) = n $$
 まずはRAW現像します。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
        np.array([6.32044369e-07, 9.70694361e-01]), 
@@ -3395,7 +3204,7 @@ plt.show()
 この画像を拡大すると、このようになっています。
 
 
-```python
+```
 # 画像表示
 plt.figure(figsize=(8, 8))
 plt.imshow(gmm_img[1950:2150, 800:1000, :])
@@ -3412,7 +3221,7 @@ plt.show()
 
 では実際どの程度の量のノイズがあるのか測定してみましょう。
 
-![ノイズ測定領域](fig_5_2_1.png)
+![ノイズ測定領域](Figures/fig_5_2_1.png)
 
 図のグレイパッチ部分（赤い長方形で囲った部分）のノイズ量を実際に測定してみます。
 
@@ -3421,7 +3230,7 @@ plt.show()
 今回は次のような座標をとり、その点から右下の100x100画素の正方形の領域を測定します。
 
 
-```python
+```
 patches = [(2586, 2086), (2430, 2092), (2272, 2090), (2112, 2090), (1958, 2086), (1792, 2094), 
            (1642, 2096), (1486, 2090), (1328, 2090), (1172, 2086), (1016,2084), (860, 2084),
            (866, 482), (1022, 480), (1172, 476), (1328, 474), (1480, 470), (1634, 466),
@@ -3432,7 +3241,7 @@ patches = [(2586, 2086), (2430, 2092), (2272, 2090), (2112, 2090), (1958, 2086),
 画像のフォーマットがBayerなので、各色チャンネル毎に統計をとります。
 
 
-```python
+```
 variances = []
 averages = []
 for index, (dx, dy) in enumerate(((0, 0), (1, 0), (0, 1), (1, 1))):
@@ -3449,7 +3258,7 @@ for index, (dx, dy) in enumerate(((0, 0), (1, 0), (0, 1), (1, 1))):
 測定結果を見てみましょう。
 
 
-```python
+```
 plt.plot(averages, variances, linestyle='None', marker='o', color='blue')
 plt.show()
 ```
@@ -3463,7 +3272,7 @@ plt.show()
 一次多項式で近似してみましょう。
 
 
-```python
+```
 par = np.polyfit(averages, variances, 1)
 print(par)
 ```
@@ -3474,7 +3283,7 @@ print(par)
 では、近似した１次式ともとのグラフを並べてみましょう。
 
 
-```python
+```
 xs = np.arange(0, 300, 1)
 ys = par[1] + par[0] * xs
 plt.plot(averages, variances, linestyle='None', marker='o', color='blue')
@@ -3505,7 +3314,7 @@ plt.show()
 
 たとえば、各ターゲット画素のまわりに次のような5x5の領域を設定します。
 
-![注目した画素の周辺](fig_5_2_2.png)
+![注目した画素の周辺](Figures/fig_5_2_2.png)
 
 赤で囲った画素がターゲットです。
 
@@ -3517,7 +3326,7 @@ plt.show()
 
 一例としてはこのようなフィルターになるでしょう。（これは説明用の図で、実際のフィルターとは異なります。）
 
-![フィルターの値](fig_5_2_3.png)
+![フィルターの値](Figures/fig_5_2_3.png)
 
 バイラテラルフィルターでは、ターゲット画素と周辺画素の一つ一つの値の差を取り、それをノイズの量とくらべて加重平均のウェイトを計算することで、ターゲット画素に近いものにのみフィルターを適用します。
 
@@ -3556,7 +3365,7 @@ RAW画像から処理する場合はこのような処理が行われていな�
 Bayerフォーマットのままではフィルターがかけにくいので、デモザイク後の値を使用します。一応この段階の画像を確認しておきましょう。
 
 
-```python
+```
 outimg = dms_img / 1024
 outimg[outimg < 0] = 0
 outimg[outimg > 1] = 1
@@ -3575,7 +3384,7 @@ plt.show()
 RGBの平均に対して確かめてみましょう。
 
 
-```python
+```
 luma_img = dms_img.mean(2)
 variances = []
 averages = []
@@ -3602,7 +3411,7 @@ plt.show()
 傾きを求めて確かめてみましょう。
 
 
-```python
+```
 par = np.polyfit(averages, variances, 1)
 print(u'傾き', par[0], '切片', par[1])
 
@@ -3628,7 +3437,7 @@ Bayerでの測定に比べると誤差が大きいようですが、この程度
 コード中、coefがバイラテラルフィルターの式の$a$に相当します。なお今回は$b = 0$としました。
 
 
-```python
+```
 # 注：これは処理をわかりやすく書いたもので非常に実行速度が遅い。
 # 実際にはこの後の高速版を使用することをおすすめする
 import math
@@ -3662,7 +3471,7 @@ for y in range(2, h-2):
 ```
 
 
-```python
+```
 outimg = img_flt.copy()
 outimg = outimg / 1024
 outimg[outimg < 0] = 0
@@ -3681,7 +3490,7 @@ plt.show()
 このままではわかりにくいので、残りの処理（カラーマトリクスとガンマ補正）を行います。
 
 
-```python
+```
 ccm_flt_img = color_correction_matrix(img_flt, color_matrix)
 gmm_flt_img = gamma_correction(ccm_flt_img / white_level, 2.2)
 
@@ -3700,7 +3509,7 @@ plt.show()
 拡大してノイズフィルターなしの画像と比較してみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 plt.imshow(gmm_img[1950:2150, 800:1000, :])
@@ -3720,7 +3529,7 @@ plt.show()
 正常に処理できているようです。他の部分も見てみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 plt.imshow(gmm_img[1500:1700, 1650:1850, :])
@@ -3755,7 +3564,7 @@ numpyにはこのような用途のためにstride_tricksというライブラ�
 まずは、RGBの平均画像(luma_img)から分散を計算します。
 
 
-```python
+```
 # as_stridedのインポート
 from numpy.lib.stride_tricks import as_strided
 import scipy
@@ -3786,7 +3595,7 @@ sigma_tile = sigma_tile[2:h-2, 2:w-2, : , :]
 同様に、各パッチの平均値をコピーして同じ要素の5x5の行列を作り、その5x5の行列を3278 x 2444個並べます。
 
 
-```python
+```
 # luma_imgのストライドを求める。
 sy, sx = luma_img.strides
 # lumaの各画素を5x5ならべたパッチを、さらにh x w並べた4次元配列を作成。
@@ -3801,7 +3610,7 @@ luma_tile = luma_tile[2:h-2, 2:w-2, : , :]
 次に、RGBの平均画像(luma_img)から5x5のパッチを3278 x 2444通り作ります。
 
 
-```python
+```
 # luma_imgから5x5の領域を取り出したものをさらに画像サイズ分ならべている。(ただし縁の2画素はのぞく)
 # 取り出す際のメモリーオフセットはoffset(y, x, z, v)=sy*x+sx*x+sy*z+sx*v。
 luma_box = as_strided(luma_img, strides=(sy, sx, sy, sx), shape=(h-4, w-4, 5, 5))
@@ -3813,7 +3622,7 @@ luma_box = as_strided(luma_img, strides=(sy, sx, sy, sx), shape=(h-4, w-4, 5, 5)
 次にこのluma_boxから各画素にかける重みを計算します。
 
 
-```python
+```
 # 5x5の平均値からの差をとる。
 diff = luma_box - luma_tile
 # 5x5の各パッチについて、要素毎に重みを計算。
@@ -3827,7 +3636,7 @@ weight_sum = weight.sum(axis=(2, 3))
 これで係数の計算はできました。各色毎に処理を行います。
 
 
-```python
+```
 # 赤画像処理。まずフルカラー画像から赤のプレーンを取り出す。
 red = dms_img[:, :, 0]
 # この画像のストライドを取り出す。
@@ -3843,7 +3652,7 @@ red_out = (weight * red_boxes).sum(axis=(2, 3)) / weight_sum
 同じように緑画像と青画像も処理します。
 
 
-```python
+```
 # 緑画像処理。処理自体は赤画像と同じ。
 green = dms_img[:, :, 1]
 sy, sx = green.strides
@@ -3860,7 +3669,7 @@ blue_out = (weight * blue_boxes).sum(axis=(2, 3)) / weight_sum
 ３色の画像を組み合わせてフルカラーの画像にします。
 
 
-```python
+```
 # フィルターされた赤、緑、青のプレーンを元の画像にはめ込む。
 img_flt2 = dms_img.copy()
 img_flt2[2:h-2, 2:w-2, 0] = red_out
@@ -3871,7 +3680,7 @@ img_flt2[2:h-2, 2:w-2, 2] = blue_out
 画像を表示して確認しましょう。
 
 
-```python
+```
 outimg = img_flt2.copy()
 outimg = outimg.reshape((h, w, 3))
 outimg = outimg / 1024
@@ -3891,7 +3700,7 @@ plt.show()
 うまくいったようです。続けてカラーマトリクス補正とガンマ補正をかけてみましょう。
 
 
-```python
+```
 # カラーマトリクス処理。
 ccm_flt2_img = color_correction_matrix(img_flt2, color_matrix)
 # ガンマ補正処理。
@@ -3912,7 +3721,7 @@ plt.show()
 先ほどと同じ部分を拡大して処理ができているか見てみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.imshow(gmm_flt2_img[1950:2150, 800:1000, :])
 plt.axis('off')
@@ -3934,7 +3743,7 @@ plt.show()
 ノイズフィルターもモジュール化しておきます。
 
 
-```python
+```
 def noise_filter(rgb_img, noise_model, coef=0.1):
     """
     バイラテラルノイズフィルター処理を行う。
@@ -3988,7 +3797,7 @@ def noise_filter(rgb_img, noise_model, coef=0.1):
 正常に動作するか確認します。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
        np.array([6.32044369e-07, 9.70694361e-01]), 
@@ -4065,7 +3874,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -4077,7 +3886,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import imshow
 
 # 前節までに作成したモジュールのダウンロードとインポート
-!if [ ! -f raw_process.py ]; wget raw_process.py; fi
+!if [ ! -f raw_process.py ]; then wget raw_process.py; fi
 from raw_process import simple_demosaic, white_balance, black_level_correction, gamma_correction
 from raw_process import demosaic, defect_correction, color_correction_matrix, lens_shading_correction
 from raw_process import noise_filter
@@ -4085,8 +3894,6 @@ from raw_process import noise_filter
 # 日本語フォントの設定
 !apt -y install fonts-ipafont-gothic
 plt.rcParams['font.family'] = 'IPAPGothic'
-# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
-# Runtime->Restart Runtimeで再実行
 
 # 画像をダウンロードします。
 !if [ ! -f chart.jpg ]; then wget chart.jpg; fi
@@ -4103,24 +3910,33 @@ raw_array = raw.raw_image
 h, w = raw_array.shape
 ```
 
-    Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
-    Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
-    [33mYou are using pip version 19.0.1, however version 19.0.2 is available.
-    You should consider upgrading via the 'pip install --upgrade pip' command.[0m
-    Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
-    [33mYou are using pip version 19.0.1, however version 19.0.2 is available.
-    You should consider upgrading via the 'pip install --upgrade pip' command.[0m
-    /bin/sh: 1: Syntax error: "fi" unexpected (expecting "then")
-    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
-    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+    Requirement already satisfied: rawpy in /usr/local/lib/python3.6/dist-packages (0.13.1)
+    Requirement already satisfied: numpy in /usr/local/lib/python3.6/dist-packages (from rawpy) (1.14.6)
+    Requirement already satisfied: imageio in /usr/local/lib/python3.6/dist-packages (2.4.1)
+    Requirement already satisfied: numpy in /usr/local/lib/python3.6/dist-packages (from imageio) (1.14.6)
+    Requirement already satisfied: pillow in /usr/local/lib/python3.6/dist-packages (from imageio) (4.0.0)
+    Requirement already satisfied: olefile in /usr/local/lib/python3.6/dist-packages (from pillow->imageio) (0.46)
+    Reading package lists... Done
+    Building dependency tree       
+    Reading state information... Done
+    fonts-ipafont-gothic is already the newest version (00303-18ubuntu1).
+    0 upgraded, 0 newly installed, 0 to remove and 8 not upgraded.
 
+
+
+```
+# もし日本語が文字化けしている場合以下の３行の行頭の#を削除して実行後、Runtime->Restart Runtime
+# import matplotlib
+# target_dir = matplotlib.get_cachedir()
+# ! rm {target_dir}/*.json
+```
 
 ### 画像の解像感
 
 前回までに作成した画像の細部をもう一度よく見てみましょう。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
        np.array([6.32044369e-07, 9.70694361e-01]), 
@@ -4139,7 +3955,7 @@ gmm_img = gamma_correction(ccm_img / white_level, 2.2)
 ```
 
 
-```python
+```
 # 最終画像表示
 plt.figure(figsize=(8, 8))
 plt.imshow(gmm_img[1500:1700, 1650:1850, :])
@@ -4149,7 +3965,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_6_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_7_0.png)
 
 
 どことなくぼやっとしていて、コントラストも少し低いようです。
@@ -4184,7 +4000,7 @@ sRGBからJPEGで使われるYCbCr空間への変換マトリクスはこのよ�
 
 $$
 \left(
-\begin{array}{rr}
+\begin{array}{rrr}
 0.299 &0.587 &0.144 \\\
 -0.168736 &-0.331264 &0.5 \\\ 
 0.5 &-0.418688 &-0.081312\\\
@@ -4197,7 +4013,7 @@ $$
 ではRGB信号をYCbCrに分解してみます。
 
 
-```python
+```
 rgb2ycbcr = np.array([[0.299, 0.587, 0.144], [-0.168736, -0.331264, 0.5], [0.5, -0.418688, -0.081312]])
 
 # 色空間の変換
@@ -4211,7 +4027,7 @@ for c in (0, 1, 2):
 このうち輝度成分を取り出して確認してみましょう。
 
 
-```python
+```
 luma = ycb_img[:, :, 0]
 plt.figure(figsize=(8, 8))
 plt.imshow(luma, cmap='gray')
@@ -4221,7 +4037,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_10_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_11_0.png)
 
 
 うまく変換できているようです。
@@ -4231,7 +4047,7 @@ plt.show()
 まずはぼやけた画像を作成します。このためにscipyのgaussian_filterという機能を使います。
 
 
-```python
+```
 import scipy
 # scipyのgaussian_filterによってガウシアンフィルターをかける。
 blurred = scipy.ndimage.gaussian_filter(luma, sigma = 2)
@@ -4240,7 +4056,7 @@ blurred = scipy.ndimage.gaussian_filter(luma, sigma = 2)
 どんな画像になったか見てみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 plt.imshow(luma[1500:1700, 1650:1850], cmap='gray')
@@ -4254,7 +4070,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_14_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_15_0.png)
 
 
 ガウシアンフィルターをかけた画像はかなりぼやけているのがわかります。
@@ -4262,7 +4078,7 @@ plt.show()
 元の画像からフィルターをかけた画像を引き明るさを調整します。
 
 
-```python
+```
 # アンシャープマスクの強度。
 coef = 0.25
 unsharp = luma + coef * (luma - blurred)
@@ -4271,7 +4087,7 @@ unsharp = luma + coef * (luma - blurred)
 表示して確認してみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 plt.imshow(luma[1500:1700, 1650:1850], cmap='gray')
@@ -4285,7 +4101,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_18_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_19_0.png)
 
 
 解像感が上がっているのが確認できました。
@@ -4293,7 +4109,7 @@ plt.show()
 次にカラー画像に戻します。
 
 
-```python
+```
 # YCbCrからRGBへの変換の逆行列を求める。
 ycbcr2rgb = np.linalg.inv(rgb2ycbcr)
 shp_img = ycb_img.copy()
@@ -4310,7 +4126,7 @@ for c in (0, 1, 2):
 カラーでも画像を確認しておきます。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 plt.imshow(gmm_img[1500:1700, 1650:1850, :])
@@ -4324,7 +4140,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_22_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_23_0.png)
 
 
 カラー画像でも細部がはっきりしたのが確認できました
@@ -4334,7 +4150,7 @@ plt.show()
 エッジ強調もモジュールとして追加しておきます。
 
 
-```python
+```
 # RGB to YCbCr 変換マトリクス
 RGB_TO_YCBCR = np.array([[0.299, 0.587, 0.144],
                          [-0.168736, -0.331264, 0.5],
@@ -4403,7 +4219,7 @@ def edge_enhancement(rgb_img, sigma=2, coef=0.25):
 全処理を行って動作を確認します。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
        np.array([6.32044369e-07, 9.70694361e-01]), 
@@ -4423,7 +4239,7 @@ shp_img = edge_enhancement(gmm_img, 2, 0.25)
 ```
 
 
-```python
+```
 # 最終画像表示
 plt.figure(figsize=(8, 16))
 plt.subplot(2, 1, 1)
@@ -4438,7 +4254,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_28_0.png)
+![png](camera_raw_chapter_5_3_files/camera_raw_chapter_5_3_29_0.png)
 
 
 うまく処理できているようです。
@@ -4763,6 +4579,853 @@ plt.show()
 今回はトーンカーブ補正を行いました。ここではトーンカーブを手動で設定しましたが、カメラの中では画像の内容や状況に応じて自動的に最適なトーンカーブを設定します。この本の範囲を超えるのであつかいませんが、こういったアルゴリズムもそれ自体かなり重要な処理です。
 またここで扱ったものは画像全体に一律のトーンカーブを使いますがこういったものはグローバル・トーンカーブ補正と呼ばれます。さらに高度な処理では画像内の領域ごとにコントラストの調整を行ったりします。興味がある方は論文など参照されてはどうでしょうか？
 
-これで画質を良くする処理の章は終わりです。次は[応用編](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6.ipynb)に入ります。
+これで画質を良くする処理の章は終わりです。次は[応用編](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6_1.ipynb)に入ります。
 
 
+
+
+```python
+
+```
+
+# 6 応用編
+
+## 6.1 線形補間デモザイクの周波数特性
+
+### はじめに
+
+この章（応用編）ではより高度なデモザイクアルゴリズムを扱いますが、そのために若干アドバンストな数学的内容をとりあげます。
+
+もし画像処理の数学的な側面に興味のない方は数式や信号処理的な説明の部分は読み飛ばし、コードとその使い方にお進みくださっても問題ありません。
+
+### この節について
+
+この節では第４章で取り上げた線形補間デモザイクの特徴について調べて次の章の準備とします。
+
+この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+
+https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6_1.ipynb
+
+### 準備
+
+まずモジュールのインポートと日本語の設定を行っておきます。
+
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
+```
+
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+
+
+### ベイヤー画像の周波数特性
+
+_この節は、画像処理の理論的背景に興味がない方は読み飛ばして構いません。_
+
+それではまず、前回のデモザイク処理の問題点を分析してみましょう。
+
+前回の記事の最後で、線形補間処理をFIRフィルターとして書き換える作業を行いました。これは処理の高速化を念頭においたものですが、FIRを使った画像処理として解釈することもできます。
+
+まず、ベイヤー配列のある特定の色の画素は、もともとのフル解像度の画像に、位置によって0または１を取るサンプリング関数を画像にかけたものと解釈する事ができます。
+
+![ベイヤー配列上の緑画素](fig6_1_1.png)
+
+これを数式で表すとこうなります。
+
+$$ \displaystyle f_G(x, y) = f(x, y) \cdotp s(x, y) $$
+
+$$ \displaystyle 
+s(x, y) = 
+\begin{cases}
+0   \text{  if } x \mod 2 = y \mod 2 \\\
+1  \text{  otherwise}
+\end{cases}
+$$
+
+$ s(x, y) $はさらに
+
+$$
+\begin{eqnarray}
+s \left ( x, y \right )  =  \frac{1}{2} \left ( 1 - \left ( -1 \right ) ^ {x + y} \right ) \\
+ = \frac{1}{2} \left ( 1 - e ^ {i \pi \left ( x + y \right ) } \right )
+\end{eqnarray}
+$$
+
+とかけます。
+たとえば$ x $と$ y $の和が偶数だと
+
+$$ e ^ {i \pi \left ( x + y \right )} = 1 $$
+
+になり、奇数だと
+
+$$ e ^ {i \pi \left ( x + y \right )} = -1 $$
+
+になることを利用しています。
+
+したがって、元の式は
+
+$$
+\begin{eqnarray}
+f_{G} \left ( x, y \right ) =  \frac{1}{2} f_{full}\left ( 1 - \left ( -1 \right ) ^ {x + y} \right ) \\
+= \frac{1}{2} \left ( f_{full} - f_{full} e ^ {i \pi \left ( x + y \right ) } \right )
+\end{eqnarray}
+$$
+
+と表されます。この式の後半は、元の関数をx軸方向とy軸方向に$ \pi$ずつずらし、元の信号から引く事を意味します。
+
+さて、この画像をフーリエ変換して周波数特性を求めたらどのようになるでしょうか？$ f_G $ をフーリエ変換したものを$ F_G $とすると、
+
+$$
+\begin{eqnarray}
+F_G \left( w, v \right ) &=& \int f_G \left ( x, y \right) e ^ {i w} e ^ {i v} dx dy \\
+&=& \int \frac{1}{2} \left (
+    f \left( x, y \right) - f \left( x, y \right ) e ^ {\pi i \left( x + y \right) } 
+    \right ) e ^ {i w} e ^ {i v} dx dy
+\end{eqnarray}
+$$
+
+ここで元の$ f \left( x, y \right) $をフーリエ変換したものを $F(w, v)$とすると、
+
+$$
+F\left( w, v \right) = \int f \left( x, y  \right )  e ^ {i w x} e ^ {i v y} dx dy
+$$
+
+なので、
+
+$$
+\begin{eqnarray}
+F_G \left( w, v \right ) 
+&=& \frac{1}{2} F \left( x, y \right) - \frac{1}{2} \int f \left( x, y \right ) e ^ {\pi i \left( x + y \right) } 
+    e ^ {i w} e ^ {i v} dx dy
+\end{eqnarray}
+$$
+
+ここで、
+
+$$
+\begin{eqnarray}
+\int f \left( x, y \right ) e ^ {\pi i \left( x + y \right) } e ^ {i w} e ^ {i v} dx dy
+&=& \int f \left( x, y \right ) e ^ {i \left( w + \pi \right ) x } e ^ {i \left( v + \pi \right) y} dx dy \\
+&=& F\left(w + \pi, v + \pi \right) 
+\end{eqnarray}
+$$
+
+を利用すると
+
+$$
+F_G \left( w, v \right ) = \frac{1}{2} F\left( x, y \right) - \frac{1}{2} F\left( x + \pi, y + \pi\right)
+$$
+
+となります。
+
+これは$\frac{1}{2}$の係数をのぞけば、元の画像の周波数特性を周波数軸上に$pi$だけずらすしてもとの画像から引いたものです。
+
+つまり、もし元の画像の周波数特性が模式的にこのように表されるとしたら、
+
+![元画像の周波数特性の模式図](fig6_1_2.png)
+
+Bayer上の緑画素の周波数特性はこのようになります。
+
+![エイリアスを起こした画像の周波数特性](fig6_1_3.png)
+
+青い部分が、全式の後半部分にできたもので元の画像の一部を定間隔でとりだした（サブサンプリング）したためにできた副生成物（アーティファクト）です。このような副生成物をエイリアシングとよびます[^1]。
+
+[^1]: 通常の画像で拡大縮小などによってエイリアシングがおきると、高周波成分が低い周波数に干渉してモアレなどを生成することがしられています。
+
+### 線形補間フィルターの周波数特性
+
+画像の周波数成分は低い部分に多いと考えると、サンプリング前の信号を取り出すには、低周波部分を取り出してやれば良いことになります。
+信号処理的にはローパスフィルターをかけます。
+
+ここで、線形補間の式から作ったフィルターを思い出すと、このような形をしていました。
+
+$$
+h_1 = 
+\begin{bmatrix}
+    0 & 1/4 &   0 \\
+  1/4 &   1 & 1/4 \\
+    0 & 1/4 &   0 \\
+\end{bmatrix}
+$$
+
+これはそのものズバリ、ローパスフィルターです。
+
+この周波数特性はこのようになります。
+$$
+\begin{eqnarray}
+H_1\left(w, v\right) 
+&=& \sum_{n=-1}^{1} \sum_{m=-1}^{1} h_1 \left(n, m\right) e^{-i w n} e^{-i v m}\\
+&=& \frac{1}{2} cos\left( w \right) + \frac{1}{2} cos\left( v \right) + 1
+\end{eqnarray}
+$$
+
+画像として表示してみましょう。
+
+
+```python
+# 横軸と縦軸の位置
+sample_num = 64
+ws = np.linspace(-np.pi, np.pi, sample_num)
+vs = np.linspace(-np.pi, np.pi, sample_num)
+
+# wsとvsを並べたもの。
+wmesh, vmesh = np.meshgrid(ws, vs, sparse=True)
+# 周波数特性
+f1 = np.cos(wmesh)/2 + np.cos(vmesh)/2 + 1
+# パワーを求めるために２乗
+f1 = f1 * f1
+
+# pyplotのcountourfを使って表示
+plt.figure(figsize=(6, 6))
+plt.imshow(f1, cmap='gray')
+plt.axis('off')
+plt.title("緑画素用線形補間フィルターの周波数特性")
+plt.show()
+```
+
+
+![png](camera_raw_chapter_6_1_files/camera_raw_chapter_6_1_11_0.png)
+
+
+この図では明るい部分の値が大きく、暗い部分の値が小さくなっています。特に角の部分では０になります。
+
+先程のベイヤー画像の緑画素の周波数特性の図と比べると、ちょうど４つの角にあるエイリアシングの部分で周波数特性が０になり打ち消すようになっていることがわかります。
+
+### 赤・青画素の周波数特性とフィルター
+
+同様に赤画素のサンプリング関数は、xとyがどちらも偶数のときのみ値が存在することを考えると、
+
+\begin{equation}
+s_R \left ( x, y \right ) =  \frac{1}{4} \left ( 1 - \left ( -1 \right ) ^ x \right ) \left ( 1 - \left ( -1 \right ) ^ y \right ) 
+=  \frac{1}{4} \left ( 1 - e ^ {i \pi x} \right ) \left ( 1 - e ^ {i \pi y} \right )  
+\end{equation}
+
+で、青画素は、
+
+\begin{equation}
+s_B \left ( x, y \right ) =  \frac{1}{4} \left ( 1 + \left ( -1 \right ) ^ x \right ) \left ( 1 + \left ( -1 \right ) ^ y \right ) 
+=  \frac{1}{4} \left ( 1 + e ^ {i \pi x} \right ) \left ( 1 + e ^ {i \pi y} \right )  
+\end{equation}
+
+符号を無視すると周波数特性はどちらも同じになり、エイリアシングの様子はこうなります。
+
+![ベイヤー内の赤・青画像の周波数特性](fig6_1_4.png)
+
+緑の画素にくらべて、エイリアシングの影響を受ける領域が大きくなっています。したがって、緑よりも強めのローパスフィルターをかける必要があることが予想されます。
+
+前回使用した赤・青画素線形補間用ののFIRフィルターはこうなっています。
+
+$$
+h_2 = 
+\begin{bmatrix}
+  1/4 & 1/2 & 1/4 \\
+  1/2 &   1 & 1/4 \\
+  1/4 & 1/2 & 1/4 \\
+\end{bmatrix}
+$$
+
+
+周波数特性はこうです。
+
+$$
+\begin{eqnarray}
+H_2\left(w, v\right) 
+&=& \sum_{n=-1}^{1} \sum_{m=-1}^{1} h_2 \left(n, m\right) e^{-i w n} e^{-i v m} \\
+&=& \left( 1 + cos\left( w \right) \right) \left( 1 + cos\left( v \right) \right)
+\end{eqnarray}
+$$
+
+図示してみましょう。
+
+
+```python
+# 周波数特性
+f2 = (1 + np.cos(wmesh)) * (1 + np.cos(vmesh))
+# パワーを求めるために２乗
+f2 = f2 * f2
+
+# pyplotのcountourfを使って表示
+plt.figure(figsize=(6, 6))
+plt.imshow(f2, cmap='gray')
+plt.axis('off')
+plt.title("赤・青画素用線形補間フィルターの周波数特性")
+plt.show()
+```
+
+
+![png](camera_raw_chapter_6_1_files/camera_raw_chapter_6_1_15_0.png)
+
+
+ちょうと赤青画像のエイリアシングを取り除くような特性になっています。
+
+こうしてみると理想的なフィルター処理をしているように見えますが、実際の画像はだいぶぼやけていて、細かい模様の周りには偽色という本来ないはずの色がでてきています。
+
+画像のぼやけは、もともとの画像の周波数特性を十分にカバーしていないことを、偽色の存在は本来の信号とエイリアシングとが十分に分割できていない事を示しています。
+このような単純な形のフィルターの限界でしょう。
+
+### まとめ
+
+今回は線形補間デモザイクフィルターの周波数特性を調べてその問題点を調べてきました。
+
+次はこういった問題点を改善した[高度なデモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6_1.ipynb)に入ります。
+
+
+
+
+```python
+
+```
+
+## 6.2 高度なデモザイク処理
+
+### この節について
+
+この節では線形補間デモザイクよりも高度なデモザイクアルゴリズムをとりあげます。なお、この節の内容の大部分は"Frequency-Domain Methods for Demosaicking of Bayer-Sampled Color Images, Eric Dubois, IEEE Signal Processing Letters, Dec. 2005"に基づいています。
+
+この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+
+https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6_1.ipynb
+
+### 準備
+
+まずライブラリーのインストールと、モジュールのインポート、画像の読み込みを行います。今回もラズベリーパイで撮影したチャート画像を使用します。
+内容については各節を参照ください。
+
+
+```python
+# rawpyとimageioのインストール
+!pip install rawpy;
+!pip install imageio;
+
+# rawpy, imageio, numpuy, pyplot, imshowのインポート
+import rawpy, imageio
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import imshow
+
+# 前節までに作成したモジュールのダウンロードとインポート
+!if [ ! -f raw_process.py ]; then wget raw_process.py; fi
+from raw_process import simple_demosaic, white_balance, black_level_correction, gamma_correction
+from raw_process import demosaic, defect_correction, color_correction_matrix, lens_shading_correction
+from raw_process import noise_filter, apply_matrix, edge_enhancement, tone_curve_correction
+
+# 日本語フォントの設定
+!apt -y install fonts-ipafont-gothic
+plt.rcParams['font.family'] = 'IPAPGothic'
+# もし日本語が文字化けしている場合`! rm /content/.cache/matplotlib/fontList.json`を実行して、
+# Runtime->Restart Runtimeで再実行
+
+# 画像をダウンロードします。
+!if [ ! -f chart.jpg ]; then wget chart.jpg; fi
+
+# 自分で撮影した画像を使用する場合は以下のコメントを取り除きアップロードします。
+# from google.colab import files
+# uploaded = files.upload()
+
+# RAWファイルの名前。
+# アップロードしたファイルを使う場合はその名前に変更。
+raw_file  = "chart.jpg"
+raw = rawpy.imread(raw_file)
+raw_array = raw.raw_image
+h, w = raw_array.shape
+```
+
+    Requirement already satisfied: rawpy in /home/moiz/anaconda3/lib/python3.7/site-packages (0.13.0)
+    Requirement already satisfied: numpy in /home/moiz/anaconda3/lib/python3.7/site-packages (from rawpy) (1.15.1)
+    [33mYou are using pip version 19.0.1, however version 19.0.2 is available.
+    You should consider upgrading via the 'pip install --upgrade pip' command.[0m
+    Requirement already satisfied: imageio in /home/moiz/anaconda3/lib/python3.7/site-packages (2.4.1)
+    [33mYou are using pip version 19.0.1, however version 19.0.2 is available.
+    You should consider upgrading via the 'pip install --upgrade pip' command.[0m
+    E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+    E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+
+
+### より高度なデモザイク処理
+
+_この項は、画像処理の理論的背景に興味がない方は読み飛ばして構いません。_
+
+線形補間デモザイクでは各色チャンネルをそれぞれ独立なものとして処理しました。ここでは、３色のBayer配列全体を一つの画像と見てみます。
+
+前節でもとめた各色チャンネルの表現をもちいると、Bayer画像はこのように表記できます。
+
+\begin{aligned}
+f_{bayer} = & \frac{1}{2} f_G \left ( 1 - \left ( -1 \right ) ^ {x + y} \right ) + \\\
+& \frac{1}{2} f_R \left ( 1 - \left ( -1 \right ) ^ {x} \right ) \left ( 1 - \left ( -1 \right ) ^ {y} \right ) + \\\
+& \frac{1}{2} f_B \left ( 1 + \left ( -1 \right ) ^ {x} \right ) \left ( 1 + \left ( -1 \right ) ^ {y} \right )
+\end{aligned}
+
+
+ここで、
+\begin{equation}
+\left ( -1 \right ) ^ {x} = e ^ {i \pi x}\\
+\left ( -1 \right ) ^ {y} = e ^ {i \pi y}\\
+\left ( -1 \right ) ^ {x + y} = e ^ {i \pi \left( x + y \right)}\\
+\end{equation}
+
+
+を利用して、
+
+\begin{aligned}
+f_{bayer} = & \left ( \frac{1}{4} f_B + \frac{1}{2} f_G + \frac{1}{4} f_R \right ) + \\\
+& \left ( \frac{1}{4} f_B - \frac{1}{2} f_G + \frac{1}{4} f_R \right ) \cdot e^{i \pi (x + y)} + \\\
+& \left ( \frac{1}{4} f_B - \frac{1}{4} f_R \right ) \cdot (e^{i \pi x} + e^{i \pi y})
+\end{aligned}
+
+
+まとめると
+
+\begin{aligned}
+f_{bayer} & = f_{L} - f_{C1} e^{i \pi \left ( x + y \right ) } + f_{C2} \left ( e^{i \pi x} + e^{i \pi y} \right ) \\\
+f_L & = \frac{1}{4} f_R + \frac{1}{2} f_G + \frac{1}{4} f_B \\\
+f_{C1} & = \left ( \frac{1}{4} f_B - \frac{1}{2} f_G + \frac{1}{4} f_R \right ) \\\
+f_{C2} & = \left ( \frac{1}{4} f_B - \frac{1}{4} f_R \right ) 
+\end{aligned}
+
+逆に、$ f_L $、 $ f_{C1} $、$ f_{C2} $から、$ f_R $、$ f_G $、$ f_B $は、
+
+\begin{cases}
+f_R = f_L + f_{C1} - 2f_{C2} \\\
+f_G = f_L - f_{C1} \\\
+f_B = f_L + f_{C1} - 2f_{C2} 
+\end{cases}
+
+と、求められます。
+
+では、$ f_L $、$ f_{C1} $、$ f_{C2} $はどうやって計算すれば良いのか、というのが次の問題になります。
+
+$ f_L$、$ f_{C1} $、$ f_{C2} $の定義をみると、$ f_R $、$ f_G $、$ f_B $の線形結合なので元の画像が周波数制限されていて低い周波数の成分しかもっていないとすると、$ f_L $、$ f_{C1} $、$ f_{C2} $も周波数制限されていると考えられます。
+
+ここで前節のベイヤー画像の周波数特性の計算を思い出すと、$ f_{C1} e^{i \pi (x + y)} $や$ f_{C2} \left ( e^{i \pi x} + e^{i \pi y} \right )$は$ f_{C1}$、$ f_{C2} $を周波数空間で$ \pi$だけシフトしたものです。
+もとの$f_{Bayer}$はこれらを足し合わせたものなので、図に表すとこうなります。
+
+![ベイヤー画像の周波数特性の分解](fig7_1_1.png)
+
+ということは、$_{Bayer} $に帯域制限フィルターをかけて各成分をとりだして周波数をシフトすれば$ f_L $、$ f_{C1}$、$ f_{C2} $を得られるという事になります。
+
+必要なフィルターは4つです。
+
+- FC1 : 縦・横ハイパスフィルター。$ f_{C1} $を取り出すのに使います。
+
+例：
+\begin{equation}
+F_{C1} = 
+\left(\begin{array}{c} -1 \\\ 2 \\\ -3 \\\ 4 \\\ -3 \\\ 2 \\\ -1\end{array}\right)
+\left(\begin{array}{c} -1, 2, -3, 4, -3, 2, -1\end{array}\right)
+\end{equation}
+
+- FC2V : 縦方向ハイパスフィルター、横方向ローパスフィルター。$ f_{C2}$の上下の成分を取り出すのに使います。
+
+例：
+\begin{equation}
+F_{C2V} = 
+\left(\begin{array}{c} -1 \\\ 2 \\\ -3 \\\ 4 \\\ -3 \\\ 2 \\\ -1\end{array}\right)
+\left(\begin{array}{c} 1, 2, 3, 4, 3, 2, 1\end{array}\right)
+\end{equation}
+
+- FC2H: 縦方向ローパスフィルター、横方向ハイパスフィルター。$ f_{C2} $の左右の成分を取り出すのに使います。
+
+例：
+\begin{equation}
+F_{C2H} = 
+\left(\begin{array}{c} 1 \\\ 2 \\\ 3 \\\ 4 \\\ 3 \\\ 2 \\\ 1\end{array}\right)
+\left(\begin{array}{c} -1, 2, -3, 4, -3, 2, -1\end{array}\right)
+\end{equation}
+
+- FL: (FC1 + FC2V + FC2H)を反転させたフィルター。$ f_{L} $の成分を取り出すのに使います。
+
+例
+\begin{equation}
+F_L = 1 - F_{C1} - F_{C2V} - F_{C2H}
+\end{equation}
+
+
+これらを使えば、
+
+\begin{aligned}
+f_{C1} & = F_{C1}  \left ( f_{Bayer} \right ) e^{- i \pi \left ( x + y \right )} \\\
+f_{C2V} & = F_{C2V} \left ( f_{Bayer} \right )  e^{-i \pi y} \\\
+f_{C2H} & = F_{C2H} \left ( f_{Bayer} \right )  e^{-i \pi x} \\\
+f_{C2} & = \left ( f_{C2V} + f_{C2H} \right ) / 2 \\\
+f_L & = F_L \left ( f_{Bayer} \right ) 
+\end{aligned}
+
+となって$ f_L $、$ f_{C1}$、$ f_{C2} $の近似が計算でき、そこから$ f_R $、$ f_G$、$ f_B$が求められるはずです。
+やってみましょう。
+
+まずはホワイトバランスまでの処理を行います。
+
+
+```python
+blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
+lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
+       np.array([6.32044369e-07, 9.70694361e-01]), 
+       np.array([6.28455183e-07, 9.72493898e-01]), 
+       np.array([9.58743579e-07, 9.29427169e-01])]
+lsc_raw = lens_shading_correction(blc_raw, lsc)
+dpc_raw = defect_correction(lsc_raw, 16)
+wb_raw = white_balance(dpc_raw, raw.camera_whitebalance, raw.raw_colors)
+dms_input = wb_raw
+```
+
+次に必要なFIRフィルターを準備しましょう。
+まず、横方向のローパスフィルターです。
+
+
+```python
+hlpf = np.array([[1, 2, 3, 4, 3, 2, 1]]) / 16
+```
+
+これを利用して、縦方向のローパスフィルターを作ります。numpyの転置機能を使います。
+
+
+```python
+vlpf = np.transpose(hlpf)
+```
+
+同様に、横・縦方向のハイパスフィルターを作ります。
+
+
+```python
+hhpf = np.array([[-1, 2, -3, 4, -3, 2, -1]]) / 16
+vhpf = np.transpose(hhpf)
+```
+
+次に、等価フィルターを作ります。なにもしない（出力＝入力）フィルターです。
+
+
+```python
+identity_filter = np.zeros((7, 7))
+identity_filter[3, 3] = 1
+```
+
+これらの基本的なフィルターから、必要なフィルターを作っていきます。
+
+FC1は、縦横ハイパスフィルターなので、こうなります。
+
+
+```python
+FC1 = np.matmul(vhpf, hhpf)
+```
+
+FC2Vは縦ハイパス・横ローパス、FC2Hは縦ローパス・横ハイパスです。
+
+
+```python
+FC2H = np.matmul(vlpf, hhpf)
+FC2V = np.matmul(vhpf, hlpf)
+```
+
+FLは、等価フィルターからFC1, FC2V, FC2Hを取り除いたものです。
+
+
+```python
+FL = identity_filter - FC1 - FC2V - FC2H
+```
+
+これで準備ができました。
+
+ではまず、ハイパスフィルターを使って、C1成分を周波数空間の角からとりだしてみましょう。
+SciPyの２次元コンボリューション機能を使います。
+
+
+```python
+import scipy
+
+# f_C1 at 4 corners
+c1_mod = scipy.signal.convolve2d(dms_input, FC1, boundary='symm', mode='same')
+```
+
+同様に、C2V成分、C2H成分を取り出してみましょう。
+
+
+```python
+# f_C1^1 at wy = 0, wx = +Pi/-Pi
+c2h_mod = scipy.signal.convolve2d(dms_input, FC2H, boundary='symm', mode='same')
+# f_C1^1 at wy = +Pi/-Pi, wx = 0
+c2v_mod = scipy.signal.convolve2d(dms_input, FC2V, boundary='symm', mode='same')
+```
+
+最後にL成分をとりだします。
+
+
+```python
+# f_L at center
+f_L = scipy.signal.convolve2d(dms_input, FL, boundary='symm', mode='same')
+```
+
+今の所、C1成分、C2V・C2H成分は、周波数空間で$ \pi $だけずれています。色情報を復元するにはこれを復調してやる必要があります。
+
+復調するためには$e^{-i \pi x}$や$e^{-i \pi y}$を掛け合わせなくてはならないのですが$x$, $y$はいずれも整数なので、結局$-1$と$＋１$の繰り返しになります。
+つまり$e^{-i \pi x}$をかけるのは奇数列の成分に-1をかける、$e^{-i \pi y}$をかけるのは奇数行の成分に-1をかけるのと同じです。
+
+まずC1についてやってみましょう。必要な計算はこうなります。
+
+
+```python
+# Move c1 to the center by shifting by Pi in both x and y direction
+# f_c1 = c1 * (-1)^x * (-1)^y
+f_c1 = c1_mod.copy()
+f_c1[:, 1::2] *= -1
+f_c1[1::2, :] *= -1
+```
+
+同様にC2V・C2Hでは必要な計算はこうなります。
+
+
+```python
+# Move c2a to the center by shifting by Pi in x direction, same for c2b in y direction
+c2v = c2v_mod.copy()
+c2v[1::2, :] *= -1
+c2h = c2h_mod.copy()
+c2h[:, 1::2] *= -1
+# f_c2 = (c2v_mod * x_mod + c2h_mod * y_mod) / 2
+f_c2 = (c2v + c2h) / 2
+```
+
+これで$f_L$、$f_{C1}$、$f_{C2}$が求められました。
+
+最後に、以下の式にしたがって$f_R$、$f_G$、$f_B$を計算します。
+
+$$
+\begin{eqnarray}
+f_R &=& f_L + f_{C1} + 2f_{C2} \\
+f_G &=& f_L - f_{C1} \\
+f_B &=& f_L + f_{C1} - 2f_{C2} 
+\end{eqnarray}
+$$
+
+やってみましょう。
+
+
+```python
+# generate RGB channel using 
+# [R, G, B] = [[1, 1, 2], [1, -1, 0], [1, 1, - 2]] x [L, C1, C2]
+height, width = dms_input.shape
+dms_img = np.zeros((height, width, 3))
+dms_img[:,:,0] = f_L + f_c1 - 2 * f_c2
+dms_img[:,:,1] = f_L - f_c1
+dms_img[:,:,2] = f_L + f_c1 + 2 * f_c2
+```
+
+これでRGB画像が再現されたはずです！
+
+解像感に影響のあるエッジ強調とノイズフィルター以外の処理を行い結果を確認してみましょう。
+
+
+```python
+color_matrix = np.array([6022,-2314,394,-936,4728,310,300,-4324,8126])/4096
+ccm_img = color_correction_matrix(dms_img, color_matrix)
+white_level = 1024
+gmm_img = gamma_correction(ccm_img / white_level, 2.2)
+ton_img = tone_curve_correction(gmm_img, (0, 0.28, 0.78, 1.0), (0, 0.22, 0.88, 1.0))
+```
+
+表示してみます。
+
+
+```python
+# 最終画像表示
+plt.figure(figsize=(8, 8))
+plt.imshow(ton_img)
+plt.axis('off')
+plt.title(u"トーンカーブ補正")
+plt.show()
+```
+
+
+![png](camera_raw_chapter_6_2_files/camera_raw_chapter_6_2_37_0.png)
+
+
+
+```python
+dms2_img = demosaic(wb_raw, raw.raw_colors)
+ccm2_img = color_correction_matrix(dms2_img, color_matrix)
+gmm2_img = gamma_correction(ccm2_img / white_level, 2.2)
+ton2_img = tone_curve_correction(gmm2_img, (0, 0.28, 0.78, 1.0), (0, 0.22, 0.88, 1.0))
+```
+
+
+```python
+plt.figure(figsize=(10, 20))
+plt.subplot(2, 1, 1)
+plt.imshow(ton2_img[1400:1600, 1650:1850, :])
+plt.axis('off')
+plt.title(u"線形補間デモザイク、拡大")
+plt.subplot(2, 1, 2)
+plt.imshow(ton_img[1400:1600, 1650:1850, :])
+plt.axis('off')
+plt.title(u"高度なデモザイク、拡大")
+plt.show()
+```
+
+
+![png](camera_raw_chapter_6_2_files/camera_raw_chapter_6_2_39_0.png)
+
+
+全体に画像のシャープさ感が上がっていること、また細かい模様やエッジ近辺などで偽色（本来ないはずの色）が減っている事がわかります。副作用としてノイズの量が増えていますが、このあたりはノイズフィルターで抑制するべきでしょう。
+
+### モジュールへの追加
+
+このデモザイクも関数としてモジュールに追加しておきましょう。
+
+
+```python
+def advanced_demosaic(raw_array, bayer_pattern):
+    """
+    ベイヤー配列の周波数特性を利用したデモザイク処理。
+    
+    Parameters
+    ----------
+    raw_array: numpy 2d array
+        入力RAW画像
+    bayer_pattern: [2, 2] array
+        2x2のBayer配列。0: R, 1:Gr(or G), 2:B, 3:Gb
+        通常はRAWPYのrawpy.raw_patternの値を渡す。
+
+    Returns
+    -------
+    dms_img: numpy array
+        デモザイク後の画像
+    """
+    # 横方向ローパスフィルター
+    hlpf = np.array([[1, 2, 3, 4, 3, 2, 1]]) / 16
+    # 縦方向ローパスフィルター
+    vlpf = np.transpose(hlpf)
+    # 横方向ハイパスフィルター
+    hhpf = np.array([[-1, 2, -3, 4, -3, 2, -1]]) / 16
+    # 縦方向ハイパスフィルター
+    vhpf = np.transpose(hhpf)
+    # 等価フィルター
+    identity_filter = np.zeros((7, 7))
+    identity_filter[3, 3] = 1
+
+    # 必用な周波数領域に対応するフィルター
+    FC1 = np.matmul(vhpf, hhpf)
+    FC2H = np.matmul(vlpf, hhpf)
+    FC2V = np.matmul(vhpf, hlpf)
+    FL = identity_filter - FC1 - FC2V - FC2H
+
+    # f_C1 (四つ角の成分)をとりだす。
+    c1_mod = scipy.signal.convolve2d(raw_array, FC1, boundary='symm', mode='same')
+    # f_C2H (横軸方向の端)
+    c2h_mod = scipy.signal.convolve2d(raw_array, FC2H, boundary='symm', mode='same')
+    # f_C2V (縦軸方向の端)
+    c2v_mod = scipy.signal.convolve2d(raw_array, FC2V, boundary='symm', mode='same')
+    # f_L (中心部)
+    f_L = scipy.signal.convolve2d(raw_array, FL, boundary='symm', mode='same')
+
+    # C1を復調。周波数空間で(Pi, Pi)シフトして中心を(0, 0)に戻すのに相当。
+    f_c1 = c1_mod.copy()
+    f_c1[:, 1::2] *= -1
+    f_c1[1::2, :] *= -1
+    # 緑画像が左上にある場合、位相を１８０度ずらす。
+    if bayer_pattern[0, 0] == 1 or bayer_pattern[0, 0] == 3:
+        f_c1 *= -1
+    # C2Hを復調。周波数空間で(Pi, 0)シフトして中心を(0, 0)に戻すのに相当。
+    c2h = c2h_mod.copy()
+    c2h[:, 1::2] *= -1
+    # 青画像が左上か左下にある場合、位相を１８０度ずらす。
+    if bayer_pattern[0, 0] == 2 or bayer_pattern[1, 0] == 2:
+        c2h *= -1
+    # C2Vを復調。周波数空間で(0, Pi)シフトして中心を(0, 0)に戻すのに相当。
+    c2v = c2v_mod.copy()
+    c2v[1::2, :] *= -1
+    # 青画像が左上か右上にある場合、位相を１８０度ずらす。
+    if bayer_pattern[0, 0] == 2 or bayer_pattern[0, 1] == 2:
+        c2v *= -1
+    # C2HとC2Vの平均からC2を求める。
+    f_c2 = (c2v + c2h) / 2
+
+    # R/G/B画像の合成。
+    # [R, G, B] = [[1, 1, 2], [1, -1, 0], [1, 1, - 2]] x [L, C1, C2]
+    height, width = raw_array.shape
+    dms_img = np.zeros((height, width, 3))
+    dms_img[:, :, 0] = f_L + f_c1 + 2 * f_c2
+    dms_img[:, :, 1] = f_L - f_c1
+    dms_img[:, :, 2] = f_L + f_c1 - 2 * f_c2
+
+    return dms_img
+```
+
+このメソッドを使って全ての処理を行い、結果を確認してみましょう。
+
+
+```python
+blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
+lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
+       np.array([6.32044369e-07, 9.70694361e-01]), 
+       np.array([6.28455183e-07, 9.72493898e-01]), 
+       np.array([9.58743579e-07, 9.29427169e-01])]
+lsc_raw = lens_shading_correction(blc_raw, lsc)
+dpc_raw = defect_correction(lsc_raw, 16)
+wb_raw = white_balance(dpc_raw, raw.camera_whitebalance, raw.raw_colors)
+dms_img = advanced_demosaic(wb_raw, raw.raw_pattern)
+noise_model=(0.29300604909937544, 10.754229129481296)
+nfl3_img = noise_filter(dms_img, noise_model)
+color_matrix = np.array([6022,-2314,394,-936,4728,310,300,-4324,8126])/4096
+ccm_img = color_correction_matrix(nfl3_img, color_matrix)
+white_level = 1024
+gmm_img = gamma_correction(ccm_img / white_level, 2.2)
+shp_img = edge_enhancement(gmm_img, 2, 0.25)
+ton_img = tone_curve_correction(shp_img, (0, 0.28, 0.78, 1.0), (0, 0.22, 0.88, 1.0))
+```
+
+表示してみます。
+
+
+```python
+# 最終画像表示
+plt.figure(figsize=(16, 8))
+plt.subplot(1, 2, 1)
+plt.imshow(ton_img)
+plt.axis('off')
+plt.title(u"高度なデモザイク最終画像")
+plt.subplot(1, 2, 2)
+plt.imshow(ton_img[1400:1600, 1650:1850, :])
+plt.axis('off')
+plt.title(u"高度なデモザイク最終画像、拡大")
+plt.show()
+```
+
+
+![png](camera_raw_chapter_6_2_files/camera_raw_chapter_6_2_46_0.png)
+
+
+うまくいったようです。
+
+### まとめ
+
+今回は高度なデモザイク処理をとりあげました。
+
+参照した論文[^1]ではさらに、一部のチャンネルを混ぜ合わせるときに各画素毎に重み計算を行うという適合処理的アルゴリズムを扱っています。今回は割愛しましたが、興味のある方は試されてはいかがでしょうか[^2]？
+
+[^1]: Frequency-Domain Methods for Demosaicking of Bayer-Sampled Color Images, Eric Dubois, IEEE Signal Processing Letters, Dec. 2005
+
+[^2]: 論文の著者グループが[WebにてMatlabのサンプルプログラムを配布しています](http://www.site.uottawa.ca/~edubois/SingleSensorImaging/Bayer_structure/)。また、今回のスクリプトを少し書き換えれば実現できることは確認済みです。
+
+また、このアルゴリズムが発表されたのがすでに１３年前であり、これまでにさらにさまざまなアルゴリズムが提案されており、現在も進歩をつづけています[^3]。
+たとえば、最近の流行はデモザイク処理にディープラーニングを使う手法です[^4]。
+
+[^3]: たとえば高機能なRAW現像ソフトウェアRawTherapeeではさまざまなアルゴリズムを実装しているようです。[https://rawpedia.rawtherapee.com/Demosaicing/jp]
+
+[^4]: [https://arxiv.org/abs/1802.03769:title]
+
+こういった事情を考慮にいれても、今回紹介した手法はシンプルな割には高画質の出力が得られる良いアルゴリズムだと思います。
+
+次は全体の[まとめ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_7_1.ipynb)です。
+
+
+
+
+```python
+
+```

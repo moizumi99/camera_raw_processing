@@ -1,4 +1,6 @@
 
+<a href="https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
 #  4. 重要な処理
 
 ## 4.1 この章について
@@ -17,9 +19,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 前章でRAW画像に最低限の処理を行いフルRGBとして表示することができました。
 処理が単純な割には以外のきれいな画像ができたのではないでしょうか？
 
-しかし、これは多くの部分が元のRAWデータが良い状態であったという恵まれた条件によるものです。前章で扱ったRAWデータは、フルサイズセンサーのカメラで非常に明るい屋外で撮影したもので、歪みもノイズも少なく、最小限の画像処理でもそこそこの画質を再現することができました。
-
-しかし、RAW現像やカメラ画像処理で扱う画像は常にこのような理想的な状態で撮影されるわけではありません。撮影は室内などの暗いところで扱われることも多いですし、センサーもスマートフォン向けを始め非常に小さい物を使う事が多々あります。そういった画像データにはさまざまな理想的でない特性があり、そういったものは、各種の補正処理を行わないと最終的な画質は低品質になってしまいます。
+でもこれは画像を随分小さく表示しているせいで粗が目立っていないという面が大きいのです。またRAW現像やカメラ画像処理で扱う画像は常に理想的な状態で撮影されるわけではありません。撮影は室内などの暗いところで扱われることも多いですし、センサーもスマートフォン向けを始め非常に小さい物を使う事が多々あります。そういった画像データにはさまざまな理想的でない特性があり、そういったものは、各種の補正処理を行わないと最終的な画質は低品質になってしまいます。
 
 また、前章で扱ったデモザイクは簡易的なもので出力画像が入力画像の４分の１の大きさになるという重大な問題があります。これも解決しなくてはなりません。
 
@@ -39,8 +39,6 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 レンズシェーディング補正は画像の周辺で明るさが低下する周辺減光・レンズシェーディングと呼ばれる現象を補正します。
 
-また、これらの処理の効果を見るために、この章以降では、ラズベリーパイのカメラ(v1.2)で撮影したRAW画像を使用します。
-
 ### まとめ
 
-この章で扱う内容について概要を説明しました。次は[デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_1.ipynb)です。
+この章で扱う内容について概要を説明しました。次は[線形補間デモザイク処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_2.ipynb)です。

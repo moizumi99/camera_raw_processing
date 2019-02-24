@@ -60,7 +60,7 @@ h, w = raw_array.shape
 
 ### 欠陥画素
 
-ライブラリーを使って対象画像を現像して拡大表示すると、こんな部分があります。
+ライブラリーを使って対象画像の左下の方、グレイチャートの一部（図の赤でかこった部分）を現像して拡大表示すると、こんな部分があります。
 
 
 ```python
@@ -75,6 +75,22 @@ white_level = 1024.0
 dms_img = dms_img / white_level
 # raw_processからインポートしたgamma_crrection()関数を使って、ガンマ補正。
 gmm_img = gamma_correction(dms_img, 2.2)
+```
+
+
+```python
+# 画像を表示。
+plt.figure(figsize=(16, 8))
+plt.imshow(gmm_img)
+# 欠陥のある部分を示す赤い四角を描画。
+# x=2210, y=1150から50x50の正方形を、塗りつぶしなし、赤色、線の太さ2で作成。
+box = plt.Rectangle((1150, 2110), 50, 50, fill=False, edgecolor='red', linewidth=2)
+# Pyplotのgca()を使ってAxesインスタンス（描画用の軸インスタンス）を取得。
+# そのAxesインスタンスに先程のBoxをadd_patchを使って追加。
+plt.gca().add_patch(box)
+plt.axis('off')
+plt.title(u"全体画像")
+plt.show()
 
 # 画像の一部分を拡大表示。
 plt.figure(figsize=(16, 8))
@@ -85,7 +101,11 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_5_0.png)
+![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_6_0.png)
+
+
+
+![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_6_1.png)
 
 
 これはいわゆる欠陥画素です。 「欠陥」という名前がついていますが、製品の欠陥ではなく、一部の画素が正常な値を出力しない状態です。 多くの場合このように、常に明るく見えますが（ホットピクセル）、常に暗い（デッドピクセルまたはコールドピクセル）こともあれば、本来の信号とずれた値を示すという捕まえにくいケースもあります。
@@ -239,7 +259,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_20_0.png)
+![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_21_0.png)
 
 
 欠陥画素が修正されたか、先ほどと同じ部分を拡大して確認しましょう。
@@ -255,7 +275,7 @@ plt.show()
 ```
 
 
-![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_22_0.png)
+![png](camera_raw_chapter_4_3_files/camera_raw_chapter_4_3_23_0.png)
 
 
 どうやら修正されたようです。

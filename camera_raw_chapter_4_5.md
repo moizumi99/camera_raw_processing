@@ -15,7 +15,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -61,7 +61,7 @@ h, w = raw_array.shape
 このような事が起きてしまう第一の原因は、レンズを通してセンサーにあたる光の量が、センサーの中央部と、センサーの周辺部とで異なる事です。
 良く説明に出されるのが二枚のレンズを持つ単純な系の場合です。
 
-![レンズシェーディングが起こるしくみ](https://github.com/moizumi99/camera_raw_processing/raw/master/fig_4_5_1.png)
+![レンズシェーディングが起こるしくみ](https://github.com/moizumi99/camera_raw_processing/raw/master/Figures/fig_4_5_1.png)
 
 この図の例では、センサー中央部分にあたる光はレンズの開口部全体を通ってくるのに対して、センサー周辺部にあたる光はレンズの一部分しか通過できません。
 結果的に中心部が明るく、周辺部が暗くなります。
@@ -82,7 +82,7 @@ h, w = raw_array.shape
 まずはダウンロードしてみます。
 
 
-```python
+```
 ! wget https://github.com/moizumi99/camera_raw_processing/raw/master/flat.jpg
 ```
 
@@ -108,7 +108,7 @@ h, w = raw_array.shape
 まだレンズシェーディング補正は行いません。
 
 
-```python
+```
 # RAW画像の読み込み。
 raw_file  = "flat.jpg"
 raw = rawpy.imread(raw_file)
@@ -144,7 +144,7 @@ plt.show()
 画面の高さ方向中央付近、上下３２画素幅で左から右まで帯状の画像をとりだし、明るさがどう変わるをグラフにしてみます。
 
 
-```python
+```
 # 基準となる画像中央部の位置
 center_y, center_x = h // 2, w // 2
 # 明るさの配列を保存する配列
@@ -165,7 +165,7 @@ shading_profile = [np.array(a) / max(a) for a in shading_profile]
 ```
 
 
-```python
+```
 plt.axis(ymin=0, ymax=1.1)
 plt.plot(shading_profile[0], color='red')
 plt.plot(shading_profile[1], color='green')
@@ -197,7 +197,7 @@ plt.show()
 ゼロレベルを正しく取る必用があるので、測定する対象はブラックレベル補正後の画像です。
 
 
-```python
+```
 # 測定値を入れる配列を色の数分だけ準備する。
 vals = [[], [], [], []]
 # 中心からの距離を保存
@@ -225,7 +225,7 @@ for y in range(0, h, 32):
 最大値でノーマライズしてグラフにして確認してみます。
 
 
-```python
+```
 # 扱いやすいようにnumpyの配列に変換。
 rs = np.array(radials)
 vs = np.array(vals)
@@ -257,7 +257,7 @@ plt.show()
 逆数のグラフを書いてみましょう。
 
 
-```python
+```
 # 明るさの逆数を求める。
 gs = 1 / vs
 # 明るさの逆数のグラフ。
@@ -285,7 +285,7 @@ plt.show()
 で、xsは入力、ysは出力、oは次数です。psには各次の係数が入ります。
 
 
-```python
+```
 # 係数をしまう配列を色の数分だけ準備。
 par = [[], [], [], []]
 # 各色ごとに１次式で近似。
@@ -297,7 +297,7 @@ for color in range(4):
 確認してみましょう。
 
 
-```python
+```
 print(par)
 ```
 
@@ -307,7 +307,7 @@ print(par)
 それらしい値が入っています。グラフにしてでみてみましょう。
 
 
-```python
+```
 # 各色ごとの１次式の出力
 es = [[], [], [], []]
 # 各色ごとに、中心からの距離(rs)に応じた値を求める
@@ -335,7 +335,7 @@ plt.show()
 まず、レンズシェーディング補正前の、ブラックレベル補正のみをかけたRAW画像がこちらです。
 
 
-```python
+```
 plt.figure(figsize=(8, 8))
 plt.imshow(blc_raw, cmap='gray')
 plt.axis('off')
@@ -349,7 +349,7 @@ plt.show()
 先に各画素ごとに掛け合わせるゲインを、先程の近似関数から計算しておきます。
 
 
-```python
+```
 gain_map = np.zeros((h, w))
 center_y, center_x = h // 2, w // 2
 for y in range(0, h, 2):
@@ -365,12 +365,12 @@ for y in range(0, h, 2):
 このゲインをブラックレベル補正した画像にかけ合わせます。
 
 
-```python
+```
 lsc_raw = blc_raw * gain_map
 ```
 
 
-```python
+```
 outimg = lsc_raw.copy()
 outimg /= 1024
 outimg[outimg < 0] = 0
@@ -390,7 +390,7 @@ plt.show()
 残りの処理（ホワイトバランス補正、デモザイク、カラーマトリクス補正、ガンマ補正）を行ってフルカラー画像を出力してみましょう。
 
 
-```python
+```
 dpc_raw = defect_correction(lsc_raw, 16)
 wb_raw = white_balance(dpc_raw, raw.camera_whitebalance, raw.raw_colors)
 dms_img = demosaic(wb_raw, raw.raw_colors)
@@ -416,7 +416,7 @@ RGB画像で効果が確認できました。
 残っているシェーディング量を測定してみましょう。
 
 
-```python
+```
 #画素の明るさの横方向の分布の測定。 
 center_y, center_x = h // 2, w // 2
 shading_after = [[], [], []]
@@ -449,7 +449,7 @@ plt.show()
 今回も`chart.jpg`を使います。
 
 
-```python
+```
 # 画像をダウンロードします。
 !if [ ! -f chart.jpg ]; then wget https://github.com/moizumi99/camera_raw_processing/raw/master/chart.jpg; fi
 
@@ -468,7 +468,7 @@ h, w = raw_array.shape
 ではRAW画像データを取り出し、まずはレンズシェーディング補正なしで現像してみます。
 
 
-```python
+```
 #RAW現像処理
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 dpc_raw = defect_correction(blc_raw, 16)
@@ -497,7 +497,7 @@ plt.show()
 それでは次にレンズシェーディング補正を入れて処理してみます。補正パラメータは先程の平坦画像で計算したものを使います。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 #先程計算したゲインマップを使いシェーディング補正。
 lsc_raw = blc_raw * gain_map
@@ -528,7 +528,7 @@ plt.show()
 この処理も関数としてモジュールへ追加しておきましょう。
 
 
-```python
+```
 def lens_shading_correction(raw_array, coef):
     """
     レンズシェーディング補正を行う。
@@ -579,7 +579,7 @@ def lens_shading_correction(raw_array, coef):
 正常に動作するか確認しておきます。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc_raw = lens_shading_correction(blc_raw, par)
 dpc_raw = defect_correction(lsc_raw, 16)

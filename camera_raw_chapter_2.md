@@ -32,7 +32,7 @@ RAWファイルやRAWデータというのは厳密な定義はないのです�
 
 
 
-![BayerとRGB配列](https://github.com/moizumi99/camera_raw_processing/raw/master/fig1.png "BayerとRGB配列")
+![BayerとRGB配列](https://github.com/moizumi99/camera_raw_processing/raw/master/Figures/fig1.png "BayerとRGB配列")
 
 カメラ用センサーでは2000年代初頭までは、補色フィルターや３板方式もそれなりの割合で使われていたのですが、センサーの性能向上やカメラの小型化と高画質化の流れの中でほとんどがBayer方式にかわりました。今では、SigmaのFoveonのような意欲的な例外を除くと、DSLRやスマートフォンで使われているカラー画像センサーの殆どがBayer方式を採用しています。したがって、ほとんどのカメラの中ではBayerフォーマットの画像データをセンサーから受取り、フルカラーの画像に変換するという処理が行われている、ということになります。
 
@@ -61,7 +61,7 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 
 [^2]: これはあくまで一例です。実際のカメラやRAW現像ソフト内で行われる処理はメーカーや機種ごとに異なります。
 
-![カメラ画像処理パイプライン](https://github.com/moizumi99/camera_raw_processing/raw/master/fig2.png "カメラ画像処理パイプライン")
+![カメラ画像処理パイプライン](https://github.com/moizumi99/camera_raw_processing/raw/master/Figures/fig2.png "カメラ画像処理パイプライン")
 
 このうち、最低限必要な処理は、以下のものです。
 
@@ -102,10 +102,12 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 
 などの処理が行われるのが普通です。今回はベーシックな処理のみとりあげるので、こういった高度な処理は行いません。
 
-結局、今回扱うのは次の部分のみです。
+今回、まず最初の**基本的な処理**では次の部分の処理を行います。
 
-![単純化したカメラ画像処理パイプライン](https://github.com/moizumi99/camera_raw_processing/raw/master/fig3.png "単純化したカメラ画像処理パイプライン")
+![単純化したカメラ画像処理パイプライン](https://github.com/moizumi99/camera_raw_processing/raw/master/Figures/fig3.png "単純化したカメラ画像処理パイプライン")
 
+
+次の章以降で残りの処理を行います。
 
 ### この章のまとめ
 
@@ -113,4 +115,4 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 
 ### 次の章
 
-次は[RAW画像の準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1pynb)を行います。
+次は[RAW画像の準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb)を行います。

@@ -15,7 +15,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -51,7 +51,7 @@ from raw_process import simple_demosaic, white_balance, black_level_correction, 
 ![チャート画像](https://raw.githubusercontent.com/moizumi99/raw_process/master/chart.jpg)
 
 
-```python
+```
 # 画像をダウンロードします。
 !if [ ! -f chart.jpg ]; then wget https://raw.githubusercontent.com/moizumi99/camera_raw_process/master/chart.jpg; fi
 
@@ -77,7 +77,7 @@ h, w = raw_array.shape
 この点を確認するために、先程の画像を`raw_process`モジュールを使ってRGB画像に変換してみましょう。
 
 
-```python
+```
 # raw_processからインポートしたblack_level_correction関数を使用してブラックレベル補正。
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 # raw_processからインポートしたwhite_balance()関数を使って、ホワイトバランス調整。
@@ -94,7 +94,7 @@ gmm_img = gamma_correction(dms_img, 2.2)
 表示してみます。
 
 
-```python
+```
 # サイズ設定
 plt.figure(figsize=(16, 8))
 plt.imshow(gmm_img)
@@ -110,7 +110,7 @@ plt.show()
 この画像のサイズとRAWデータのサイズを見てみましょう。
 
 
-```python
+```
 print("現像後のサイズ = ", gmm_img.shape)
 print("RAWデータのサイズ = ", raw_array.shape)
 ```
@@ -124,7 +124,7 @@ print("RAWデータのサイズ = ", raw_array.shape)
 最初に表示したJPEG画像と大きさを合わせて並べてみましょう。まずはJPEG画像をnumpyのarrayとして読み込みます。
 
 
-```python
+```
 # matplotlibのモジュールimageを使ってJPEG画像を読み込みます。
 from matplotlib import image
 jpg_img = image.imread("chart.jpg")
@@ -137,7 +137,7 @@ h2, w2, c = jpg_img.shape
 次に、このJPEGから作ったデータと、先程簡易RAW現像したデータを同じnumpy arrayに代入してみます。
 
 
-```python
+```
 # JPEG画像の横幅の倍の幅を持つnumpy arrayを作成
 two_img = np.zeros((h2, w2 * 2, c))
 # numpy arrayの右半分にJPEG画像のデータをはめこむ。
@@ -149,7 +149,7 @@ two_img[h//4:h//4+h//2, w//4:w//4+w//2, :] = gmm_img
 ならべてた画像データを表示してみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.imshow(two_img)
 plt.axis('off')
@@ -166,7 +166,7 @@ plt.show()
 次は拡大してみましょう。こんどは表示サイズが同じになるように調整します。
 
 
-```python
+```
 # 表示サイズ設定
 plt.figure(figsize=(16, 8))
 
@@ -209,18 +209,18 @@ plt.show()
 デモザイクアルゴリズムの中で、縮小する方法の次に簡単なのは、線形補間法です。
 線形補間というとものものしいですが、ようするに、距離に応じて間の値をとるわけです。たとえば、緑の画素ならこうなります。
 
-![緑画像の線形補間](fig_4_2_1.png "緑画像の線形補間")
+![緑画像の線形補間](https://github.com/moizumi99/camera_raw_processing/raw/master/Figures/fig_4_2_1.png "緑画像の線形補間")
 
 赤の画素ではこうです。
 
-![赤画像の線形補間](fig_4_2_2.png "赤画像の線形補間")
+![赤画像の線形補間](https://github.com/moizumi99/camera_raw_processing/raw/master/Figures/fig_4_2_2.png "赤画像の線形補間")
 
 青の画素でも、赤の場合と同じような補完を行います。
 
 では実際やってみましょう。
 
 
-```python
+```
 # 画像のヘリの部分で折り返すためのヘルパー関数
 def mirror(x, min, max):
     if x < min:
@@ -260,7 +260,7 @@ for y in range(0, h):
 画像のサイズを確認します。
 
 
-```python
+```
 print(dms_img.shape)
 ```
 
@@ -272,7 +272,7 @@ print(dms_img.shape)
 画像を確認してみましょう。まずは残っているガンマ補正処理を行います。
 
 
-```python
+```
 # ガンマ補正
 gmm_full_img = gamma_correction(dms_img / white_level, 2.2)
 ```
@@ -280,7 +280,7 @@ gmm_full_img = gamma_correction(dms_img / white_level, 2.2)
 表示します。
 
 
-```python
+```
 # サイズ設定
 plt.figure(figsize=(16, 8))
 plt.imshow(gmm_full_img)
@@ -296,7 +296,7 @@ plt.show()
 それでは、JPEG画像と並べて表示してみましょう。
 
 
-```python
+```
 # 表示サイズ設定
 plt.figure(figsize=(16, 8))
 
@@ -335,7 +335,7 @@ plt.show()
 高速化に当たっては、数値計算ライブラリscipyのsignalモジュールを使います。
 
 
-```python
+```
 from scipy import signal
 
 def demosaic(raw_array, raw_colors):
