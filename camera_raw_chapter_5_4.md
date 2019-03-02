@@ -5,9 +5,9 @@
 
 この節ではトーンカーブ補正について解説します。
 
-この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](http://bit.ly/raw_toc)から参照するか、以下のリンクを使ってアクセスしてください。
 
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_4.ipynb
+http://bit.ly/raw_5_4
 
 ### 準備
 
@@ -15,7 +15,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -66,7 +66,7 @@ h, w = raw_array.shape
 前回までに作成した画像を表示します。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
        np.array([6.32044369e-07, 9.70694361e-01]), 
@@ -86,7 +86,7 @@ shp_img = edge_enhancement(gmm_img, 2, 0.25)
 ```
 
 
-```python
+```
 # 最終画像表示
 plt.figure(figsize=(8, 8))
 plt.imshow(shp_img)
@@ -102,7 +102,7 @@ plt.show()
 この画像の輝度成分のヒストグラムを見てみましょう。
 
 
-```python
+```
 rgb2ycbcr = np.array([[0.299, 0.587, 0.144], [-0.168736, -0.331264, 0.5], [0.5, -0.418688, -0.081312]])
 ycr_img = apply_matrix(shp_img, rgb2ycbcr)
 luma = ycr_img[:, :, 0]
@@ -126,7 +126,7 @@ plt.show()
 先程のヒストグラムをみると中央部分が高いので、この部分をバラけさせるために、0.5付近で急になる関数をかけましょう。まず適当なアンカーポイントを設定します。
 
 
-```python
+```
 xs = [0, 0.28, 0.78, 1.0]
 ys = [0, 0.22, 0.88, 1.0]
 ```
@@ -134,7 +134,7 @@ ys = [0, 0.22, 0.88, 1.0]
 図示するとこうなります
 
 
-```python
+```
 plt.plot(xs, ys)
 plt.axis((0, 1, 0, 1))
 plt.title("トーンカーブ（スムージング前）")
@@ -150,7 +150,7 @@ plt.show()
 scipyのinterpolate.splrepに入力点と出力点の値を渡すと、スプライン関数で補完した関数を作ってくれます。
 
 
-```python
+```
 import scipy
 func = scipy.interpolate.splrep(xs, ys)
 ```
@@ -158,7 +158,7 @@ func = scipy.interpolate.splrep(xs, ys)
 この関数を図示するとこうなります。
 
 
-```python
+```
 xx = np.arange(0, 1.0, 0.01)
 # splevはsplrepで作成した関数を実際に適用する。
 yy = scipy.interpolate.splev(xx, func)
@@ -175,7 +175,7 @@ plt.show()
 よさそうな関数ができました。輝度信号に適用してみましょう。
 
 
-```python
+```
 # splev関数を使って元の輝度画像にトーンカーブを適用する。
 adjusted = scipy.interpolate.splev(luma, func)
 
@@ -195,7 +195,7 @@ plt.show()
 [^3]: 本来色差成分（Cb/Cr)も調整しなくてはならないのですが今回は省きます。
 
 
-```python
+```
 # 元のYCbCr画像のうち輝度信号だけをトーンカーブ後のものに置き換える。
 ton_img = ycr_img.copy()
 ton_img[:, :, 0] = adjusted
@@ -210,7 +210,7 @@ out_img[out_img>1] = 1
 トーンカーブ補正後の画像を補正前の画像と比べてみましょう。
 
 
-```python
+```
 plt.figure(figsize=(16, 8))
 plt.subplot(1, 2, 1)
 plt.imshow(shp_img)
@@ -234,7 +234,7 @@ plt.show()
 エッジ強調もモジュールとして追加しておきます。
 
 
-```python
+```
 # RGBからYCbCrへの変換行列。
 RGB_TO_YCBCR = np.array([[0.299, 0.587, 0.144],
                          [-0.168736, -0.331264, 0.5],
@@ -271,7 +271,7 @@ def tone_curve_correction(rgb_img, xs=(0, 0.25, 0.75, 1.0), ys=(0, 0.25, 0.75, 1
 全処理を行って動作を確認します。
 
 
-```python
+```
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 lsc = [np.array([6.07106808e-07, 9.60556906e-01]), 
        np.array([6.32044369e-07, 9.70694361e-01]), 
@@ -292,7 +292,7 @@ ton_img = tone_curve_correction(shp_img, (0, 0.28, 0.78, 1.0), (0, 0.22, 0.88, 1
 ```
 
 
-```python
+```
 # 最終画像表示
 plt.figure(figsize=(8, 8))
 plt.imshow(ton_img)
@@ -312,11 +312,11 @@ plt.show()
 今回はトーンカーブ補正を行いました。ここではトーンカーブを手動で設定しましたが、カメラの中では画像の内容や状況に応じて自動的に最適なトーンカーブを設定します。この本の範囲を超えるのであつかいませんが、こういったアルゴリズムもそれ自体かなり重要な処理です。
 またここで扱ったものは画像全体に一律のトーンカーブを使いますがこういったものはグローバル・トーンカーブ補正と呼ばれます。さらに高度な処理では画像内の領域ごとにコントラストの調整を行ったりします。興味がある方は論文など参照されてはどうでしょうか？
 
-これで画質を良くする処理の章は終わりです。次は[応用編](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_6_1.ipynb)に入ります。
+これで画質を良くする処理の章は終わりです。次は[応用編](http://bit.ly/raw_6_1)に入ります。
 
 
 
 
-```python
+```
 
 ```

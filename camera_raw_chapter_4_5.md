@@ -5,9 +5,9 @@
 
 この節では、シェーディング補正について解説します。
 
-この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](http://bit.ly/raw_toc)から参照するか、以下のリンクを使ってアクセスしてください。
 
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_5.ipynb
+http://bit.ly/raw_4_5
 
 ### 準備
 
@@ -614,4 +614,4 @@ plt.show()
 
 一見単純そうな見た目や効果と比べて、実際には遥かに複雑で非常に重要な処理です。ある意味カメラの出力画像の画質を決める肝と言ってもよいと思います。
 
-これで第４章は終わりです。次は[第五章 画像をきれいにする処理](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5.ipynb)に入ります。
+これで第４章は終わりです。次は[第五章 画像をきれいにする処理](http://bit.ly/raw_5)に入ります。

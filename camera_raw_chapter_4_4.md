@@ -5,9 +5,9 @@
 
 この節では、カラーマトリクス補正を解説します。
 
-この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](http://bit.ly/raw_toc)から参照するか、以下のリンクを使ってアクセスしてください。
 
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb
+http://bit.ly/raw_4_4
 
 ### 準備
 
@@ -15,7 +15,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -64,7 +64,7 @@ h, w = raw_array.shape
 こちらがJPEG画像をJPEGとしてそのまま表示したものです。
 
 
-```python
+```
 # JPEG画像をnumpyのarrayとして取得
 # [4.2節参照](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_2.ipynb)
 from matplotlib import image
@@ -87,7 +87,7 @@ plt.show()
 それに対してこちらが、前回までに現像したものです。
 
 
-```python
+```
 # ブラックレベル補正。
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 # 前節で作成したdefect_correction関数を使って、欠陥画素補正。
@@ -154,7 +154,7 @@ $$
 RAWPYにもカラーマトリクスを読み取る機能はあるのですが、実際に実行するとこうなってしまいます。
 
 
-```python
+```
 print(raw.color_matrix)
 ```
 
@@ -168,7 +168,7 @@ print(raw.color_matrix)
 まずcolabの環境にexiftoolをインストールします。
 
 
-```python
+```
 ! apt install exiftool
 ```
 
@@ -183,7 +183,7 @@ Raspberry PiのRAW画像の場合、カラーマトリクスはメーカーノ�
 [^1]: α7IIIのRAW画像ではEXIF情報に含まれているのでオプションをつけなくとも`! exiftool sample.ARW`で読み取ることができます。
 
 
-```python
+```
 ! exiftool -EXIF:MakerNoteUnknownText -b chart.jpg -b
 ```
 
@@ -208,7 +208,7 @@ $$ \left(
 それではこの値を使ってカラーマトリクス補正を行ってみましょう。カラーマトリクス補正は線形な色空間で行う必用があるので、ガンマ補正の前に行います。
 
 
-```python
+```
 # カラーマトリクス
 # [[6022,-2314,394]
 #  [-936,4728,310]
@@ -230,14 +230,14 @@ for y in range(0, h):
 残っているガンマ補正を行います。
 
 
-```python
+```
 ccm_gmm_img = gamma_correction(ccm_img, 2.2)
 ```
 
 最終的な画像を表示して、カラーマトリクス補正なしのものと比較してみましょう。
 
 
-```python
+```
 # 表示領域設定
 plt.figure(figsize=(12, 16))
 # 2 x 1 (縦２，横１)のうち１つめの表示
@@ -267,7 +267,7 @@ CCMありのほうが色が鮮やかになっているのがわかると思い�
 この処理も高速化して、関数としてモジュールへ追加しておきましょう。
 
 
-```python
+```
 def color_correction_matrix(rgb_array, color_matrix):
     """
     カラーマトリクス補正を行う。
@@ -312,4 +312,4 @@ def color_correction_matrix(rgb_array, color_matrix):
 
 ### まとめ
 
-この節ではカラーマトリクス補正を行いました。次は[レンズシェーディング補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_5.ipynb)を行います。
+この節ではカラーマトリクス補正を行いました。次は[レンズシェーディング補正](http://bit.ly/raw_4_5)を行います。

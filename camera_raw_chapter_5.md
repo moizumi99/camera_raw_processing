@@ -8,9 +8,9 @@
 
 この章では画像の画質を良くする処理を紹介します。
 
-この章の内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+この章の内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](http://bit.ly/raw_toc)から参照するか、以下のリンクを使ってアクセスしてください。
 
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5.ipynb
+http://bit.ly/raw_5
 
 
 ### この章で扱う処理について
@@ -34,4 +34,4 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 
 ### まとめ
 
-この章で扱う内容について概要を説明しました。次は[ノイズフィルター](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_2.ipynb)です。
+この章で扱う内容について概要を説明しました。次は[ノイズフィルター](http://bit.ly/raw_5_2)です。

@@ -5,9 +5,9 @@
 
 この節では、欠陥画素補正を解説します。
 
-この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](http://bit.ly/raw_toc)から参照するか、以下のリンクを使ってアクセスしてください。
 
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_3.ipynb
+http://bit.ly/raw_chap_4_3
 
 ### 準備
 
@@ -15,7 +15,7 @@ https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/ma
 内容については各節を参照ください。
 
 
-```python
+```
 # rawpyとimageioのインストール
 !pip install rawpy;
 !pip install imageio;
@@ -63,7 +63,7 @@ h, w = raw_array.shape
 ライブラリーを使って対象画像の左下の方、グレイチャートの一部（図の赤でかこった部分）を現像して拡大表示すると、こんな部分があります。
 
 
-```python
+```
 # raw_processからインポートしたblack_level_correction関数を使用してブラックレベル補正。
 blc_raw = black_level_correction(raw_array, raw.black_level_per_channel, raw.raw_pattern)
 # raw_processからインポートしたwhite_balance()関数を使って、ホワイトバランス調整。
@@ -78,7 +78,7 @@ gmm_img = gamma_correction(dms_img, 2.2)
 ```
 
 
-```python
+```
 # 画像を表示。
 plt.figure(figsize=(16, 8))
 plt.imshow(gmm_img)
@@ -131,7 +131,7 @@ plt.show()
 まず、左上の色（Blue）からです。処理しやすいようにBlueのみを抜き出します。
 
 
-```python
+```
 dpc_raw = blc_raw.copy()
 single_channel = dpc_raw[::2, ::2]
 ```
@@ -141,7 +141,7 @@ single_channel = dpc_raw[::2, ::2]
 最大値最小値を求めるのにscipyのndfilerモジュールから、maximum_filterとminimum_filterを使います。
 
 
-```python
+```
 import scipy
 
 # 5x5の行列を作る、全成分を１にする。
@@ -171,7 +171,7 @@ $$ footprint = \begin{bmatrix}
 この最大値と最小値を使って、欠陥画素判定を行います。 最大値や最小値との差がthreshold値より大きい場合欠陥画素とみなす事にします。
 
 
-```python
+```
 threshold = 16
 mask = (single_channel < local_min - threshold) + (single_channel > local_max + threshold)
 ```
@@ -183,7 +183,7 @@ mask = (single_channel < local_min - threshold) + (single_channel > local_max + 
 まず、欠陥画素の上下左右の画素の平均値を計算しておきます。
 
 
-```python
+```
 # 上下左右の平均値を取るフィルター。
 flt = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]]) / 4
 # scipyの機能で上下左右画素の平均値をとり、結果をnumpy arrayとして保存。
@@ -195,7 +195,7 @@ average = scipy.signal.convolve2d(single_channel, flt, mode='same')
 欠陥画素はmaskのうちTrueになっている部分です。
 
 
-```python
+```
 single_channel[mask] = average[mask]
 ```
 
@@ -204,7 +204,7 @@ single_channel[mask] = average[mask]
 他の色の欠陥も補正するためにループ化します。
 
 
-```python
+```
 # ブラックレベル補正後の画像をコピー。
 dpc_raw = blc_raw.copy()
 # footprintとして5x5のマスクを作成
@@ -240,7 +240,7 @@ for (yo, xo) in ((0, 0), (1, 0), (0, 1), (1, 1)):
 残りのホワイトバランス、デモザイク、ガンマ処理を行い、出力結果を確認します。
 
 
-```python
+```
 wb_raw = white_balance(dpc_raw, raw.camera_whitebalance, raw.raw_colors)
 # raw_processからインポートしたsimple_demosaic()関数を使って、簡易デモザイク処理。
 dms_img = demosaic(wb_raw, raw.raw_colors)
@@ -265,7 +265,7 @@ plt.show()
 欠陥画素が修正されたか、先ほどと同じ部分を拡大して確認しましょう。
 
 
-```python
+```
 # 画像の一部分を拡大表示。
 plt.figure(figsize=(16, 8))
 plt.imshow(gmm_img[2110:2160, 1150:1210, :])
@@ -285,7 +285,7 @@ plt.show()
 この処理も関数としてモジュールへ追加しておきましょう。
 
 
-```python
+```
 def defect_correction(raw_array, threshold):
     """
     線形補間でデモザイクを行う
@@ -345,4 +345,4 @@ def defect_correction(raw_array, threshold):
 
 ### まとめ
 
-この節では欠陥画素補正を行いました。次は[カラーマトリクス補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_4_4.ipynb)を行います。
+この節では欠陥画素補正を行いました。次は[カラーマトリクス補正](http://bit.ly/raw_4_4)を行います。

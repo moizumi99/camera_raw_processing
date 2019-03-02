@@ -5,9 +5,9 @@
 
 この節ではエッジ強調について解説します。
 
-この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+この節のの内容はColabノートブックとして公開してあります。ノートブックを見るには[目次ページ](http://bit.ly/raw_toc)から参照するか、以下のリンクを使ってアクセスしてください。
 
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_3.ipynb
+http://bit.ly/raw_5_3
 
 ### 準備
 
@@ -405,4 +405,4 @@ plt.show()
 今回は古典的なアンシャープマスキングによるエッジ強調を行いました。
 昔から知られている処理ですが、現代のエッジ強調アルゴリズムにも通じる部分の多い重要なアルゴリズムです。
 
-次は[トーンカーブ補正](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_5_4.ipynb)をあつかいます。
+次は[トーンカーブ補正](http://bit.ly/raw_5_4)をあつかいます。

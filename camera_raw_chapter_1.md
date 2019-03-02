@@ -84,4 +84,4 @@ Google Colabを利用することにより、Pythonの環境を無料でブラ�
 
 ### 次の章
 
-次は[カメラ画像処理について](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.ipynb)簡単に解説します。
+次は[カメラ画像処理について](http://bit.ly/raw_chap_2)簡単に解説します。

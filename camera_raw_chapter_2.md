@@ -6,9 +6,9 @@
 
 この章ではカメラのしくみやRAW画像からはじめて、カメラ画像処理やRAW現像ソフトの中でどのような処理が行われているのかを説明します。
 
-この章を含む全ての内容はColabノートブックとして公開してあります。この章のノートブックを見るには[目次ページ](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_toc.ipynb)から参照するか、以下のリンクを使ってアクセスしてください。
+この章を含む全ての内容はColabノートブックとして公開してあります。この章のノートブックを見るには[目次ページ](http://bit.ly/raw_toc)から参照するか、以下のリンクを使ってアクセスしてください。
 
-https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_2.ipynb
+http://bit.ly/raw_chap_2
 
 ### カメラのしくみ
 
@@ -115,4 +115,4 @@ Bayerからフルカラーの画像を作り出すRAW現像処理・カメラ画
 
 ### 次の章
 
-次は[RAW画像の準備](https://colab.research.google.com/github/moizumi99/camera_raw_processing/blob/master/camera_raw_chapter_3_1.ipynb)を行います。
+次は[RAW画像の準備](http://bit.ly/raw_chap_3)を行います。
